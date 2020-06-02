@@ -14,3 +14,4 @@ pom.xml.asc
 *figwheel*
 secrets*
 .rebel_readline_history
+*.db
