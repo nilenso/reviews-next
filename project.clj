@@ -65,7 +65,7 @@
             :app
             {:source-paths ["src/cljs" "src/cljc" "dev"]
              :figwheel { ;; :on-jsload ""
-                        :open-urls ["http://localhost:3449/"]}
+                        :open-urls ["http://local.reviews-next:3449/"]}
              :compiler
              {:main "reviews-next.user"
               :asset-path "/js/out"

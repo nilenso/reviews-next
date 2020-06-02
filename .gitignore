@@ -13,3 +13,5 @@ pom.xml.asc
 .clj-kondo
 public
 *figwheel*
+secrets*
+.rebel_readline_history
