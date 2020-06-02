@@ -17,3 +17,5 @@
 (defn reset []
   (core/stop)
   (refresh :after go))
+
+(go)
