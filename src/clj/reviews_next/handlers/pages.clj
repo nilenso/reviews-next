@@ -24,7 +24,7 @@
 (defn index [_request]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body (h/html (page [:div#container]))})
+   :body (h/html (page [:div#app]))})
 
 (defn not-found [_request]
   {:status 404

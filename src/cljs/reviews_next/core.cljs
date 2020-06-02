@@ -18,4 +18,4 @@
 
 (defn init! []
   (set! (.. js/window -onSignIn) (clj->js on-sign-in))
-  (rdom/render [app] (.getElementById js/document "container")))
+  (rdom/render [app] (.getElementById js/document "app")))
