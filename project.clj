@@ -13,6 +13,7 @@
                  [cider/piggieback "0.5.0"]
                  [cheshire "5.10.0"]
                  [hiccup "1.0.5"]
+                 [hikari-cp "2.12.0"]
                  [honeysql "0.9.10"]
                  [mount "0.1.16"]
                  [nrepl "0.7.0"]

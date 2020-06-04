@@ -1,4 +1,5 @@
 {:server {:port #long #or [#env PORT 3000]}
  :nrepl {:enable? #boolean #or [#env ENABLE_NREPL "true"]
          :port #long #or [#env NREPL_PORT 4444]}
- :secrets #include "secrets.edn"}
+ :secrets #include "secrets.edn"
+ :database {:jdbc-url "jdbc:sqlite:db/reviews_next.db"}}
