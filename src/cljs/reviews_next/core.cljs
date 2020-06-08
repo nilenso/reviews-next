@@ -1,21 +1,14 @@
 (ns reviews-next.core
   (:require [reagent.dom :as rdom]
-            [re-frame.core :as reframe]))
-
-;; (reframe/dispatch-sync [:initialize-db])
-
-(defn on-sign-in [& args]
-  (apply (.-log js/console) args))
-
-(defn sign-in []
-  [:div {:class "g-signin2"
-         :data-onsuccess "onSignIn"}])
+            [re-frame.core :as re-frame]
+            [reviews-next.pages.login :as login]))
 
 (defn app []
   [:div
-   [:div "Hello World!"]
-   [sign-in]])
+   [:div "Hello!"]
+   [login/login]])
 
 (defn init! []
-  (set! (.. js/window -onSignIn) (clj->js on-sign-in))
+  (re-frame/dispatch-sync [:initialize-db])
+  (re-frame/dispatch-sync [:setup-google-signin-functions])
   (rdom/render [app] (.getElementById js/document "app")))

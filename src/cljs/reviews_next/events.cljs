@@ -6,3 +6,10 @@
  ::initialize-db
  (fn [_ _]
    {:db (db/initial-db)}))
+
+(re-frame/reg-fx
+ ::setup-google-signin-functions
+ (fn []
+   (set!
+    (.. js/window -onSignIn)
+    (cljs->js (fn [& args] (apply (.-log js/console) args))))))
