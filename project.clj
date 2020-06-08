@@ -17,6 +17,7 @@
                  [honeysql "0.9.10"]
                  [mount "0.1.16"]
                  [nrepl "0.7.0"]
+                 [org.xerial/sqlite-jdbc "3.23.1"]
                  [reagent "1.0.0-alpha2"]
                  [reagent-utils "0.3.3"]
                  [re-frame "1.0.0-rc2"]
@@ -41,6 +42,9 @@
   :source-paths ["src/clj" "src/cljc" "src/cljs"]
 
   :main reviews-next.core
+
+  :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
+            "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
 
   :clean-targets ^{:protect false}
   [:target-path
