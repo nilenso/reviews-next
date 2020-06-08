@@ -1,4 +1,3 @@
 (ns reviews-next.db)
 
-(def initial-db
-  {})
+(def initial-db {})
