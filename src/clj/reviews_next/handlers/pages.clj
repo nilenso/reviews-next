@@ -10,15 +10,15 @@
            :content "width=device-width, initial-scale=1"}]
    [:meta {:name "google-signin-client_id"
            :content (-> config/config :secrets :google-oauth :client-id)}]
-   (page/include-css "/public/css/bulma.min.css")
-   (page/include-css "/public/css/site.css")])
+   (page/include-css "/assets/css/bulma.min.css")
+   (page/include-css "/assets/css/site.css")])
 
 (defn page [contents]
   (page/html5
    (head)
    [:body
     contents
-    (page/include-js "/public/js/app.js")
+    (page/include-js "/assets/main.js")
     (page/include-js "https://apis.google.com/js/platform.js")]))
 
 (defn index [_request]

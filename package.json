@@ -1,0 +1,15 @@
+{
+  "name": "reviews-next",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:nilenso/reviews-next.git",
+  "author": "Nilenso",
+  "license": "MIT",
+  "devDependencies": {
+    "shadow-cljs": "^2.10.5"
+  },
+  "dependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  }
+}

@@ -4,5 +4,5 @@
 
 (def routes
   ["/" {"" pages/index
-        "public" (bidi/resources {:prefix "public/"})
+        "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])

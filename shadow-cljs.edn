@@ -1,0 +1,11 @@
+{:source-paths ["src/cljs"]
+ :dev-http     {8080 {:root      "target"}}
+ :dependencies [[reagent "1.0.0-alpha2"]
+                [re-frame "1.0.0-rc2"]]
+
+ :builds       {:app {:output-dir "target/assets/"
+                      :asset-path "assets"
+                      :target     :browser
+                      :modules    {:main {:init-fn reviews-next.core/init!}}
+                      :devtools   {:http-root  "target/"
+                                   :http-port  8080}}}}
