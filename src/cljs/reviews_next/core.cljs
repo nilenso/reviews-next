@@ -1,12 +1,13 @@
 (ns reviews-next.core
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame]
-            [reviews-next.pages.login :as login]))
+            [reviews-next.pages.login :as login]
+            [reviews-next.pages.review_event :as review_event]))
 
 (defn app []
   [:div
    [:div "Hello!"]
-   [login/login]])
+   [review_event/review_event]])
 
 (defn init! []
   (apply (.-log js/console) "Hello World!")
