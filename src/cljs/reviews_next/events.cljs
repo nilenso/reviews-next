@@ -12,5 +12,25 @@
  (fn [_ _]
    (set!
     (.. js/window -onSignIn)
-    (clj->js (fn [& args] (apply (.-log js/console) args))))
-   {}))
+    (cljs->js (fn [& args] (apply (.-log js/console) args))))))
+
+(re-frame/reg-event-db
+  ::title-change
+  (fn [db [_ new-title]]
+    (assoc db :review_event_title new-title)))
+
+(re-frame/reg-event-db
+  ::date-change
+  (fn [db [_ new-date]]
+    (assoc db :review_date new-date)))
+
+(re-frame/reg-event-db
+  ::level-change
+  (fn [db [_ new-date]]
+    (assoc db :review_level new-date)))
+
+
+(re-frame/reg-event-db
+  ::description-change
+  (fn [db [_ new-date]]
+    (assoc db :description new-date)))

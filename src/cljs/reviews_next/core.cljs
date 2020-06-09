@@ -6,9 +6,11 @@
 
 (defn app []
   [:div
+   [:div "Hello App"]
    [review_event/review_event]])
 
 (defn init! []
-  (re-frame/dispatch [::events/initialize-db])
-  (re-frame/dispatch-sync [::events/setup-google-signin-functions])
+  (apply (.-log js/console) "Hello World!")
+  ; (re-frame/dispatch-sync [:initialize-db])
+  ; (re-frame/dispatch-sync [:setup-google-signin-functions])
   (rdom/render [app] (.getElementById js/document "app")))
