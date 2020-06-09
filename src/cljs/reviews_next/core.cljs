@@ -1,11 +1,12 @@
 (ns reviews-next.core
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame]
-            [reviews-next.events :as events]
-            [reviews-next.pages.login :as login]))
+            [reviews-next.pages.login :as login]
+            [reviews-next.pages.review_event :as review_event]))
 
 (defn app []
-  [login/login])
+  [:div
+   [review_event/review_event]])
 
 (defn init! []
   (re-frame/dispatch [::events/initialize-db])
