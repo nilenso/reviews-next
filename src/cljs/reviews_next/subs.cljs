@@ -13,11 +13,6 @@
     (:review_date db)))
 
 (re-frame/reg-sub
-  ::review_level
-  (fn [db _]
-    (:review_level db)))
-
-(re-frame/reg-sub
   ::description
   (fn [db _]
     (:description db)))

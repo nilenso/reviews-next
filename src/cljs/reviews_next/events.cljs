@@ -12,7 +12,7 @@
  (fn [_ _]
    (set!
     (.. js/window -onSignIn)
-    (cljs->js (fn [& args] (apply (.-log js/console) args))))))
+    (clj->js (fn [& args] (apply (.-log js/console) args))))))
 
 (re-frame/reg-event-db
   ::title-change
@@ -23,12 +23,6 @@
   ::date-change
   (fn [db [_ new-date]]
     (assoc db :review_date new-date)))
-
-(re-frame/reg-event-db
-  ::level-change
-  (fn [db [_ new-date]]
-    (assoc db :review_level new-date)))
-
 
 (re-frame/reg-event-db
   ::description-change

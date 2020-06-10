@@ -34,14 +34,14 @@
              :test {:dependencies [[ring/ring-mock "0.4.0"]]}}
 
   :source-paths ["src/clj"]
-
+  :auto-clean false
   :main reviews-next.core
 
   :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
             "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
 
   :resource-paths ["resources" "target"]
-
+  :clean-targets ^{:protect false} [....]
   :minify-assets
   [[:css {:source "resources/public/css/site.css"
           :target "resources/public/css/site.min.css"}]]
