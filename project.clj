@@ -23,19 +23,23 @@
                  [ring "1.8.1"]
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
+                 [lein-cljfmt "0.6.7"]                 
                  [seancorfield/next.jdbc "1.0.409"]]
+                 ; [com.fakaria/slf4j-timbre "0.2"]]
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
-
+             :uberjar {:aot :all}
              :test {:dependencies [[ring/ring-mock "0.4.0"]]}}
 
   :source-paths ["src/clj"]
   :auto-clean false
   :main reviews-next.core
+
+
 
   :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
             "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
