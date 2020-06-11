@@ -3,14 +3,14 @@
    [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
-  ::review_event_title
+  ::review-event-title
   (fn [db _]
-    (:review_event_title db)))
+    (:review-event-title db)))
 
 (re-frame/reg-sub
-  ::review_date
+  ::review-date
   (fn [db _]
-    (:review_date db)))
+    (:review-date db)))
 
 (re-frame/reg-sub
   ::description

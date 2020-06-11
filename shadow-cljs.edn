@@ -1,6 +1,7 @@
 {:source-paths ["src/cljs"]
  :dev-http     {8080 {:root      "target"}}
  :dependencies [[reagent "1.0.0-alpha2"]
+                [stylefy "2.0.0"]
                 [re-frame "1.0.0-rc2"]]
 
  :builds       {:app {:output-dir "target/assets/"

@@ -1,7 +1,8 @@
 (ns reviews-next.db)
 
 (def initial-db
-  {:review_event_title "Hello"
-   :review_date ""
-   :description ""})
-   
+  {:pages
+   {:add-review-event
+    {:review-event-title "Hello"
+     :review-date ""
+     :description ""}}})
