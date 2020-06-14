@@ -21,11 +21,12 @@
                  [re-frame "1.0.0-rc2"]
                  [ragtime "0.8.0"]
                  [ring "1.8.1"]
+                 [ring-cors "0.1.13"]
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
-                 [lein-cljfmt "0.6.7"]                 
-                 [seancorfield/next.jdbc "1.0.409"]]
-                 ; [com.fakaria/slf4j-timbre "0.2"]]
+                 [lein-cljfmt "0.6.7"]
+                 [seancorfield/next.jdbc "1.0.409"]
+                 [com.fzakaria/slf4j-timbre "0.3.19"]]
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
@@ -51,4 +52,5 @@
           :target "resources/public/css/site.min.css"}]]
 
   :ring {:handler reviews-next.server/hander}
-  :repl-options {:init-ns reviews-next.user})
+  :repl-options {:init-ns reviews-next.user
+                 :timeout 1200000})
