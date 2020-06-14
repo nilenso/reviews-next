@@ -5,7 +5,7 @@
 (re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
-   {:db db/initial-db}))
+   db/initial-db))
 
 (re-frame/reg-event-fx
  ::setup-google-signin-functions
@@ -16,13 +16,13 @@
 
 (re-frame/reg-event-db
   ::title-change
-  (fn [db [_ new-title]]
-    (assoc db :review_event_title new-title)))
+   (fn [db [_ new-title]]
+    (assoc db :review-event-title new-title)))
 
 (re-frame/reg-event-db
   ::date-change
-  (fn [db [_ new-date]]
-    (assoc db :review_date new-date)))
+   (fn [db [_ new-date]]
+    (assoc db :review-date new-date)))
 
 (re-frame/reg-event-db
   ::description-change

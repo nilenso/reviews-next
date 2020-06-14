@@ -5,4 +5,4 @@
    {:add-review-event
     {:review-event-title "Hello"
      :review-date ""
-     :description ""}}})
+     :description "DES"}}})
