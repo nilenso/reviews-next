@@ -13,7 +13,6 @@
     (response (db_ops/insert {:title title :review_date date}))))
             ; (with-out-str (clojure.pprint/pprint (get body 0)))))
 
-
 (defn not-found [_request]
   {:status 404
    :headers {"Content-Type" "text/html"}

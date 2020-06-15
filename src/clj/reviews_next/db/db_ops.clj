@@ -9,8 +9,7 @@
    :subname     "reviews_next.db"})
 
 (def data
-  {
-   :title "report"
+  {:title "report"
    :review_date "20-09-2019"})
 
 (defn insert
