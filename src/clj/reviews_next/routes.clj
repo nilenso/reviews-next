@@ -1,9 +1,11 @@
 (ns reviews-next.routes
   (:require [bidi.ring :as bidi]
             [ring.adapter.jetty :as jetty]
+            [clojure.pprint :as pp]
             [reviews-next.handlers.pages :as pages]
             [ring.middleware.cors :refer [wrap-cors]]
-            [reviews-next.handlers.post-title-date :as post-title-date]))
+            [ring.middleware.json :refer [wrap-json-params]]
+            [reviews-next.handlers.review-event :as review-event]))
 
 (def handler
   (wrap-cors routes :access-control-allow-origin [#"http://localhost:3000/"]
@@ -11,6 +13,6 @@
 
 (def routes
   ["/" {"" pages/index
-        "api/post-title-date/" {[:title "/" :date ] post-title-date/index}
+        "api/" {"review-event" {:post {"" (wrap-json-params review-event/index)}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
