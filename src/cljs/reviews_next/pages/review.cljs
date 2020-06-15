@@ -4,6 +4,7 @@
     [cljs.core.async :refer [<!]]
     [cljs-http.client :as http]
     [clojure.pprint :as pp]
+    ["@material-ui/core" :as material-ui]
     [stylefy.core :as stylefy :refer [use-style]]
     [reviews-next.db :as db]
     [reviews-next.events :as events]
@@ -12,23 +13,37 @@
     [cljs.core.async.macros :refer [go]]))
 
 (def main-content-style
-           {:display "flex"
-            :flex-direction "row"})
+  {:display "flex"
+   :flex-direction "row"})
 
 (defn section-style [width]
-               {:margin "40px"
-                :width width})
+  {:margin "40px"
+   :width width})
 (def box-button-style
-  {
-   :display "flex"
+  {:display "flex"
    :flex-direction "row"
    :justify-content "space-between"
    :text-align "center"})
 
+(defn TextField
+  [component-value]
+  [:> material-ui/TextField component-value])
+
+(defn Snackbar
+  [component-value]
+  [:> material-ui/Snackbar component-value])
+
+(defn Button
+  [component-value text]
+  [:> material-ui/Button component-value text])
+
 (defn call-save-api-fn
   [title date]
-  (go (let [response (<! (http/get (str "http://localhost:3000/api/post-title-date/" title "/" date)))]
+  (def request-map {:json-params {:title title :date date}})
+  (js/console.log request-map)
+  (go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
         (js/console.log (:body response)))))
+
 
 (defn review-event []
       (let [review-title (re-frame/subscribe [::subs/review-event-title])
@@ -39,7 +54,6 @@
 
           [:div.main-section (use-style (section-style "80vw"))
            [:div#box-button (use-style box-button-style)
-
             [:input#title-box
                               {:style {
                                        :padding "5px"
@@ -58,7 +72,10 @@
                                  :color "#f8337d"
                                  :type "date"
                                  :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
-           [:input#save-buton
-                             {:type "button"
-                              :value "Save"
-                              :on-click call-save-api}]]]))
+           (Button
+                   {:variant "contained"
+                    :onClick call-save-api
+                    :style {
+                            :margin "5px"
+                            :background "#f8337d"
+                            :color "white"}} "Save")]]))
