@@ -21,6 +21,7 @@
                  [re-frame "1.0.0-rc2"]
                  [ragtime "0.8.0"]
                  [ring "1.8.1"]
+                 [ring/ring-mock "0.4.0"]
                  [ring-cors "0.1.13"]
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
