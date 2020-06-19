@@ -5,9 +5,9 @@
 (re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
-   db/initial-db))
+   {:db db/initial-db}))
 
-(re-frame/reg-event-fx
+(re-frame/reg-fx
  ::setup-google-signin-functions
  (fn [_ _]
    (set!
@@ -28,3 +28,8 @@
   ::description-change
   (fn [db [_ new-date]]
     (assoc db :description new-date)))
+
+(re-frame/reg-event-db
+  ::all-fields-valid-change
+  (fn [db [_ new-val]]
+    (assoc db :all-fields-valid? new-val)))

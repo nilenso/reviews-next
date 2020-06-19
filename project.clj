@@ -26,6 +26,7 @@
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
                  [lein-cljfmt "0.6.7"]
+                 [day8.re-frame/test "0.1.5"]
                  [seancorfield/next.jdbc "1.0.409"]
                  [com.fzakaria/slf4j-timbre "0.3.19"]]
 
@@ -37,11 +38,9 @@
              :uberjar {:aot :all}
              :test {:dependencies [[ring/ring-mock "0.4.0"]]}}
 
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljs"]
   :auto-clean false
   :main reviews-next.core
-
-
 
   :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
             "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
