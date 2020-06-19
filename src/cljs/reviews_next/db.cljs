@@ -3,6 +3,7 @@
 (def initial-db
   {:pages
    {:add-review-event
-    {:review-event-title "Hello"
+    {:review-event-title ""
      :review-date ""
-     :description "DES"}}})
+     :description "DES"
+     :all-fields-valid? true}}})

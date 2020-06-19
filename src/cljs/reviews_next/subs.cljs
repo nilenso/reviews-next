@@ -16,3 +16,8 @@
   ::description
   (fn [db _]
     (:description db)))
+
+(re-frame/reg-sub
+  ::all-fields-valid?
+  (fn [db _]
+    (:all-fields-valid? db)))
