@@ -11,8 +11,10 @@
     "source-map-support": "^0.5.19"
   },
   "dependencies": {
-    "@material-ui/core": "^4.10.2",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "scripts": {
+    "build": "shadow-cljs --npm release app"
   }
 }
