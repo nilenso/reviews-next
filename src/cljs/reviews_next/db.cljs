@@ -1,9 +1,12 @@
 (ns reviews-next.db)
 
 (def initial-db
-  {:pages
+ {
+  :pages
    {:add-review-event
     {:review-event-title ""
      :review-date ""
      :description "DES"
-     :all-fields-valid? true}}})
+     :all-fields-valid? true
+     :participants []
+     :selected-participants (vector nil)}}})

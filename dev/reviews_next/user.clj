@@ -11,11 +11,11 @@
 (def stop core/stop)
 
 (defn go []
-  (start)
+  start
   :ready)
 
 (defn reset []
-  (core/stop)
+  stop
   (refresh :after (go)))
 
 (go)

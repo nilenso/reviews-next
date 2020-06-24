@@ -4,14 +4,15 @@
             [clojure.pprint :as pp]
             [reviews-next.handlers.pages :as pages]
             [ring.middleware.cors :refer [wrap-cors]]
-            [ring.middleware.json :refer [wrap-json-params wrap-json-body]]
+            [ring.middleware.json :refer [wrap-json-params wrap-json-body wrap-json-response]]
             [reviews-next.handlers.review-event :as review-event]))
 
 (def call-api (partial wrap-json-params))
 
 (def routes
   ["/" {"" pages/index
-        "api/" {"review-event" {:post {"" (call-api review-event/index)}}}
+        "api/" {"review-event" {:post {"" (call-api review-event/publish-into-user-reviews)}}
+                "get-users" (wrap-json-response review-event/participants-from-users)}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 

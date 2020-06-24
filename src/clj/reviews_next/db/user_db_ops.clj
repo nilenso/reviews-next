@@ -1,4 +1,4 @@
-(ns reviews-next.db.db_ops
+(ns reviews-next.db.user-db-ops
   (:require
           [clojure.pprint :as pp]
           [clojure.java.jdbc :refer :all]))
@@ -9,26 +9,25 @@
    :subname     "reviews_next.db"})
 
 (def data
-  {:title "title"
-   :review_date "20-09-2019"})
+  {:id "U4"
+   :name "PHI"
+   :email "phi@gmail.com"})
 
 (defn insert
   "execute query and return lazy sequence"
   [data]
   (try
-       do
-        (insert! db :reviews data)
-        true
+    (insert! db :users data)
    (catch Exception e
         false)))
 
 (defn delete-all
   []
-  (db-do-commands db "delete from reviews"))
+  (db-do-commands db "delete from users"))
 
 (defn display-all
   []
   (try
-     (query db ["select * from reviews"])
+     (query db ["select * from users"])
     (catch Exception e
      false)))

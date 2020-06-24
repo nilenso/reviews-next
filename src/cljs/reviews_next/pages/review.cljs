@@ -20,7 +20,7 @@
 (defn title-valid? [title] (s/valid? ::title title))
 (defn date-valid? [date] (s/valid? ::date date))
 
-
+;;styles
 (def main-content-style
   {:display "flex"
    :flex-direction "row"})
@@ -35,21 +35,34 @@
    :justify-content "space-between"
    :text-align "center"})
 
-(defn TextField
-  [component-value]
-  [:> material-ui/TextField component-value])
+(def checkbox-area
+  {:display "flex"
+   :margin "20px 0px 20px 0px"
+   :margin-left "25vw"
+   :margin-right "25vw"
+   :height "40vh"
+   :flex-direction "column"
+   :flex-wrap "wrap"
+   :aligh-content "space-between"})
 
-(defn Snackbar
-  [component-value]
-  [:> material-ui/Snackbar component-value])
+(def checkbox-style
+  {:margin "2%"})
 
-(defn Button
-  [component-value text]
-  [:> material-ui/Button component-value text])
+;;init functions
+(defn add-participants
+  []
+  (go (let [response (<! (http/get "http://localhost:3000/api/get-users"))
+            participants (re-frame/subscribe [::subs/participants])]
+        (re-frame/dispatch [::events/set-participants (:body response)]))))
 
+;;events
 (defn call-save-api-fn
   [title date]
-  (let [request-map {:json-params {:title title :date date}}
+  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
+        request-map {:json-params {:title title
+                                   :review_date date
+                                   :from_uid "U1"
+                                   :participants @selected-participants}}
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])]
     (re-frame/dispatch [::events/all-fields-valid-change (and
                                                               (date-valid? date)
@@ -58,15 +71,51 @@
       (go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
            (js/console.log (:body response)))))))
 
+(defn toggle-participants
+  [checked? id]
+  (let [selected-participants [::subs/selected-participants]]
+    (if checked?
+      (re-frame/dispatch [::events/add-to-selected-participants id])
+      (re-frame/dispatch [::events/remove-from-selected-participants id]))))
+
+;;npm components
+(defn TextField
+  [component-value]
+  [:> material-ui/TextField component-value])
+
+(defn Button
+  [component-value text]
+  [:> material-ui/Button component-value text])
+
+;;components
+(defn participants-checkboxes
+  [participants]
+  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])]
+    [:div
+     (for [participant @participants]
+      ^{:key (participant :id)}
+       [:div.checkbox (use-style checkbox-style)
+        [:input
+               {:type "checkbox"
+                :id (participant :id)
+                :name "checkbox"
+                :value (participant :id)
+                :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
+        [:label
+               {:for (participant :id)} (participant :name)]])]))
+
+;;main code
 (defn review-event []
   (let [review-title (re-frame/subscribe [::subs/review-event-title])
         review-date (re-frame/subscribe [::subs/review-date])
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])
-        call-save-api #(call-save-api-fn @review-title @review-date)]
+        call-save-api #(call-save-api-fn @review-title @review-date)
+        participants (re-frame/subscribe [::subs/participants])
+        selected-participants (re-frame/subscribe [::subs/selected-participants])]
+   (add-participants)
 
-    [:div.main-content (use-style main-content-style)
-       [:div.side-section (use-style (section-style "20vw"))]
-
+   [:div.main-content (use-style main-content-style)
+      [:div.side-section (use-style (section-style "20vw"))]
       [:div.main-section (use-style (section-style "80vw"))
        [:div#box-button (use-style box-button-style)
          [:input#title-box
@@ -85,12 +134,15 @@
                              :color "#f8337d"
                              :type "date"
                              :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
+       [:div#description]
+       [:div.participants-box (use-style checkbox-area)
+        [:b "Add Participants"]
+        [participants-checkboxes participants]]
        (Button
                {:variant "contained"
                 :onClick call-save-api
                 :style {:margin "5px"
                         :background "#f8337d"
                         :color "white"}} "Save")
-
        (when-not @all-fields-valid?
          [:h3 {:style {:color "red"}} "*Fill all fields"])]]))

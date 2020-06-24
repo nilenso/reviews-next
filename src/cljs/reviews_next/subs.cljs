@@ -21,3 +21,13 @@
   ::all-fields-valid?
   (fn [db _]
     (:all-fields-valid? db)))
+
+(re-frame/reg-sub
+  ::participants
+  (fn [db _]
+    (:participants db)))
+
+(re-frame/reg-sub
+  ::selected-participants
+  (fn [db _]
+    (:selected-participants db)))
