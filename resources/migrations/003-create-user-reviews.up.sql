@@ -5,5 +5,5 @@ CREATE TABLE user_reviews (
        review_id TEXT NOT NULL,
        FOREIGN KEY (from_uid) REFERENCES USERS(id),
        FOREIGN KEY (to_uid) REFERENCES USERS(id),
-       FOREIGN KEY (review_id) REFERENCES REVIEWS(id)    
+       FOREIGN KEY (review_id) REFERENCES REVIEWS(id)
 );

@@ -1,15 +1,15 @@
-(ns reviews-next.pages.review
+(ns reviews-next.pages.review-event
   (:require
     [re-frame.core :as re-frame]
     [cljs.core.async :refer [<!]]
     [cljs-http.client :as http]
     [clojure.pprint :as pp]
     [cljs.spec.alpha :as s]
-    ["@material-ui/core" :as material-ui]
     [stylefy.core :as stylefy :refer [use-style]]
     [reviews-next.db :as db]
     [reviews-next.events :as events]
-    [reviews-next.subs :as subs])
+    [reviews-next.subs :as subs]
+    [reviews-next.components :as components])
   (:require-macros
     [cljs.core.async.macros :refer [go]]))
 
@@ -51,7 +51,7 @@
 ;;init functions
 (defn add-participants
   []
-  (go (let [response (<! (http/get "http://localhost:3000/api/get-users"))
+  (go (let [response (<! (http/get "http://localhost:3000/api/users"))
             participants (re-frame/subscribe [::subs/participants])]
         (re-frame/dispatch [::events/set-participants (:body response)]))))
 
@@ -77,15 +77,6 @@
     (if checked?
       (re-frame/dispatch [::events/add-to-selected-participants id])
       (re-frame/dispatch [::events/remove-from-selected-participants id]))))
-
-;;npm components
-(defn TextField
-  [component-value]
-  [:> material-ui/TextField component-value])
-
-(defn Button
-  [component-value text]
-  [:> material-ui/Button component-value text])
 
 ;;components
 (defn participants-checkboxes
@@ -136,9 +127,9 @@
                              :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
        [:div#description]
        [:div.participants-box (use-style checkbox-area)
-        [:b "Add Participants"]
-        [participants-checkboxes participants]]
-       (Button
+        [:b "Add Participants"]]
+        ; [participants-checkboxes participants]]
+       (components/Button
                {:variant "contained"
                 :onClick call-save-api
                 :style {:margin "5px"

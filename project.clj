@@ -36,9 +36,10 @@
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
              :uberjar {:aot :all}
-             :test {:dependencies [[ring/ring-mock "0.4.0"]]}}
+             :test {:source-paths ["test"]
+                    :dependencies [[ring/ring-mock "0.4.0"]]}}
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/clj"]
   :auto-clean false
   :main reviews-next.core
 

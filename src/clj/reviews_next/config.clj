@@ -5,3 +5,9 @@
 
 (defstate config
   :start (read-config (io/resource "config.edn")))
+
+(defn connection-uri
+  ([]
+   (:jdbc-url (:database (read-config (io/resource "config.edn")))))
+  ([test]
+   (:test (:database (read-config (io/resource "config.edn"))))))

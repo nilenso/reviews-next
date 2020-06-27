@@ -10,9 +10,11 @@
 (def call-api (partial wrap-json-params))
 
 (def routes
-  ["/" {"" pages/index
-        "api/" {"review-event" {:post {"" (call-api review-event/publish-into-user-reviews)}}
-                "get-users" (wrap-json-response review-event/participants-from-users)}
+  ["/" {
+        "" pages/index
+        "api/" {
+                "review-event" {:post {"" (call-api review-event/insert-into-db)}}
+                "users" (wrap-json-response review-event/users-list)}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
