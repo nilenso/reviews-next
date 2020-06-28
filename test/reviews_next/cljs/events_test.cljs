@@ -1,4 +1,4 @@
-(ns test.reviews-next.events
+(ns reviews-next.cljs.events-test
   (:require [cljs.core :as core]
             [cljs.test :as test :refer-macros [deftest is testing]]
             [day8.re-frame.test :as rf-test]

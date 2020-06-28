@@ -1,4 +1,4 @@
-(ns test.reviews-next.db.reviews
+(ns reviews-next.clj.db-test.reviews
   (:require [clojure.test :refer :all]
             [reviews-next.db.reviews :as reviews]))
 

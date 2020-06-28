@@ -1,4 +1,4 @@
-(ns test.reviews-next.handlers.review-event
+(ns reviews-next.clj.handlers-test.review-event
   (:require [clojure.test :refer :all]
             [cheshire.core :as cheshire]
             [ring.mock.request :as mock]
@@ -16,7 +16,7 @@
                                         :participants ["U2" "U3"]})
           api-request (-> (mock/request :post "/api/review-event" json-params)
                           (mock/content-type "application/json"))
-          handler (wrap-json-params review-event-handler/insert-into-db)
+          handler (wrap-json-params review-event/insert-into-db)
           response (handler api-request)]
       (is (= (:status response) 200))
       (is (= (:body response) "Posted")))))
@@ -25,7 +25,7 @@
   (testing "Test GET request to /api/users returns expected response"
     (let [api-request (-> (mock/request :get "/api/users")
                           (mock/content-type "application/json"))
-          handler (wrap-json-response review-event-handler/users-list)
+          handler (wrap-json-response review-event/users-list)
           response (handler api-request)
           response-body (parse-body (:body response))]
       (is (= (:status response) 200)))))
