@@ -14,7 +14,8 @@
         "" pages/index
         "api/" {
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
-                "users" (wrap-json-response review-event/users-list)}
+                "users" (wrap-json-response review-event/users-list)
+                "feedback-for" {:post {"review-event" (call-api feedback-event/get-participants)}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
