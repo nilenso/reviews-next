@@ -26,8 +26,8 @@
 
 (re-frame/reg-event-db
   ::description-change
-  (fn [db [_ new-date]]
-    (assoc db :description new-date)))
+  (fn [db [_ new-desc]]
+    (assoc db :description new-desc)))
 
 (re-frame/reg-event-db
   ::all-fields-valid-change

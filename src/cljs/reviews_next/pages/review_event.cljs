@@ -16,9 +16,11 @@
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
 (s/def ::date (s/and #(not (nil? %)) #(not (empty? %))))
+(s/def ::description (s/and #(not (nil? %)) #(<= 1 (count %))))
 
 (defn title-valid? [title] (s/valid? ::title title))
 (defn date-valid? [date] (s/valid? ::date date))
+(defn desc-valid? [description] (s/valid? ::description description))
 
 ;;styles
 (def main-content-style
@@ -57,16 +59,18 @@
 
 ;;events
 (defn call-save-api-fn
-  [title date]
+  [title date description]
   (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
         request-map {:json-params {:title title
                                    :review_date date
+                                   :review_description description
                                    :from_uid "U1"
                                    :participants @selected-participants}}
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])]
     (re-frame/dispatch [::events/all-fields-valid-change (and
-                                                              (date-valid? date)
-                                                              (title-valid? title))])
+                                                          (date-valid? date)
+                                                          (title-valid? title)
+                                                          (desc-valid? description))])
     (when @all-fields-valid?
       (go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
            (js/console.log (:body response)))))))
@@ -99,8 +103,9 @@
 (defn review-event []
   (let [review-title (re-frame/subscribe [::subs/review-event-title])
         review-date (re-frame/subscribe [::subs/review-date])
+        review-description (re-frame/subscribe [::subs/review-description])
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])
-        call-save-api #(call-save-api-fn @review-title @review-date)
+        call-save-api #(call-save-api-fn @review-title @review-date @review-description)
         participants (re-frame/subscribe [::subs/participants])
         selected-participants (re-frame/subscribe [::subs/selected-participants])]
    (add-participants)
@@ -125,6 +130,16 @@
                              :color "#f8337d"
                              :type "date"
                              :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
+       [:textarea#title-box
+        {:style {:padding "5px"
+                 :border "5px white"
+                 :box-shadow "5px 5px 10px #888888"
+                 :font-size "large"
+                 :width "80%"
+                 :height "30vh"}
+         :placeholder "Add Description"
+         :on-change #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])}]
+
        [:div#description]
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]

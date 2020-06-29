@@ -8,25 +8,30 @@
   (testing "Test delete all from reviews table"
     (is (= false (empty? (reviews/delete-all connection-uri-test))))))
 
-(deftest insert-test
-  (testing "Test insert to reviews table"
+(deftest insert-db
+  (testing "Test insert to DB"
     (is (= false (reviews/insert {:title "Report"} connection-uri-test)))
     (is (= false (reviews/insert {:review_date ""} connection-uri-test)))
     (is (= false (reviews/insert {:title "" :review_date ""} connection-uri-test)))
     (is (= false (reviews/insert {:title "" :review_date "20-09-2017"} connection-uri-test)))
     (is (= false (reviews/insert {:title "Report" :review_date ""} connection-uri-test)))
-    (is (= true (reviews/insert {:title "Report" :review_date "20-09-2017"} connection-uri-test)))
-    (is (= true (reviews/insert {:title "Report 2019" :review_date "20-09-2019"} connection-uri-test)))))
+    (is (= false (reviews/insert {:title "Report" :review_description "hey there"} connection-uri-test)))
+    (is (= false (reviews/insert {:review_date "" :review_description "hey there"} connection-uri-test)))
+    (is (= false (reviews/insert {:title "" :review_date "20-09-2017" :review_description "hey there"} connection-uri-test)))
+    (is (= false (reviews/insert {:title "Report" :review_date "20-09-2017"} connection-uri-test)))
+    (is (= false (reviews/insert {:title "Report 2019" :review_date "20-09-2019" :review_description ""} connection-uri-test)))
+    (is (= true (reviews/insert {:title "Report 2019" :review_date "20-09-2019" :review_description "Report DESC"} connection-uri-test)))
+    (is (= true (reviews/insert {:title "Report" :review_date "20-09-2019" :review_description "Report"} connection-uri-test)))))
 
 (deftest get-list-test
-  (testing "Test display all from reviews table"
+  (testing "Test display all from DB"
     (do
       (reviews/delete-all connection-uri-test)
-      (reviews/insert {:title "Report" :review_date "20-09-2017"} connection-uri-test)
-      (reviews/insert {:title "Report 2019" :review_date "20-09-2019"} connection-uri-test)
+      (reviews/insert {:title "Report" :review_date "20-09-2017" :review_description "Report DESC"} connection-uri-test)
+      (reviews/insert {:title "Report 2019" :review_date "20-09-2019" :review_description "Report"} connection-uri-test)
       (is (= true (= (vec (reviews/get-list connection-uri-test))
-                    [{:review_date "20-09-2017", :title "Report", :id 1}
-                     {:review_date "20-09-2019", :title "Report 2019", :id 2}]))))))
+                    [{:review_description "Report DESC", :review_date "20-09-2017", :title "Report", :id 1}
+                     {:review_description "Report", :review_date "20-09-2019", :title "Report 2019", :id 2}]))))))
 
 (deftest insert-and-get-last-id-test
   (testing "Testing insert and get last id from reviews"

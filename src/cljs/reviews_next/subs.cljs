@@ -13,7 +13,7 @@
     (:review-date db)))
 
 (re-frame/reg-sub
-  ::description
+  ::review-description
   (fn [db _]
     (:description db)))
 
