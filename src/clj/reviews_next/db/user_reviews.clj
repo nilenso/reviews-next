@@ -16,13 +16,12 @@
   "execute query and return lazy sequence"
   ([data] (insert data connection-uri-default))
   ([data connection-uri]
-   (insert! connection-uri :user_reviews data)))
-   ; (try
-   ;      do
-   ;        (insert! connection-uri :user_reviews data)
-   ;        true
-   ;   (catch Exception e
-   ;     false))))
+   (try
+        do
+          (insert! connection-uri :user_reviews data)
+          true
+     (catch Exception e
+       false))))
 
 (defn delete-all
   ([] (delete-all connection-uri-default))
@@ -33,7 +32,7 @@
   ([] (get-list connection-uri-default))
   ([connection-uri]
    (try
-      (query connection-uri ["select * from user_reviews"])
+      (query connection-uri ["select * from userreviews"])
      (catch Exception e
       false))))
 
