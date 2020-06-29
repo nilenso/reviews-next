@@ -32,11 +32,15 @@
   ([] (get-list connection-uri-default))
   ([connection-uri]
    (try
-      (query connection-uri ["select * from userreviews"])
+      (query connection-uri ["select * from user_reviews"])
      (catch Exception e
       false))))
 
 (defn users-for-review-id
-  ([review-id] (users-for-review-id connection-uri-default))
+  ([review-id] (users-for-review-id review-id connection-uri-default))
   ([review-id connection-uri]
-   (db-do-prepared connection-uri "select * from user_reviews where review_id= ?" review-id)))
+   (try
+      (let [user-ids (query connection-uri ["select to_uid from user_reviews where review_id=?" review-id] {:row-fn :to_uid})]
+       (concat user-ids (query connection-uri ["select distinct from_uid from user_reviews where review_id=?" review-id] {:row-fn :from_uid})))
+     (catch Exception e
+       false))))

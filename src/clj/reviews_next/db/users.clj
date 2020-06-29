@@ -36,10 +36,10 @@
      (catch Exception e
       false))))
 
-(defn get-users-for-given-ids
-  ([user-ids] (get-users-for-given-ids connection-uri-default))
+(defn users-for-given-ids
+  ([user-ids] (users-for-given-ids user-ids connection-uri-default))
   ([user-ids connection-uri]
    (try
-      (db-do-prepared connection-uri "select * from users where id in (?)" user-ids)
+      (query connection-uri [(str "select * from users where id in " "(" (clojure.string/join "," (map #(str \" % \") user-ids)) ")")])
      (catch Exception e
        (str e)))))

@@ -8,11 +8,11 @@
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
-  {:from_uid "U1"
+  {:from_uid "U3"
    :to_uid "U2"
    :review_id 2
-   :feedback "Good Work"
-   :level 3.2})
+   :feedback "Great Job"
+   :level 6.1})
 
 (defn insert
   "execute query and return lazy sequence"

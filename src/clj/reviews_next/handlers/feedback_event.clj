@@ -22,6 +22,6 @@
     (response (str "Posted"))))
 
 (defn users-list [_request]
- (let [review_id (get-in _request [:params "review_id"])
+ (let [review_id (get-in _request [:params :review_id])
        user-ids (user-reviews/users-for-review-id review_id)]
-   (response (users/get-users-for-given-ids user-ids))))
+   (response (users/users-for-given-ids user-ids))))
