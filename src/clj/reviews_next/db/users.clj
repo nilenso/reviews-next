@@ -8,9 +8,9 @@
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
-  {:id "U2"
-   :name "DEF"
-   :email "def@gmail.com"})
+  {:id "U5"
+   :name "MNO"
+   :email "mno@gmail.com"})
 
 (defn insert
   "execute query and return lazy sequence"
@@ -35,3 +35,11 @@
       (query connection-uri ["select * from users"])
      (catch Exception e
       false))))
+
+(defn get-users-for-given-ids
+  ([user-ids] (get-users-for-given-ids connection-uri-default))
+  ([user-ids connection-uri]
+   (try
+      (db-do-prepared connection-uri "select * from users where id in (?)" user-ids)
+     (catch Exception e
+       (str e)))))

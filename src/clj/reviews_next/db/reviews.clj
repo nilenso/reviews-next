@@ -11,8 +11,8 @@
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
-  {:title "title-trial"
-   :review_date "20-09-2020"})
+  {:title "title-trial-2"
+   :review_date "21-09-2020"})
 
 (defn insert
   "execute insert and return lazy sequence"
