@@ -5,7 +5,8 @@
             [reviews-next.handlers.pages :as pages]
             [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.json :refer [wrap-json-params wrap-json-body wrap-json-response]]
-            [reviews-next.handlers.review-event :as review-event]))
+            [reviews-next.handlers.review-event :as review-event]
+            [reviews-next.handlers.feedback-event :as feedback-event]))
 
 (def call-api (partial wrap-json-params))
 
@@ -15,7 +16,7 @@
         "api/" {
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
                 "users" (wrap-json-response review-event/users-list)
-                "feedback-for" {:post {"review-event" (call-api feedback-event/get-participants)}}}
+                "feedback-for" {:post {"review-event" (call-api feedback-event/users-list)}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
