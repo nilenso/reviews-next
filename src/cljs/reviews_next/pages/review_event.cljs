@@ -1,17 +1,18 @@
 (ns reviews-next.pages.review-event
   (:require
-    [re-frame.core :as re-frame]
-    [cljs.core.async :refer [<!]]
-    [cljs-http.client :as http]
-    [clojure.pprint :as pp]
-    [cljs.spec.alpha :as s]
-    [stylefy.core :as stylefy :refer [use-style]]
-    [reviews-next.db :as db]
-    [reviews-next.events :as events]
-    [reviews-next.subs :as subs]
-    [reviews-next.components :as components])
+   [re-frame.core :as re-frame]
+   [cljs.core.async :refer [<!]]
+   [cljs-http.client :as http]
+   [clojure.pprint :as pp]
+   [cljs.spec.alpha :as s]
+   [stylefy.core :as stylefy :refer [use-style]]
+   [reviews-next.db :as db]
+   [reviews-next.events :as events]
+   [reviews-next.subs :as subs]
+   [reviews-next.components :as components])
   (:require-macros
-    [cljs.core.async.macros :refer [go]]))
+    [cljs.core.async.macros :refer [go]])
+  )
 
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
@@ -114,41 +115,43 @@
       [:div.side-section (use-style (section-style "20vw"))]
       [:div.main-section (use-style (section-style "80vw"))
        [:div#box-button (use-style box-button-style)
-         [:input#title-box
-                          {:style {:padding "5px"
-                                   :border "5px white"
-                                   :box-shadow "5px 5px 10px #888888"
-                                   :font-size "large"
-                                   :width "80%"
-                                   :height "10vh"}
-                           :placeholder "Review Event Title"
-                           :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
-         [:input#date-picker
-                            {:style   {:border "5px white"
-                                       :border-right "3px solid #f8337d"
-                                       :box-shadow "5px 5px 10px #888888"}
-                             :color "#f8337d"
-                             :type "date"
-                             :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
-       [:textarea#title-box
-        {:style {:padding "5px"
-                 :border "5px white"
-                 :box-shadow "5px 5px 10px #888888"
-                 :font-size "large"
-                 :width "80%"
-                 :height "30vh"}
-         :placeholder "Add Description"
-         :on-change #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])}]
-
+        [:input#title-box
+         {:style {:padding "5px"
+                  :border "5px white"
+                  :box-shadow "5px 5px 10px #888888"
+                  :font-size "large"
+                  :width "80%"
+                  :height "10vh"}
+          :placeholder "Review Event Title"
+          :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
+        [:input#date-picker
+         {:style   {:border "5px white"
+                    :border-right "3px solid #f8337d"
+                    :box-shadow "5px 5px 10px #888888"
+                    }
+          :color "#f8337d"
+          :type "date"
+          :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
+       [:div.markdown {
+          :style {:padding "10px"
+                  :border "5px white"
+                  :box-shadow "2px 2px px #888888"
+                  }}
+        (components/MarkDownEditor
+         {:style {:width "80%"
+                  :height "50vh"
+                  :padding-bottom "20px"}
+          :onChange #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])})]
+       
        [:div#description]
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
         ; [participants-checkboxes participants]]
        (components/Button
-               {:variant "contained"
-                :onClick call-save-api
-                :style {:margin "5px"
-                        :background "#f8337d"
-                        :color "white"}} "Save")
+        {:variant "contained"
+         :onClick call-save-api
+         :style {:margin "5px"
+                 :background "#f8337d"
+                 :color "white"}} "Save")
        (when-not @all-fields-valid?
          [:h3 {:style {:color "red"}} "*Fill all fields"])]]))
