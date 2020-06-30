@@ -6,7 +6,7 @@
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.util.response :refer [response]]))
 
-(defn index [_request]
+(defn insert-into-db [_request]
   (let [title (get-in _request [:params "title"])
         date (get-in _request [:params "review_date"])]
     (response (str (reviews/insert {:title title :review_date date})))))
