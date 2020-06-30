@@ -11,6 +11,6 @@
 
 (def routes
   ["/" {"" pages/index
-        "api/" {"review-event" {:post {"" (call-api review-event/index)}}}
+        "api/" {"review-event" {:post {"" (call-api review-event/insert-into-db)}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
