@@ -141,8 +141,8 @@
          {:style {:width "80%"
                   :height "50vh"
                   :padding-bottom "20px"}
-          :onChange do ( #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])
-                        js/console.log(:desc (re-frame/subscribe [::subs/review-description])))})]
+          :onChange #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])})]
+
        
        [:div#description]
        [:div.participants-box (use-style checkbox-area)
