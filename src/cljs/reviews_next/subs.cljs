@@ -15,7 +15,7 @@
 (re-frame/reg-sub
   ::review-description
   (fn [db _]
-    (:description db)))
+    (:review-description db)))
 
 (re-frame/reg-sub
   ::all-fields-valid?

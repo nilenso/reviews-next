@@ -127,8 +127,7 @@
         [:input#date-picker
          {:style   {:border "5px white"
                     :border-right "3px solid #f8337d"
-                    :box-shadow "5px 5px 10px #888888"
-                    }
+                    :box-shadow "5px 5px 10px #888888"}
           :color "#f8337d"
           :type "date"
           :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
@@ -141,10 +140,10 @@
          {:style {:width "80%"
                   :height "50vh"
                   :padding-bottom "20px"}
-          :onChange #(re-frame/dispatch [::events/description-change (-> % .-target .-value)])})]
-
-       
-       [:div#description]
+          :placeholder "Add description"
+          :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])
+          })
+        ]     
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
         ; [participants-checkboxes participants]]

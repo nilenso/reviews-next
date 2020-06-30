@@ -27,7 +27,7 @@
 (re-frame/reg-event-db
   ::description-change
   (fn [db [_ new-desc]]
-    (assoc db :description new-desc)))
+    (assoc db :review-description new-desc)))
 
 (re-frame/reg-event-db
   ::all-fields-valid-change
@@ -48,3 +48,8 @@
   ::remove-from-selected-participants
   (fn [db [_ new-val]]
     (assoc db :selected-participants (disj (set (get db :selected-participants)) new-val))))
+
+(re-frame/reg-event-db
+ ::remove-all-selected-participants
+ (fn [db [_]]
+   (assoc db :selected-participants [])))

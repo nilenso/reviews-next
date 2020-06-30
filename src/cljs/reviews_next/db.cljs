@@ -6,7 +6,7 @@
    {:add-review-event
     {:review-event-title ""
      :review-date ""
-     :description ""
+     :review-description ""
      :all-fields-valid? true
      :participants []
      :selected-participants (vector nil)}}})
