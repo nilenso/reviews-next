@@ -14,7 +14,3 @@
         "api/" {"review-event" {:post {"" (call-api review-event/index)}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
-
-; (def handler
-;   (wrap-cors routes :access-control-allow-origin [#"http://localhost:3000/"]
-;                     :access-control-allow-methods [:get :put :post :delete]))
