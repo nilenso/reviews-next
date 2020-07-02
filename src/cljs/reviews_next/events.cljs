@@ -53,3 +53,8 @@
  ::remove-all-selected-participants
  (fn [db [_]]
    (assoc db :selected-participants [])))
+
+(re-frame/reg-event-db
+ ::clear-all-fields
+ (fn [db [_ new_val]]
+   (assoc db :clear-all-fields new_val)))

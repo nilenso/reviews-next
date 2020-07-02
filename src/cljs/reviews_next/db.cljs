@@ -9,4 +9,5 @@
      :review-description ""
      :all-fields-valid? true
      :participants []
-     :selected-participants (vector nil)}}})
+     :selected-participants (vector nil)
+     :clear-all-fields false}}})

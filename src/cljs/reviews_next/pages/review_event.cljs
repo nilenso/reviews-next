@@ -59,6 +59,18 @@
         (re-frame/dispatch [::events/set-participants (:body response)]))))
 
 ;;events
+
+(defn clear-all-fields
+  []
+  ((re-frame/dispatch [::events/clear-all-fields true])
+   (re-frame/dispatch [::events/date-change ""])
+   (re-frame/dispatch [::events/title-change ""])
+   (re-frame/dispatch [::events/description-change ""])
+   (re-frame/dispatch [::events/all-fields-valid-change false])
+   (re-frame/dispatch [::events/remove-all-selected-participants])
+   (re-frame/dispatch [::events/clear-all-fields false])
+   ))
+
 (defn call-save-api-fn
   [title date description]
   (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
@@ -73,8 +85,10 @@
                                                           (title-valid? title)
                                                           (desc-valid? description))])
     (when @all-fields-valid?
-      (go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
-           (js/console.log (:body response)))))))
+      ((go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
+            (js/console.log (:body response))))
+      ))
+    (clear-all-fields)))
 
 (defn toggle-participants
   [checked? id]
@@ -86,7 +100,8 @@
 ;;components
 (defn participants-checkboxes
   [participants]
-  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])]
+  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
+        reset-checkbox? (re-frame/subscribe [::subs/clear-all-fields])]
     [:div
      (for [participant @participants]
       ^{:key (participant :id)}
@@ -95,7 +110,7 @@
                {:type "checkbox"
                 :id (participant :id)
                 :name "checkbox"
-                :value (participant :id)
+                :value (if reset-checkbox? false (participant :id))
                 :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
         [:label
                {:for (participant :id)} (participant :name)]])]))
@@ -122,6 +137,7 @@
                   :font-size "large"
                   :width "80%"
                   :height "10vh"}
+          :value @review-title
           :placeholder "Review Event Title"
           :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
         [:input#date-picker
@@ -130,6 +146,7 @@
                     :box-shadow "5px 5px 10px #888888"}
           :color "#f8337d"
           :type "date"
+          :value @review-date
           :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
        [:div.markdown {
           :style {:padding "10px"
@@ -140,13 +157,14 @@
          {:style {:width "80%"
                   :height "50vh"
                   :padding-bottom "20px"}
+          :value @review-description
           :placeholder "Add description"
           :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])
           })
         ]     
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
-        ; [participants-checkboxes participants]]
+         [participants-checkboxes participants]
        (components/Button
         {:variant "contained"
          :onClick call-save-api
@@ -154,4 +172,4 @@
                  :background "#f8337d"
                  :color "white"}} "Save")
        (when-not @all-fields-valid?
-         [:h3 {:style {:color "red"}} "*Fill all fields"])]]))
+         [:h3 {:style {:color "red"}} "*Fill all fields."])]]))
