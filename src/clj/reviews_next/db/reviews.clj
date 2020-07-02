@@ -13,11 +13,11 @@
   ([data] (insert data connection-uri-default))
   ([data connection-uri]
    (try
-        (do
-         (insert! connection-uri :reviews data)
-         true)
-    (catch Exception e
-         false))))
+     (do
+       (insert! connection-uri :reviews data)
+       true)
+     (catch Exception e
+       false))))
 
 (defn delete-all
   ([] (delete-all connection-uri-default))

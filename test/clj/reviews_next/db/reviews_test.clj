@@ -1,8 +1,9 @@
-(ns reviews-next.clj.db-test.reviews
+(ns reviews-next.db.reviews-test
   (:require [clojure.test :refer :all]
+            [reviews-next.config :as config]
             [reviews-next.db.reviews :as reviews]))
 
-(def connection-uri-test reviews/connection-uri-test)
+(def connection-uri-test (config/connection-uri))
 
 (deftest delete-all-test
   (testing "Test delete all from reviews table"

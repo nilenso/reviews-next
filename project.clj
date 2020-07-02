@@ -43,6 +43,7 @@
                     :dependencies [[ring/ring-mock "0.4.0"]]}}
 
   :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj" "test/cljs"]
   :auto-clean false
   :main reviews-next.core
 
