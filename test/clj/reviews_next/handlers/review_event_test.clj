@@ -19,6 +19,5 @@
                           (mock/content-type "application/json"))
           handler (wrap-json-params review-event/insert-into-db)
           response (handler api-request)]
-      (prn response)
       (is (= (:status response) 200))
       (is (= (:body response) "true")))))

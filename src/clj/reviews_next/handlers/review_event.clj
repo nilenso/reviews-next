@@ -11,7 +11,6 @@
         date (get-in _request [:params "review_date"])]
     (response (str (reviews/insert {:title title :review_date date})))))
 
-
 (defn not-found [_request]
   {:status 404
    :headers {"Content-Type" "text/html"}

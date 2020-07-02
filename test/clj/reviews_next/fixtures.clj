@@ -1,6 +1,9 @@
 (ns reviews-next.fixtures
-  (:require [mount.core :as mount]))
+  (:require
+   [reviews-next.config :refer [config]]
+   [mount.core :as mount]))
 
 (defn load-states [f]
-  (mount/start)
+  (-> (mount/only #{#'config})
+      mount/start)
   (f))

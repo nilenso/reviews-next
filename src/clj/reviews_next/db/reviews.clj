@@ -6,11 +6,9 @@
     [reviews-next.config :as config]
     [reviews-next.db.migrations :as migrations]))
 
-(def connection-uri-default (config/connection-uri))
-
 (defn insert
   "execute insert and return lazy sequence"
-  ([data] (insert data connection-uri-default))
+  ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
      (do
@@ -20,12 +18,12 @@
        false))))
 
 (defn delete-all
-  ([] (delete-all connection-uri-default))
+  ([] (delete-all (config/connection-uri)))
   ([connection-uri]
    (db-do-commands connection-uri "delete from reviews")))
 
 (defn get-list
-  ([] (get-list connection-uri-default))
+  ([] (get-list (config/connection-uri)))
   ([connection-uri]
    (try
       (query connection-uri ["select * from reviews"])
