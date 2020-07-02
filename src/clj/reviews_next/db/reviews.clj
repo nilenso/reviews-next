@@ -6,24 +6,33 @@
           [reviews-next.config :as config]
           [reviews-next.db.migrations :as migrations]))
 
-
 (def connection-uri-default (config/connection-uri))
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
   {:title "title-trial-2"
-   :review_date "21-09-2020"})
+   :review_date "21-04-2020"})
+
+(defn format-date
+  [date]
+  (.format
+      (java.text.SimpleDateFormat. "yyyy-MM-dd")
+      (.parse
+        (java.text.SimpleDateFormat. "dd-MM-yyyy")
+        date)))
 
 (defn insert
   "execute insert and return lazy sequence"
   ([data] (insert data connection-uri-default))
   ([data connection-uri]
    (try
-        do
-         (insert! connection-uri :reviews data)
-         true
+     (do
+       (insert! connection-uri :reviews
+                                        {:title (:title data)
+                                         :review_date (format-date (:review_date data))})
+       true)
     (catch Exception e
-         false))))
+         (str e)))))
 
 
 (defn delete-all
@@ -35,7 +44,7 @@
   ([] (get-list connection-uri-default))
   ([connection-uri]
    (try
-      (query connection-uri ["select * from reviews"])
+      (query connection-uri ["select id, title from reviews order by review_date desc"])
      (catch Exception e
       false))))
 
@@ -49,4 +58,4 @@
                             (nth
                               (query t-con ["SELECT id FROM reviews ORDER BY id DESC LIMIT 1"]) 0) :id))
      (catch Exception e
-            (str (.getMessage e))))))
+      false))))

@@ -1,24 +1,27 @@
 (ns reviews-next.pages.review-event
   (:require
-    [re-frame.core :as re-frame]
-    [cljs.core.async :refer [<!]]
-    [cljs-http.client :as http]
-    [clojure.pprint :as pp]
-    [cljs.spec.alpha :as s]
-    [stylefy.core :as stylefy :refer [use-style]]
-    [reviews-next.db :as db]
-    [reviews-next.events :as events]
-    [reviews-next.subs :as subs]
-    [reviews-next.components :as components])
+   [re-frame.core :as re-frame]
+   [cljs.core.async :refer [<!]]
+   [cljs-http.client :as http]
+   [clojure.pprint :as pp]
+   [cljs.spec.alpha :as s]
+   [stylefy.core :as stylefy :refer [use-style]]
+   [reviews-next.db :as db]
+   [reviews-next.events :as events]
+   [reviews-next.subs :as subs]
+   [reviews-next.components :as components])
   (:require-macros
     [cljs.core.async.macros :refer [go]]))
+
 
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
 (s/def ::date (s/and #(not (nil? %)) #(not (empty? %))))
+(s/def ::description (s/and #(not (nil? %)) #(<= 1 (count %))))
 
 (defn title-valid? [title] (s/valid? ::title title))
 (defn date-valid? [date] (s/valid? ::date date))
+(defn desc-valid? [description] (s/valid? ::description description))
 
 ;;styles
 (def main-content-style
@@ -51,24 +54,27 @@
 ;;init functions
 (defn add-participants
   []
-  (go (let [response (<! (http/get "http://localhost:3000/api/users"))
+  (go (let [response (<! (http/get "/api/users"))
             participants (re-frame/subscribe [::subs/participants])]
+        (js/console.log (type (:body response)))
         (re-frame/dispatch [::events/set-participants (:body response)]))))
 
 ;;events
 (defn call-save-api-fn
-  [title date]
+  [title date description]
   (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
         request-map {:json-params {:title title
                                    :review_date date
+                                   :review_description description
                                    :from_uid "U1"
                                    :participants @selected-participants}}
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])]
     (re-frame/dispatch [::events/all-fields-valid-change (and
-                                                              (date-valid? date)
-                                                              (title-valid? title))])
+                                                          (date-valid? date)
+                                                          (title-valid? title)
+                                                          (desc-valid? description))])
     (when @all-fields-valid?
-      (go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
+      (go (let [response (<! (http/post "/api/review-event" request-map))]
            (js/console.log (:body response)))))))
 
 (defn toggle-participants
@@ -99,8 +105,9 @@
 (defn review-event []
   (let [review-title (re-frame/subscribe [::subs/review-event-title])
         review-date (re-frame/subscribe [::subs/review-date])
+        review-description (re-frame/subscribe [::subs/review-description])
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])
-        call-save-api #(call-save-api-fn @review-title @review-date)
+        call-save-api #(call-save-api-fn @review-title @review-date @review-description)
         participants (re-frame/subscribe [::subs/participants])
         selected-participants (re-frame/subscribe [::subs/selected-participants])]
    (add-participants)
@@ -109,31 +116,42 @@
       [:div.side-section (use-style (section-style "20vw"))]
       [:div.main-section (use-style (section-style "80vw"))
        [:div#box-button (use-style box-button-style)
-         [:input#title-box
-                          {:style {:padding "5px"
-                                   :border "5px white"
-                                   :box-shadow "5px 5px 10px #888888"
-                                   :font-size "large"
-                                   :width "80%"
-                                   :height "10vh"}
-                           :placeholder "Review Event Title"
-                           :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
-         [:input#date-picker
-                            {:style   {:border "5px white"
-                                       :border-right "3px solid #f8337d"
-                                       :box-shadow "5px 5px 10px #888888"}
-                             :color "#f8337d"
-                             :type "date"
-                             :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
-       [:div#description]
+        [:input#title-box
+         {:style {:padding "5px"
+                  :border "5px white"
+                  :box-shadow "5px 5px 10px #888888"
+                  :font-size "large"
+                  :width "80%"
+                  :height "10vh"}
+          :placeholder "Review Event Title"
+          :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
+        [:input#date-picker
+         {:style   {:border "5px white"
+                    :border-right "3px solid #f8337d"
+                    :box-shadow "5px 5px 10px #888888"}
+          :color "#f8337d"
+          :type "date"
+          :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
+       [:div.markdown {
+                       :style {:padding "10px"
+                               :border "5px white"
+                               :box-shadow "2px 2px px #888888"}}
+
+        (components/MarkDownEditor
+         {:style {:width "80%"
+                  :height "50vh"
+                  :padding-bottom "20px"}
+          :placeholder "Add description"
+          :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])})]
+
        [:div.participants-box (use-style checkbox-area)
-        [:b "Add Participants"]]
-        ; [participants-checkboxes participants]]
+        [:b "Add Participants"]
+        [participants-checkboxes participants]]
        (components/Button
-               {:variant "contained"
-                :onClick call-save-api
-                :style {:margin "5px"
-                        :background "#f8337d"
-                        :color "white"}} "Save")
+        {:variant "contained"
+         :onClick call-save-api
+         :style {:margin "5px"
+                 :background "#f8337d"
+                 :color "white"}} "Save")
        (when-not @all-fields-valid?
          [:h3 {:style {:color "red"}} "*Fill all fields"])]]))

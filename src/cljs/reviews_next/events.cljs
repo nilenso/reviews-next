@@ -48,3 +48,13 @@
   ::remove-from-selected-participants
   (fn [db [_ new-val]]
     (assoc db :selected-participants (disj (set (get db :selected-participants)) new-val))))
+
+(re-frame/reg-event-db
+  ::set-review-events
+  (fn [db [_ new-val]]
+    (assoc db :review-events new-val)))
+
+(re-frame/reg-event-db
+  ::set-current-review-event
+  (fn [db [_ new-val]]
+    (assoc db :current-review-event new-val)))

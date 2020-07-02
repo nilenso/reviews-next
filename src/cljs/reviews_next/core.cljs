@@ -3,11 +3,14 @@
             [re-frame.core :as re-frame]
             [reviews-next.events :as events]
             [reviews-next.pages.login :as login]
-            [reviews-next.pages.review-event :as review-event]))
+            [reviews-next.pages.review-event :as review-event]
+            [reviews-next.pages.feedback-event :as feedback-event]))
+
 
 (defn app []
   [:div
-   [review-event/review-event]])
+   ; [review-event/review-event]
+   [feedback-event/feedback-event]])
 
 (defn init! []
   (re-frame/dispatch [:initialize-db])

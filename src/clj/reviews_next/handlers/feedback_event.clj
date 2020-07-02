@@ -25,3 +25,6 @@
  (let [review_id (get-in _request [:params :review_id])
        user-ids (user-reviews/users-for-review-id review_id)]
    (response (users/users-for-given-ids user-ids))))
+
+(defn reviews-list [_request]
+   (response (reviews/get-list)))

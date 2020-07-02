@@ -16,6 +16,7 @@
         "api/" {
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
                 "users" (wrap-json-response review-event/users-list)
+                "review-events-list" (wrap-json-response feedback-event/reviews-list)
                 ["users-from-review/" :review_id] (wrap-json-response feedback-event/users-list)}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])

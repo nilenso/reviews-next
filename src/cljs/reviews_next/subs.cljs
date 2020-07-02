@@ -31,3 +31,13 @@
   ::selected-participants
   (fn [db _]
     (:selected-participants db)))
+
+(re-frame/reg-sub
+  ::review-events
+  (fn [db _]
+    (:review-events db)))
+
+(re-frame/reg-sub
+  ::current-review-event
+  (fn [db _]
+    (:current-review-event db)))
