@@ -54,7 +54,7 @@
 ;;init functions
 (defn add-participants
   []
-  (go (let [response (<! (http/get "http://localhost:3000/api/users"))
+  (go (let [response (<! (http/get "/api/users"))
             participants (re-frame/subscribe [::subs/participants])]
         (re-frame/dispatch [::events/set-participants (:body response)]))))
 
@@ -62,14 +62,11 @@
 
 (defn clear-all-fields
   []
-  ((re-frame/dispatch [::events/clear-all-fields true])
-   (re-frame/dispatch [::events/date-change ""])
-   (re-frame/dispatch [::events/title-change ""])
-   (re-frame/dispatch [::events/description-change ""])
-   (re-frame/dispatch [::events/all-fields-valid-change false])
-   (re-frame/dispatch [::events/remove-all-selected-participants])
-   (re-frame/dispatch [::events/clear-all-fields false])
-   ))
+  (re-frame/dispatch [::events/date-change ""])
+  (re-frame/dispatch [::events/title-change ""])
+  (re-frame/dispatch [::events/description-change ""])
+  (re-frame/dispatch [::events/all-fields-valid-change false])
+  (re-frame/dispatch [::events/remove-all-selected-participants]))
 
 (defn call-save-api-fn
   [title date description]
@@ -85,13 +82,15 @@
                                                           (title-valid? title)
                                                           (desc-valid? description))])
     (when @all-fields-valid?
-      ((go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
+      ((go (let [response (<! (http/post "/api/review-event" request-map))]
             (js/console.log (:body response))))
       ))
-    (clear-all-fields)))
+    (clear-all-fields)
+    ))
 
 (defn toggle-participants
   [checked? id]
+  (js/console.log id)
   (let [selected-participants [::subs/selected-participants]]
     (if checked?
       (re-frame/dispatch [::events/add-to-selected-participants id])
@@ -100,20 +99,22 @@
 ;;components
 (defn participants-checkboxes
   [participants]
-  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
-        reset-checkbox? (re-frame/subscribe [::subs/clear-all-fields])]
-    [:div
-     (for [participant @participants]
-      ^{:key (participant :id)}
-       [:div.checkbox (use-style checkbox-style)
-        [:input
-               {:type "checkbox"
-                :id (participant :id)
-                :name "checkbox"
-                :value (if reset-checkbox? false (participant :id))
-                :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
-        [:label
-               {:for (participant :id)} (participant :name)]])]))
+  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])]
+    (fn []
+      [:div
+       (for [participant @participants]
+         ^{:key (participant :id)}
+         (let [checked? (some #(= (participant :id) %) @selected-participants)]
+           [:div.checkbox (use-style checkbox-style)
+            [:input
+             {:type "checkbox"
+              :id (participant :id)
+              :name "checkbox"
+              :value (participant :id)
+              :checked checked?
+              :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
+            [:label
+             {:for (participant :id)} (participant :name)]]))])))
 
 ;;main code
 (defn review-event []

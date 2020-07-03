@@ -31,8 +31,3 @@
   ::selected-participants
   (fn [db _]
     (:selected-participants db)))
-
-(re-frame/reg-sub
- ::clear-all-fields
- (fn [db _]
-   (:clear-all-fields db)))
