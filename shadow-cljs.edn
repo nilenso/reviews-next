@@ -6,7 +6,10 @@
                 [cheshire "5.10.0"]
                 [cljs-http "0.1.46"]
                 [day8.re-frame/test "0.1.5"]
-                [re-frame "1.0.0-rc2"]]
+                [re-frame "1.0.0-rc2"]
+                [day8.re-frame/http-fx "v0.2.0"]
+                [cljs-ajax "0.7.5"]
+                [cider/cider-nrepl "0.25.2"]]
 
  :builds       {:app {:output-dir "target/assets/"
                       :asset-path "assets"
