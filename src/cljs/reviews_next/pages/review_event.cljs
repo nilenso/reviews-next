@@ -69,24 +69,21 @@
   (re-frame/dispatch [::events/remove-all-selected-participants]))
 
 (defn call-save-api-fn
-  [title date description]
-  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])
-        request-map {:json-params {:title title
+  [title date description selected-participants ]
+  (js/console.log "Coming here")
+  (let [request-map {:json-params {:title title
                                    :review_date date
                                    :review_description description
                                    :from_uid "U1"
-                                   :participants @selected-participants}}
-        all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])]
-    (re-frame/dispatch [::events/all-fields-valid-change (and
-                                                          (date-valid? date)
-                                                          (title-valid? title)
-                                                          (desc-valid? description))])
-    (when @all-fields-valid?
-      ((go (let [response (<! (http/post "/api/review-event" request-map))]
-            (js/console.log (:body response))))
-      ))
-    (clear-all-fields)
-    ))
+                                   :participants selected-participants}}
+        all-fields-valid? (and
+                           (date-valid? date)
+                           (title-valid? title)
+                           (desc-valid? description))]
+    (when all-fields-valid?
+      (go (let [response (<! (http/post "/api/review-event" request-map))]
+            (js/console.log (str "review event api response: " (:body response))))))
+    (clear-all-fields)))
 
 (defn toggle-participants
   [checked? id]
@@ -122,11 +119,9 @@
         review-date (re-frame/subscribe [::subs/review-date])
         review-description (re-frame/subscribe [::subs/review-description])
         all-fields-valid? (re-frame/subscribe [::subs/all-fields-valid?])
-        call-save-api #(call-save-api-fn @review-title @review-date @review-description)
-        participants (re-frame/subscribe [::subs/participants])
-        selected-participants (re-frame/subscribe [::subs/selected-participants])]
-   (add-participants)
-
+        selected-participants (re-frame/subscribe [::subs/selected-participants])
+        call-save-api #(call-save-api-fn @review-title @review-date @review-description @selected-participants)
+        participants (re-frame/subscribe [::subs/participants])]
    [:div.main-content (use-style main-content-style)
       [:div.side-section (use-style (section-style "20vw"))]
       [:div.main-section (use-style (section-style "80vw"))
@@ -165,7 +160,7 @@
         ]     
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
-         [participants-checkboxes participants]
+         [participants-checkboxes @participants @selected-participants]
        (components/Button
         {:variant "contained"
          :onClick call-save-api

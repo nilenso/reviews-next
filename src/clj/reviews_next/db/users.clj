@@ -8,7 +8,7 @@
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
-  {:id "U8"
+  {:id "U4"
    :name "DEF"
    :email "def@gmail.com"})
 
@@ -17,9 +17,9 @@
   ([data] (insert data connection-uri-default))
   ([data connection-uri]
    (try
-        do
-          (insert! connection-uri :users data)
-          true
+     (do
+       (insert! connection-uri :users data)
+       true)
      (catch Exception e
        false))))
 
