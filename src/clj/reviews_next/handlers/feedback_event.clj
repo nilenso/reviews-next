@@ -28,3 +28,16 @@
 
 (defn reviews-list [_request]
    (response (reviews/get-list)))
+
+(defn into-user-feedback
+  [_request]
+  (let [from_uid (get-in _request [:params "from_uid"])
+        to_uid (get-in _request [:params "to_uid"])
+        review_id (get-in _request [:params "review_id"])
+        feedback (get-in _request [:params "feedback"])
+        level (get-in _request [:params "level"])]
+    (response (str user-feedback/insert {:from_uid from_uid
+                                         :to_uid to_uid
+                                         :review_id review_id
+                                         :feedback feedback
+                                         :level level}))))
