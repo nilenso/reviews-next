@@ -1,9 +1,7 @@
 (ns reviews-next.pages.feedback-event
   (:require
    ["@material-ui/core" :as material-ui]
-   ; [cljsjs.material-ui]
-   ; [cljs-react-material-ui.core :refer [get-mui-theme color]]
-   ; [cljs-react-material-ui.reagent :as ui]
+   [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [cljs.core.async :refer [<!]]
    [cljs-http.client :as http]
@@ -86,12 +84,38 @@
   [review-events]
   (first review-events))
 
-(defn current-feedback-for-user-component
-  [current-review-id]
-  (let [_ (re-frame/dispatch [::events/get-users-for-review current-review-id])
-        current-user @(re-frame/subscribe [::subs/current-user])
-        users-for-review @(re-frame/subscribe [::subs/users-for-review])]
-    (js/console.log users-for-review)
+(defn publish-button
+  []
+  (let [current-user @(re-frame/subscribe [::subs/current-user])
+        current-review-event @(re-frame/subscribe [::subs/current-review-event])
+        feedback @(re-frame/subscribe [::subs/feedback])
+        level @(re-frame/subscribe [::subs/level])]
+    (components/Button
+     {:variant "contained"
+      :on-click
+               #(re-frame/dispatch [::events/publish-feedback {:from_uid "U3"
+                                                                :to_uid (:id current-user)
+                                                                :review_id (:id current-review-event)
+                                                                :feedback feedback
+                                                                :level level}])
+      :style {:margin "5px"
+              :background "#EEF6FC"
+              :color "#257942"} }"Publish")))
+
+(defn feedback-markdown
+  []
+  (components/MarkDownEditor
+   {:style {:width "80%"
+            :height "50vh"
+            :padding "20px"
+            :margin "10px 0px 10px 0px"}
+    :placeholder "Add Feedback"
+    :onChange  #(re-frame/dispatch [::events/feedback-change (. %4 getText)])}))
+
+(defn current-user-component
+  [users-for-review]
+  (let [current-user @(re-frame/subscribe [::subs/current-user])]
+    ; (js/console.log users-for-review)
     [:div.feedback-user-display (use-style current-user-name)
      [:h3 "Feedback from You to "]
      (components/Select-Users
@@ -106,9 +130,11 @@
 
 (defn current-review-event-component
   [review-events]
-  (let [current-review-event @(re-frame/subscribe [::subs/current-review-event])]
+  (let [current-review-event @(re-frame/subscribe [::subs/current-review-event])
+        users-for-review @(re-frame/subscribe [::subs/users-for-review])
+        _ (re-frame/dispatch [::events/get-users-for-review (:id current-review-event)])]
     [:div
-     (current-feedback-for-user-component (:id current-review-event))
+     (current-user-component users-for-review)
      [:div.review-event-name-display (use-style review-event-name)
       [:h3 "For Review Event:"]
       [:b {:style {:color "#00947E"}} (:title current-review-event)]
@@ -126,25 +152,16 @@
                          review-events)]]))
 ;; main code
 (defn feedback-event []
-  (let [review-events @(re-frame/subscribe [::subs/review-events])
-        current-review-event (get-current-review-event review-events)]
+  (let [review-events @(re-frame/subscribe [::subs/review-events])]
    (re-frame/dispatch [::events/populate-review-events-list])
    (fn []
      [:div.main-content (use-style main-content-style)
         [:div.side-section (use-style (section-style "20vw"))]
         [:div.main-section (use-style (section-style "80vw"))
-
-
+         ; (current-user-component current-review-event)
          (current-review-event-component review-events)
          [:div#box-button (use-style box-button-style)
-          (components/MarkDownEditor
-           {:style {:width "80%"
-                    :height "50vh"
-                    :padding "20px"
-                    :margin "10px 0px 10px 0px"}
-            :placeholder "Add Feedback"
-            :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])})]
-
+          (feedback-markdown)]
          [:div.level (use-style level-style)
           [:label {:for "level"} "Level:"]
           [:input {:type "number"
@@ -157,9 +174,4 @@
             :style {:margin "5px"
                     :background "#EEF6FC"
                     :color "#1D72AA"}} "Save As Draft")
-          (components/Button
-           {:variant "contained"
-            ; :onClick call-save-api
-            :style {:margin "5px"
-                    :background "#EEF6FC"
-                    :color "#257942"}} "Publish")]]])))
+          (publish-button)]]])))

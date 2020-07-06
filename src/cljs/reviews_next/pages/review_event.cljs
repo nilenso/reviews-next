@@ -150,8 +150,6 @@
           :value @review-description
           :placeholder "Add description"
           :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])})]
-
-
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
        [participants-checkboxes @participants @selected-participants]

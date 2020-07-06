@@ -125,3 +125,19 @@
   ::set-level
   (fn [db [_ new-val]]
     (assoc db :level new-val)))
+
+(re-frame/reg-event-fx
+ ::publish-feedback
+ (fn [_ [_ feedback-param]]
+   {:http-xhrio {:method :post
+                 :uri    "/api/publish-feedback"
+                 :params feedback-param
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-users-for-review]
+                 :on-fail    [::api-failed]}}))
+
+(re-frame/reg-event-db
+  ::feedback-change
+  (fn [db [_ new-desc]]
+    (assoc db :feedback new-desc)))

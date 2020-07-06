@@ -15,4 +15,5 @@
      :current-review-event {}
      :users-for-review []
      :current-user {}
+     :feedback ""
      :level nil}}})

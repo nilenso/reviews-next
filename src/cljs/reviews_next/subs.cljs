@@ -54,6 +54,11 @@
     (:current-user db)))
 
 (re-frame/reg-sub
+  ::feedback
+  (fn [db _]
+    (:feedback db)))
+
+(re-frame/reg-sub
   ::level
   (fn [db _]
     (:level db)))
