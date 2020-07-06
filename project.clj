@@ -12,6 +12,7 @@
                  [bidi "2.1.6"]
                  [cider/piggieback "0.5.0"]
                  [cheshire "5.10.0"]
+                 [cljsjs/material-ui "4.10.2-0"]
                  [hiccup "1.0.5"]
                  [hikari-cp "2.12.0"]
                  [honeysql "0.9.10"]

@@ -12,4 +12,7 @@
      :selected-participants (vector nil)}
     :add-feedback-event
     {:review-events (vector nil)
-     :current-review-event {}}}})
+     :current-review-event {}
+     :users-for-review []
+     :current-user {}
+     :level nil}}})

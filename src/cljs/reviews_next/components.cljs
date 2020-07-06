@@ -1,23 +1,30 @@
 (ns reviews-next.components
   (:require
+   [reagent.core :as reagent]
    ["react-quill" :as ReactQuill]
    ["@material-ui/core" :as material-ui]))
 
 (defn TextField
-  [component-value]
-  [:> material-ui/TextField component-value])
+  [props-map]
+  [:> material-ui/TextField props-map])
 
 (defn Button
-  [component-value text]
-  [:> material-ui/Button component-value text])
+  [props-map text]
+  [:> material-ui/Button props-map text])
 
-(defn MarkDownEditor [component-value]
-  [:> ReactQuill component-value])
+(defn MarkDownEditor [props-map]
+  [:> ReactQuill props-map])
 
-(defn Select
-  ([]
-   [:> material-ui/Select {:value {:age ["10"]}
-                           :onChange (js/console.log "Clicked")}
-    [:> material-ui/Option {:value "10"} "Ten"]]))
-    ; (for [option options]
-    ;   [:> material-ui/Option {:value (:value option)}])]))
+(defn Select-Review-Event
+  ([select-props-map review-events-list]
+   [:> material-ui/Select select-props-map
+    (for [review-event review-events-list]
+      ^{:key (:id review-event)}
+      [:> material-ui/MenuItem {:value (:id review-event)} (:title review-event)])]))
+
+(defn Select-Users
+  ([select-props-map users-list]
+   [:> material-ui/Select select-props-map
+    (for [user users-list]
+      ^{:key (:id user)}
+      [:> material-ui/MenuItem {:value (:id user)} (:name user)])]))

@@ -5,7 +5,13 @@
                 [stylefy "2.0.0"]
                 [cheshire "5.10.0"]
                 [cljs-http "0.1.46"]
+                [cljs-ajax "0.7.5"]
+                [day8.re-frame/http-fx "v0.2.0"]
                 [day8.re-frame/test "0.1.5"]
+                [cljsjs/material-ui "4.10.2-0"]
+                [cljs-react-material-ui "0.2.48"]
+                [cljsjs/react "15.6.1-1"]
+                [cljsjs/react-dom "15.6.1-1"]
                 [re-frame "1.0.0-rc2"]]
 
  :builds       {:app {:output-dir "target/assets/"
