@@ -7,7 +7,8 @@
 
 (defn app []
   [:div
-   [(feedback-event/feedback-event)]])
+   ; [review-event/review-event]])
+   [feedback-event/feedback-event]])
 
 (defn init! []
   (re-frame/dispatch [:reviews-next.events/initialize-db])
