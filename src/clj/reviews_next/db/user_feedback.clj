@@ -4,9 +4,6 @@
           [clojure.java.jdbc :refer :all]
           [reviews-next.config :as config]))
 
-(def connection-uri-default (config/connection-uri))
-(def connection-uri-test (config/connection-uri "test"))
-
 (def data
   {:from_uid "U3"
    :to_uid "U2"
@@ -16,16 +13,16 @@
 
 (defn insert
   "execute query and return lazy sequence"
-  ([data] (insert data connection-uri-default))
+  ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
-        do
+        (do
           (insert! connection-uri :user_feedback data)
-          true
+          true)
      (catch Exception e
-       false))))
+       (str e)))))
 
 (defn delete-all
-  ([] (delete-all connection-uri-default))
+  ([] (delete-all (config/connection-uri)))
   ([connection-uri]
    (db-do-commands connection-uri "delete from user_feedback")))

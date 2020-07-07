@@ -80,7 +80,8 @@
 (re-frame/reg-event-db
   ::set-review-events
   (fn [db [_ new-val]]
-    (let [db (assoc db :review-events new-val)]
+    (-> db
+      (assoc db :review-events new-val)
       (assoc db :current-review-event (first new-val)))))
 
 (re-frame/reg-event-db

@@ -7,37 +7,39 @@
             [reviews-next.db.user-reviews :as user-reviews]
             [reviews-next.db.user-feedback :as user-feedback]
             [ring.middleware.json :refer [wrap-json-params wrap-json-response]]
-            [ring.util.response :refer [response]]))
+            [ring.util.response :refer [response created]]))
 
-; change publish ito to create
-(defn insert-into-db [_request]
-  (let [title (get-in _request [:params "title"])
-        date (get-in _request [:params "review_date"])
-        from_uid (get-in _request [:params "from_uid"])
-        participants (get-in _request [:params "participants"])
-        review_id (reviews/insert-and-get-last-id {:title title
-                                                   :review_date date})]
-    (doseq [participant participants]
-       (user-reviews/insert {:from_uid from_uid :to_uid participant :review_id review_id}))
-    (response (str "Posted"))))
+(defn failed-request [error]
+  {:status 404
+   :headers {"Content-Type" "text"}
+   :body error})
 
 (defn users-list [_request]
  (let [review_id (get-in _request [:params :review_id])
-       user-ids (user-reviews/users-for-review-id review_id)]
-   (response (users/users-for-given-ids user-ids))))
+       user-ids (user-reviews/users-for-review-id review_id)
+       result (users/users-for-given-ids user-ids)]
+   (if (empty? result)
+       (failed-request result)
+       (response result))))
 
 (defn reviews-list [_request]
-   (response (reviews/get-list)))
-
+  (let [result (reviews/get-list)]
+    (if (empty? result)
+      (failed-request result)
+      (response result))))
+ 
 (defn into-user-feedback
   [_request]
   (let [from_uid (get-in _request [:params "from_uid"])
         to_uid (get-in _request [:params "to_uid"])
         review_id (get-in _request [:params "review_id"])
         feedback (get-in _request [:params "feedback"])
-        level (get-in _request [:params "level"])]
-    (response (str user-feedback/insert {:from_uid from_uid
+        level (get-in _request [:params "level"])
+        result  (user-feedback/insert   {:from_uid from_uid
                                          :to_uid to_uid
                                          :review_id review_id
                                          :feedback feedback
-                                         :level level}))))
+                                         :level level})]
+    (if (= result true)
+      (created "Insertion Successful")
+      (failed-request (first result)))))
