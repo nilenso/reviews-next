@@ -26,8 +26,22 @@
        user-ids (user-reviews/users-for-review-id review_id)]
    (response (users/users-for-given-ids user-ids))))
 
+(defn create_user_review_map [user_id review_id] 
+  {:user_id user_id :review_id review_id})
+
+(defn get-user-and-review-ids [_request]
+  (let [reviews-list (user-reviews/get-reviews-for-user "U2")
+        user_ids (map :from_uid reviews-list)
+        review_ids (map :review_id reviews-list)
+        user_review_list (map create_user_review_map user_ids review_ids)]
+    
+    (response  user_review_list)))
+
 (defn reviews-list [_request]
    (response (reviews/get-list)))
+
+;; (defn get-reviews-for-user [_request]
+;;   (response (user-reviews/get-reviews-for-user "U2")))
 
 (defn into-user-feedback
   [_request]

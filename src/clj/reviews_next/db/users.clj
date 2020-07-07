@@ -8,8 +8,8 @@
 (def connection-uri-test (config/connection-uri "test"))
 
 (def data
-  {:id "U5"
-   :name "MNO"
+  {:id "U3"
+   :name "shreyanshi"
    :email "mno@gmail.com"})
 
 (defn insert

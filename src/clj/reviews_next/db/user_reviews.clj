@@ -9,8 +9,8 @@
 
 (def data
   {:from_uid "U1"
-   :to_uid "U2"
-   :review_id 3})
+   :to_uid "U3"
+   :review_id 1})
 
 (defn insert
   "execute query and return lazy sequence"
@@ -28,13 +28,23 @@
   ([connection-uri]
    (db-do-commands connection-uri "delete from user_reviews")))
 
-(defn get-list
+(defn (get-list)
   ([] (get-list connection-uri-default))
   ([connection-uri]
    (try
       (query connection-uri ["select * from user_reviews"])
      (catch Exception e
       false))))
+
+(defn get-reviews-for-user
+  ([user-uid] (get-reviews-for-user user-uid connection-uri-default))
+  ([user-uid connection-uri]
+   (try
+     (query connection-uri ["select * from user_reviews where to_uid=?" user-uid])
+     (catch Exception e
+       false))))
+
+(get-reviews-for-user "U2")
 
 (defn users-for-review-id
   ([review-id] (users-for-review-id review-id connection-uri-default))
