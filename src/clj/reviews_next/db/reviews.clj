@@ -48,6 +48,14 @@
      (catch Exception e
       false))))
 
+;; (defn get-list-reviewers
+;;   ([] (get-list-reviewers connection-uri-default))
+;;   ([connection-uri]
+;;    (try
+;;      (query connection-uri ["select id, title from reviews order by review_date desc"])
+;;      (catch Exception e
+;;        false))))
+
 (defn insert-and-get-last-id
   ([data] (insert-and-get-last-id data connection-uri-default))
   ([data connection-uri]

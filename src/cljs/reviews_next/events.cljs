@@ -138,6 +138,22 @@
                  :on-fail    [::api-failed]}}))
 
 (re-frame/reg-event-db
+ ::set-reviewers-list
+ (fn [db [_ new-val]]
+   (assoc db :reviewers-list new-val)))
+
+(re-frame/reg-event-fx
+ ::publish-reviewers
+ (fn [_ [_ feedback-param]]
+   {:http-xhrio {:method :post
+                 :uri    "/api/get-reviews-for-user"
+                 :params feedback-param
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-reviewers-list]
+                 :on-fail    [::api-failed]}}))
+
+(re-frame/reg-event-db
   ::feedback-change
   (fn [db [_ new-desc]]
     (assoc db :feedback new-desc)))

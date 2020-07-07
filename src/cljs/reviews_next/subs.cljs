@@ -62,3 +62,8 @@
   ::level
   (fn [db _]
     (:level db)))
+
+(re-frame/reg-sub
+ ::reviewers-list
+ (fn [db _]
+   (:reviewers-list db)))

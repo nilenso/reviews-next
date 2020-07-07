@@ -26,8 +26,15 @@
        user-ids (user-reviews/users-for-review-id review_id)]
    (response (users/users-for-given-ids user-ids))))
 
+;; (defn reviewers-list [_request]
+;;   (let [user_ids (get-in _request [:params :from_uid])]
+;;     (response (users/users-for-given-ids user-ids))))
+
 (defn reviews-list [_request]
    (response (reviews/get-list)))
+
+(defn get-reviews-for-user [_request]
+  (response (user-reviews/get-reviews-for-user "U2")))
 
 (defn into-user-feedback
   [_request]

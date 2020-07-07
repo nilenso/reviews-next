@@ -16,4 +16,7 @@
      :users-for-review []
      :current-user {}
      :feedback ""
-     :level nil}}})
+     :level nil}
+    :view-feedback-event
+    {:reviwers-list (vector nil)
+     }}})
