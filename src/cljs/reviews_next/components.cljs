@@ -28,3 +28,17 @@
     (for [user users-list]
       ^{:key (:id user)}
       [:> material-ui/MenuItem {:value (:id user)} (:name user)])]))
+
+(defn DialogTitle
+  [dialog-title-props title]
+  [:> material-ui/DialogTitle dialog-title-props title])
+
+(defn DialogContent
+  [content]
+  [:> material-ui/DialogContent content])
+
+(defn Dialog
+  [dialog-props dialog-title-props title content]
+  [:> material-ui/Dialog dialog-props
+   [DialogTitle dialog-title-props title]
+   [DialogContent content]])

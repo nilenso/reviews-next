@@ -81,9 +81,24 @@
    :width "20vw"
    :justify-content "flex-start"})
 
-(defn get-current-review-event
-  [review-events]
-  (first review-events))
+(defn view-review-description
+  [review-title review-description]
+  (reagent/with-let [open? (reagent/atom false)]
+    (js/console.log "Outside Button" @open?)
+    [:div
+     [components/Button
+      {:onClick
+               (fn []
+                 (reset! open? true)
+                 (js/console.log "Inside button " @open?))
+       :style {:margin "0px 5px"
+               :color "#00947E"}} "View"]
+     [components/Dialog
+      {:open @open?
+       :onClose (fn [] (reset! open? false))}
+      {:onClose (fn [] (reset! open? false))}
+      review-title
+      review-description]]))
 
 (defn publish-button
   []
@@ -142,10 +157,7 @@
          [:h3 "For Review Event:"]
          ; (js/console.log "Inside review component" current-review-event)
          [:b {:style {:color "#00947E"}} (:title current-review-event)]
-         [components/Button
-          {; :onClick call-save-api
-           :style {:margin "0px 5px"
-                   :color "#00947E"}} "View"]
+         [view-review-description (:title current-review-event) (:review_description current-review-event)]
          [components/Select-Review-Event
                             {:defaultValue "Change"
                              :multiple false
@@ -178,6 +190,8 @@
             [:input {:type "number"
                      :id "level"
                      :on-change #(re-frame/dispatch [::events/set-level (-> % .-target .-value)])}]]
+           ; [:div.Modal
+           ;  [components/Button-Modal]]
            [:div.buttons (use-style linear-buttons)
             [components/Button
              {:variant "contained"
