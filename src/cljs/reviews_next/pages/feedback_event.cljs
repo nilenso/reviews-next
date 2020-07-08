@@ -84,13 +84,11 @@
 (defn view-review-description
   [review-title review-description]
   (reagent/with-let [open? (reagent/atom false)]
-    (js/console.log "Outside Button" @open?)
     [:div
      [components/Button
       {:onClick
                (fn []
-                 (reset! open? true)
-                 (js/console.log "Inside button " @open?))
+                 (reset! open? true))
        :style {:margin "0px 5px"
                :color "#00947E"}} "View"]
      [components/Dialog
@@ -100,23 +98,36 @@
       review-title
       review-description]]))
 
-(defn publish-button
-  []
+(defn draft-publish-buttons
+  [logged-in-user-id]
   (let [current-user @(re-frame/subscribe [::subs/current-user])
         current-review-event @(re-frame/subscribe [::subs/current-review-event])
         feedback @(re-frame/subscribe [::subs/feedback])
         level @(re-frame/subscribe [::subs/level])]
-    [components/Button
-     {:variant "contained"
-      :on-click
-               #(re-frame/dispatch [::events/publish-feedback {:from_uid "U3"
+    [:div
+     [components/Button
+      {:variant "contained"
+       :onClick #(re-frame/dispatch [::events/publish-feedback {:from_uid logged-in-user-id
                                                                 :to_uid (:id current-user)
                                                                 :review_id (:id current-review-event)
                                                                 :feedback feedback
-                                                                :level level}])
-      :style {:margin "5px"
-              :background "#EEF6FC"
-              :color "#257942"} }"Publish"]))
+                                                                :level level
+                                                                :draft? 1}])
+       :style {:margin "5px"
+               :background "#EEF6FC"
+               :color "#1D72AA"}} "Save As Draft"]
+     [components/Button
+      {:variant "contained"
+       :on-click
+                #(re-frame/dispatch [::events/publish-feedback {:from_uid logged-in-user-id
+                                                                :to_uid (:id current-user)
+                                                                :review_id (:id current-review-event)
+                                                                :feedback feedback
+                                                                :level level
+                                                                :draft? 0}])
+       :style {:margin "5px"
+               :background "#EEF6FC"
+               :color "#257942"} } "Publish"]]))
 
 (defn feedback-markdown
   []
@@ -151,7 +162,6 @@
         _ (re-frame/dispatch [::events/get-users-for-review (:id current-review-event)])
         users-for-review (re-frame/subscribe [::subs/users-for-review])]
        [:div
-
         [current-user-component users-for-review]
         [:div.review-event-name-display (use-style review-event-name)
          [:h3 "For Review Event:"]
@@ -168,12 +178,12 @@
                             review-events]]]))
 ;; main code
 (defn feedback-event []
-  (let []
+  (let [logged-in-user-id "U1"]
    (reagent/create-class
     {:component-did-mount
      (fn []
        (js/console.log "Call Review events")
-       (re-frame/dispatch [::events/populate-review-events-list "U1"]))
+       (re-frame/dispatch [::events/populate-review-events-list logged-in-user-id]))
      :display-name "Main component"
      :reagent-render
      (fn []
@@ -188,15 +198,10 @@
            [:div.level (use-style level-style)
             [:label {:for "level"} "Level:"]
             [:input {:type "number"
+                     :step 0.1
                      :id "level"
                      :on-change #(re-frame/dispatch [::events/set-level (-> % .-target .-value)])}]]
            ; [:div.Modal
            ;  [components/Button-Modal]]
            [:div.buttons (use-style linear-buttons)
-            [components/Button
-             {:variant "contained"
-              ; :onClick call-save-api
-              :style {:margin "5px"
-                      :background "#EEF6FC"
-                      :color "#1D72AA"}} "Save As Draft"]
-            [publish-button]]]])})))
+            [draft-publish-buttons logged-in-user-id]]]])})))

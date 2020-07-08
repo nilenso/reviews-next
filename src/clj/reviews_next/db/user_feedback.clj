@@ -9,7 +9,8 @@
    :to_uid "U2"
    :review_id 2
    :feedback "Great Job"
-   :level 6.1})
+   :level 6.1
+   :is_draft 1})
 
 (defn insert
   "execute query and return lazy sequence"
