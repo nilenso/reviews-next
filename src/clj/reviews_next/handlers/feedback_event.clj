@@ -23,11 +23,13 @@
        (response result))))
 
 (defn reviews-list [_request]
-  (let [result (reviews/get-list)]
+  (let [uid (get-in _request [:params :uid])
+        reviews-for-uid-list (user-reviews/reviews-for-user-id uid)
+        result (reviews/reviews-for-given-ids reviews-for-uid-list)]
     (if (empty? result)
       (failed-request result)
       (response result))))
- 
+
 (defn into-user-feedback
   [_request]
   (let [from_uid (get-in _request [:params "from_uid"])

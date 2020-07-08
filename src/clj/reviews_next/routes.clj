@@ -18,7 +18,7 @@
         "api/" {
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
                 "users" (wrap-json-response review-event/users-list)
-                "review-events-list" (wrap-json-response feedback-event/reviews-list)
+                "review-events-list" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/reviews-list)))}}
                 "users-from-review" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/users-list)))}}
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}}
         "assets" (bidi/resources {:prefix "assets/"})

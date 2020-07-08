@@ -8,8 +8,9 @@
 
 
 (def data
-  {:title "title-trial-2"
-   :review_date "21-04-2020"})
+  {:title "Review-3"
+   :review_date "20-04-2000"
+   :review_description "Annual Report"})
 
 (defn format-date
   [date]
@@ -27,7 +28,8 @@
      (do
        (insert! connection-uri :reviews
                                         {:title (:title data)
-                                         :review_date (format-date (:review_date data))})
+                                         :review_date (format-date (:review_date data))
+                                         :review_description (:review_description data)})
        true)
     (catch Exception e
          (str e)))))
@@ -44,7 +46,7 @@
    (try
       (query connection-uri ["select id, title from reviews order by review_date desc"])
      (catch Exception e
-      false))))
+      (str e)))))
 
 (defn insert-and-get-last-id
   ([data] (insert-and-get-last-id data (config/connection-uri)))
@@ -57,3 +59,11 @@
                               (query t-con ["SELECT id FROM reviews ORDER BY id DESC LIMIT 1"]) 0) :id))
      (catch Exception e
       false))))
+
+(defn reviews-for-given-ids
+  ([review-ids] (reviews-for-given-ids review-ids (config/connection-uri)))
+  ([review-ids connection-uri]
+   (try
+      (query connection-uri [(str "select * from reviews where id in " "(" (clojure.string/join "," (map #(str \" % \") review-ids)) ")")])
+     (catch Exception e
+       (str e)))))

@@ -136,10 +136,11 @@
         _ (re-frame/dispatch [::events/get-users-for-review (:id current-review-event)])
         users-for-review (re-frame/subscribe [::subs/users-for-review])]
        [:div
-        (js/console.log "Inside review component" current-review-event)
+
         [current-user-component users-for-review]
         [:div.review-event-name-display (use-style review-event-name)
          [:h3 "For Review Event:"]
+         ; (js/console.log "Inside review component" current-review-event)
          [:b {:style {:color "#00947E"}} (:title current-review-event)]
          [components/Button
           {; :onClick call-save-api
@@ -160,7 +161,7 @@
     {:component-did-mount
      (fn []
        (js/console.log "Call Review events")
-       (re-frame/dispatch [::events/populate-review-events-list]))
+       (re-frame/dispatch [::events/populate-review-events-list "U1"]))
      :display-name "Main component"
      :reagent-render
      (fn []

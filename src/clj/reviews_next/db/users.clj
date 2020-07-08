@@ -5,7 +5,7 @@
           [reviews-next.config :as config]))
 
 (def data
-  {:id "U5"
+  {:id "U6"
    :name "MNO"
    :email "mno@gmail.com"})
 
@@ -14,11 +14,11 @@
   ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
-        do
+        (do
           (insert! connection-uri :users data)
-          true
+          true)
      (catch Exception e
-       false))))
+       (str e)))))
 
 (defn delete-all
   ([] (delete-all (config/connection-uri)))
@@ -31,7 +31,7 @@
    (try
       (query connection-uri ["select * from users"])
      (catch Exception e
-      false))))
+      (str e)))))
 
 (defn users-for-given-ids
   ([user-ids] (users-for-given-ids user-ids (config/connection-uri)))
