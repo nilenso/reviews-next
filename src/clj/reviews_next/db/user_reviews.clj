@@ -9,7 +9,11 @@
 
 (def data
   {:from_uid "U1"
+<<<<<<< HEAD
    :to_uid "U3"
+=======
+   :to_uid "U2"
+>>>>>>> 1020697776d7bca5799bf91041534e3032cb3681
    :review_id 1})
 
 (defn insert
