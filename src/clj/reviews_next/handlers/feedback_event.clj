@@ -37,7 +37,7 @@
         review_id (get-in _request [:params "review_id"])
         feedback (get-in _request [:params "feedback"])
         level (get-in _request [:params "level"])
-        is_draft (get-in _request [:params "draft?"])                                 
+        is_draft (get-in _request [:params "draft?"])
         result  (user-feedback/insert   {:from_uid from_uid
                                          :to_uid to_uid
                                          :review_id review_id

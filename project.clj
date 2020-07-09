@@ -37,7 +37,7 @@
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
              :uberjar {:aot :all}
-             :test {:source-paths ["test"]
+             :test {:source-paths ["test/clj" "test/cljs"]
                     :dependencies [[ring/ring-mock "0.4.0"]]}}
 
   :source-paths ["src/clj" "src/cljs"]

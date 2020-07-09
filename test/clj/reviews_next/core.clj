@@ -1,4 +1,4 @@
-(ns reviews-next.core-test
+(ns reviews-next.core
   (:require [clojure.test :refer :all]
             [reviews-next.core :refer :all]))
 
