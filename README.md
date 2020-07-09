@@ -11,6 +11,7 @@ To compile the clojurescripts, you need to install'shadow-cljs'. Follow this to 
 
 Once this is done, do yarn install in the root directory to get all the dependencies.
 
+
 ### Running
 
 To run the frontend do: `shadow-cljs watch app`
