@@ -18,9 +18,5 @@
      :feedback ""
      :level nil}
     :view-feedback-event
-<<<<<<< HEAD
     {:user-and-review-ids (vector nil)
-=======
-    {:reviwers-list (vector nil)
->>>>>>> 1020697776d7bca5799bf91041534e3032cb3681
      }}})

@@ -9,11 +9,7 @@
 
 (def data
   {:from_uid "U1"
-<<<<<<< HEAD
    :to_uid "U3"
-=======
-   :to_uid "U2"
->>>>>>> 1020697776d7bca5799bf91041534e3032cb3681
    :review_id 1})
 
 (defn insert
@@ -32,19 +28,20 @@
   ([connection-uri]
    (db-do-commands connection-uri "delete from user_reviews")))
 
-(defn (get-list)
+(defn get-list
   ([] (get-list connection-uri-default))
   ([connection-uri]
    (try
-      (query connection-uri ["select * from user_reviews"])
+     (query connection-uri ["select * from user_reviews"])
      (catch Exception e
-      false))))
+       false))))
 
 (defn get-reviews-for-user
   ([user-uid] (get-reviews-for-user user-uid connection-uri-default))
   ([user-uid connection-uri]
    (try
-     (query connection-uri ["select * from user_reviews where to_uid=?" user-uid])
+     (query connection-uri ["select * from user_reviews where to_uid=?" user-uid] 
+            {:row-fn (fn [row] {:from_uid (:from_uid row) :review_id (:review_id row)})})
      (catch Exception e
        false))))
 

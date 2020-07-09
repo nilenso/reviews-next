@@ -64,12 +64,6 @@
     (:level db)))
 
 (re-frame/reg-sub
-<<<<<<< HEAD
  ::user-and-review-ids
  (fn [db _]
    (:user-and-review-ids db)))
-=======
- ::reviewers-list
- (fn [db _]
-   (:reviewers-list db)))
->>>>>>> 1020697776d7bca5799bf91041534e3032cb3681
