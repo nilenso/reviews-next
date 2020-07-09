@@ -2,5 +2,6 @@
 
 (defn login []
   [:div.container
-   [:div {:class "g-signin2"
-          :data-onsuccess "onSignIn"}]])
+   [:div
+    {:class "g-signin2"
+      :data-onsuccess "onSignIn"}]])

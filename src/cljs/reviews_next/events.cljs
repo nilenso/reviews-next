@@ -2,14 +2,34 @@
   (:require [re-frame.core :as re-frame]
             [reviews-next.db :as db]))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
-   {:db (db/initial-db)}))
+   {:db db/initial-db}))
 
 (re-frame/reg-fx
  ::setup-google-signin-functions
- (fn []
+ (fn [_ _]
    (set!
     (.. js/window -onSignIn)
-    (cljs->js (fn [& args] (apply (.-log js/console) args))))))
+    (clj->js (fn [& args] (apply (.-log js/console) args))))))
+
+(re-frame/reg-event-db
+  ::title-change
+   (fn [db [_ new-title]]
+    (assoc db :review-event-title new-title)))
+
+(re-frame/reg-event-db
+  ::date-change
+   (fn [db [_ new-date]]
+    (assoc db :review-date new-date)))
+
+(re-frame/reg-event-db
+  ::description-change
+  (fn [db [_ new-date]]
+    (assoc db :description new-date)))
+
+(re-frame/reg-event-db
+  ::all-fields-valid-change
+  (fn [db [_ new-val]]
+    (assoc db :all-fields-valid? new-val)))

@@ -1,6 +1,11 @@
 {:source-paths ["src/cljs"]
- :dev-http     {8080 {:root      "target"}}
+ :dev-http     {8081 {:root      "target"
+                      :proxy-url "http://localhost:3000"}}
  :dependencies [[reagent "1.0.0-alpha2"]
+                [stylefy "2.0.0"]
+                [cheshire "5.10.0"]
+                [cljs-http "0.1.46"]
+                [day8.re-frame/test "0.1.5"]
                 [re-frame "1.0.0-rc2"]]
 
  :builds       {:app {:output-dir "target/assets/"
@@ -8,4 +13,4 @@
                       :target     :browser
                       :modules    {:main {:init-fn reviews-next.core/init!}}
                       :devtools   {:http-root  "target/"
-                                   :http-port  8080}}}}
+                                   :http-port  3449}}}}

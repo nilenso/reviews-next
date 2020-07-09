@@ -21,30 +21,41 @@
                  [re-frame "1.0.0-rc2"]
                  [ragtime "0.8.0"]
                  [ring "1.8.1"]
+                 [ring/ring-mock "0.4.0"]
+                 [ring-cors "0.1.13"]
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
-                 [seancorfield/next.jdbc "1.0.409"]]
+                 [lein-cljfmt "0.6.7"]
+                 [day8.re-frame/test "0.1.5"]
+                 [seancorfield/next.jdbc "1.0.409"]
+                 [com.fzakaria/slf4j-timbre "0.3.19"]]
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
+
   :profiles {:dev {:source-paths ["dev"]
+                   ; :env {:database_url "jdbc:sqlite:reviews_next.db"}
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
+             :uberjar {:aot :all}
+             :test {
+                    ; :env {:database_url "jdbc:sqlite:test_reviews_next.db"}
+                    :dependencies [[ring/ring-mock "0.4.0"]]}}
 
-             :test {:dependencies [[ring/ring-mock "0.4.0"]]}}
-
-  :source-paths ["src/clj"]
-
+  :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj" "test/cljs"]
+  :auto-clean false
   :main reviews-next.core
 
   :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
             "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
 
   :resource-paths ["resources" "target"]
-
+  :clean-targets ^{:protect false} [....]
   :minify-assets
   [[:css {:source "resources/public/css/site.css"
           :target "resources/public/css/site.min.css"}]]
 
   :ring {:handler reviews-next.server/hander}
-  :repl-options {:init-ns reviews-next.user})
+  :repl-options {:init-ns reviews-next.user
+                 :timeout 1200000})
