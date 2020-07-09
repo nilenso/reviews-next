@@ -55,6 +55,14 @@
 ;;      (query connection-uri ["select id, title from reviews order by review_date desc"])
 ;;      (catch Exception e
 ;;        false))))
+;;        
+(defn review-for-given-id
+  ([review-id] (review-for-given-id review-id connection-uri-default))
+  ([review-id connection-uri]
+   (try
+      (query connection-uri ["select * from reviews where id=?" review-id])
+     (catch Exception e
+       (str e)))))
 
 (defn insert-and-get-last-id
   ([data] (insert-and-get-last-id data connection-uri-default))

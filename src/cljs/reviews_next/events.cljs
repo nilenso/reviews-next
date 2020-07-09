@@ -144,14 +144,19 @@
 
 (re-frame/reg-event-fx
  ::populate-user-and-review-ids
- (fn [_ [_ feedback-param]]
-   {:http-xhrio {:method :post
-                 :uri    "/api/user-and-review-ids"
-                 :params feedback-param
-                 :format          (ajax/json-request-format)
+ (fn [_ _]
+   {:http-xhrio {:method :get
+                 :uri    "/api/user-and-review"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::user-and-review-ids]
                  :on-fail    [::api-failed]}}))
+   
+  ;;  {:http-xhrio {:method :get
+  ;;                :uri    "/api/user-and-review"
+  ;;                :params feedback-param
+  ;;                :response-format (ajax/json-response-format {:keywords? true})
+  ;;                :on-success [::user-and-review-ids]
+  ;;                :on-fail    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::feedback-change
