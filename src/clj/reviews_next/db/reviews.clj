@@ -67,3 +67,13 @@
       (query connection-uri [(str "select * from reviews where id in " "(" (clojure.string/join "," (map #(str \" % \") review-ids)) ")")])
      (catch Exception e
        (str e)))))
+
+(defn concat-review-details 
+  ([feedback-list-item] (concat-review-details feedback-list-item (config/connection-uri)))
+  ([feedback-list-item connection-uri]
+    (try
+        (let [review-id (:review_id feedback-list-item)
+              review-details (query connection-uri ["select * from reviews where id=?" review-id] :row-fn? #(vector %))]
+              (assoc feedback-list-item :review-details (first review-details)))              
+      (catch Exception e
+        (str e)))))

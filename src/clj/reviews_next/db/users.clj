@@ -40,3 +40,13 @@
       (query connection-uri [(str "select * from users where id in " "(" (clojure.string/join "," (map #(str \" % \") user-ids)) ")")])
      (catch Exception e
        (str e)))))
+
+(defn concat-user-details 
+  ([feedback-list-item] (concat-user-details feedback-list-item (config/connection-uri)))
+  ([feedback-list-item connection-uri]
+    (try
+        (let [uid (:from_uid feedback-list-item)
+              user-details (query connection-uri ["select * from users where id=?" uid] :row-fn? #(vector %))]
+              (assoc feedback-list-item :user-details (first user-details)))              
+      (catch Exception e
+        (str e)))))

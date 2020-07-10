@@ -8,7 +8,8 @@
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.json :refer [wrap-json-params wrap-json-body wrap-json-response]]
             [reviews-next.handlers.review-event :as review-event]
-            [reviews-next.handlers.feedback-event :as feedback-event]))
+            [reviews-next.handlers.feedback-event :as feedback-event]
+            [reviews-next.handlers.list-feedback-event :as list-feedback-event]))
 
 (def call-api (partial wrap-json-params))
 
@@ -20,7 +21,8 @@
                 "users" (wrap-json-response review-event/users-list)
                 "review-events-list" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/reviews-list)))}}
                 "users-from-review" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/users-list)))}}
-                "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}}
+                "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}
+                "feedback-list-from-user" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params list-feedback-event/feedback-from-user)))}}}         
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
