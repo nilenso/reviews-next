@@ -8,7 +8,7 @@
 
 (deftest delete-all-test
   (testing "Test delete all from user feedback table"
-    (is (= false (empty? (reviews/delete-all (config/connection-uri)))))))
+    (is (= false (empty? (user-feedback/delete-all (config/connection-uri)))))))
 
 (deftest insert-test
   (testing "Test insert to user feedback table"
