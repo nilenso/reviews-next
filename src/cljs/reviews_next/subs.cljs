@@ -62,3 +62,8 @@
   ::level
   (fn [db _]
     (:level db)))
+
+(re-frame/reg-sub
+  ::feedbacks-list
+  (fn [db _]
+    (:feedbacks-list db)))

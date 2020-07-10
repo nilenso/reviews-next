@@ -42,3 +42,4 @@
   [:> material-ui/Dialog dialog-props
    [DialogTitle dialog-title-props title]
    [DialogContent content]])
+

@@ -136,10 +136,36 @@
                  :params feedback-param
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [::set-users-for-review]
+                ;  :on-success [::set-users-for-review]
                  :on-fail    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::feedback-change
   (fn [db [_ new-desc]]
     (assoc db :feedback new-desc)))
+
+(re-frame/reg-event-db
+  ::set-feedbacks-list
+  (fn [db [_ new-val]]
+    (assoc db :feedbacks-list new-val)))
+
+(re-frame/reg-event-fx
+ ::populate-feedback-list
+ (fn [_ [_ current-user-id]]
+   {:http-xhrio {:method :get
+                 :uri    "/api/feedback-list-from-user"
+                 :params {:from_uid current-user-id}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-feedbacks-list]
+                 :on-fail    [::api-failed]}}))
+
+(re-frame/reg-event-fx
+ ::unpublish-feedback
+ (fn [_ [_ feedback-id]]
+   {:http-xhrio {:method :post
+                 :uri    "/api/delete-from-user-feedback"
+                 :params {:feedback_id feedback-id}
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                ;  :on-success [::set-users-for-review]
+                 :on-fail    [::api-failed]}}))

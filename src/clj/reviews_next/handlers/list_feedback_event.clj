@@ -23,3 +23,10 @@
    (if (empty? feedback-with-review-details)
        (failed-request feedback-with-review-details)
        (response feedback-with-review-details))))
+
+(defn delete-from-user-feedback [_request]
+ (let [feedback-id (get-in _request [:params "feedback_id"])
+       result (user-feedback/delete-feedback feedback-id)]
+   (if (empty? result)
+       (failed-request result)
+       (created "Deleted"))))

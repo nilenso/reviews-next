@@ -35,3 +35,11 @@
       (query connection-uri ["select * from user_feedback where is_draft=0 and from_uid=?" from-uid])
      (catch Exception e
       (str e)))))
+
+(defn delete-feedback
+  ([feedback-id] (delete-feedback feedback-id (config/connection-uri)))
+  ([feedback-id connection-uri]
+    (try
+      (delete! connection-uri :user_feedback ["id = ?" feedback-id])
+     (catch Exception e
+      (str e)))))

@@ -16,4 +16,6 @@
      :users-for-review []
      :current-user {}
      :feedback ""
-     :level nil}}})
+     :level nil}
+    :list-feedbacks-provided-page
+    {:feedbacks-list []}}})
