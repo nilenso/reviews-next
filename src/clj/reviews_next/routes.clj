@@ -19,14 +19,9 @@
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
                 "users" (wrap-json-response review-event/users-list)
                 "review-events-list" (wrap-json-response feedback-event/reviews-list)
-                "user-and-review" 
-                ;{:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/get-user-and-review-ids)))}}
-                (wrap-json-response feedback-event/get-user-and-review-ids)
+                "user-and-review"  (wrap-json-response feedback-event/get-user-and-review-ids)
                 "users-from-review" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/users-list)))}}
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
-; (def handler
-;   (wrap-cors routes :access-control-allow-origin [#"http://localhost:3000/"]
-;                     :access-control-allow-methods [:get :put :post :delete]))

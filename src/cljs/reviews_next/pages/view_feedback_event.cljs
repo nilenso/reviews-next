@@ -11,7 +11,9 @@
    [reviews-next.db :as db]
    [reviews-next.events :as events]
    [reviews-next.subs :as subs]
-   [reviews-next.components :as components])
+   [accountant.core :as accountant]
+   [reviews-next.components :as components]
+   [secretary.core :as secretary])
   (:require-macros
    [cljs.core.async.macros :refer [go]]))
 
@@ -80,6 +82,31 @@
    :width "40vw"
    :justify-content "flex-start"})
 
+
+(accountant/configure-navigation!
+ {:nav-handler   (fn [path] (secretary/dispatch! path))
+  :path-exists?  (fn [path] (secretary/locate-route path))
+  :reload-same-path? true})
+
+(secretary/defroute "/view-feedback" {}
+  (js/console.log "Okay atleast something")
+)
+
+(defn publish-button
+  []
+  (let [current-user @(re-frame/subscribe [::subs/current-user])
+        current-review-event @(re-frame/subscribe [::subs/current-review-event])
+        feedback @(re-frame/subscribe [::subs/feedback])
+        level @(re-frame/subscribe [::subs/level])]
+    (components/Button
+     {:variant "contained"
+      :on-click (fn [] (accountant/navigate! "/view-feedback"))
+
+      :style {:margin "5px"
+              :background "#EEF6FC"
+              :color "#257942"}} "Publish")))
+
+
 (defn join-user-review [user-and-review]
   [(:name (first (:user user-and-review))) (:title (first (:review user-and-review)))])
 
@@ -91,12 +118,14 @@
       (fn []
         (re-frame/dispatch [::events/populate-user-and-review-ids])
         (js/console.log "userssss " user-and-review-list))
-      
+
       :display-name "Main View Feedback Component"
       :reagent-render
       (fn []
         [:div.main-content (use-style main-content-style)
          [:div.side-section (use-style (section-style "20vw"))]
          [:div.main-section (use-style (section-style "80vw"))
+          ;; [:div.table-section (use-style (table-style))
           (components/Table "Reviews" ["Name" "Review Title"] (map join-user-review user-and-review-list))
-          ]])})))
+          ;;  ]
+          (publish-button)]])})))
