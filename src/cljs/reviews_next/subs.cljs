@@ -67,3 +67,9 @@
  ::user-and-review-ids
  (fn [db _]
    (:user-and-review-ids db)))
+
+
+(re-frame/reg-sub
+ ::feedback-details
+ (fn [db _]
+   (:feedback-details db)))

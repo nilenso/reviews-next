@@ -26,6 +26,11 @@
        user-ids (user-reviews/users-for-review-id review_id)]
    (response (users/users-for-given-ids user-ids))))
 
+(defn feeback-details-from-id [_request]
+  (let [review_id (get-in _request [:params :review_id])
+        feedback-details (user-feedback/feedback-for-given-review-id review_id)]
+    (response feedback-details)))
+
 (defn create_user_review_map [user_id review_id] 
   {:user_id user_id :review_id review_id})
 

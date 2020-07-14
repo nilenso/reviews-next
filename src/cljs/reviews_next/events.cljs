@@ -150,13 +150,22 @@
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::user-and-review-ids]
                  :on-fail    [::api-failed]}}))
-   
-  ;;  {:http-xhrio {:method :get
-  ;;                :uri    "/api/user-and-review"
-  ;;                :params feedback-param
-  ;;                :response-format (ajax/json-response-format {:keywords? true})
-  ;;                :on-success [::user-and-review-ids]
-  ;;                :on-fail    [::api-failed]}}))
+
+
+(re-frame/reg-event-db
+ ::set-feedback-details
+ (fn [db [_ new-val]]
+   (assoc db :feedback-details new-val)))
+
+(re-frame/reg-event-fx
+ ::populate-feedback-from-review-id
+ (fn [_ [_ review-id]]
+   {:http-xhrio {:method :get
+                 :uri    "/api/feedback-from-id"
+                 :params {:review_id review-id}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-feedback-details]
+                 :on-fail    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::feedback-change

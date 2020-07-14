@@ -19,4 +19,5 @@
      :level nil}
     :view-feedback-event
     {:user-and-review-ids (vector nil)
+     :feedback-details {}
      }}})

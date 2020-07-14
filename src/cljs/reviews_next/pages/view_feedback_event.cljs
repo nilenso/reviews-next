@@ -110,6 +110,31 @@
 (defn join-user-review [user-and-review]
   [(:name (first (:user user-and-review))) (:title (first (:review user-and-review)))])
 
+(defn view-feedback-page [user-and-review]
+  (let [feedback-details @(re-frame/subscribe [::subs/feedback-details])
+        review-id (:id (first (:review user-and-review)))]
+    (reagent/create-class
+     {:component-did-mount
+      (fn []
+        (re-frame/dispatch [::events/populate-feedback-from-review-id review-id])
+        
+
+      :display-name "Display Feedback Component"
+      :reagent-render
+      (fn []
+        (js/console.log "Feedback: " feedback-details))
+        [:div.main-content (use-style main-content-style)
+         [:div.side-section (use-style (section-style "20vw"))]
+         [:div.main-section (use-style (section-style "80vw"))
+          [:div.feedback-user-display (use-style current-user-name)
+           [:h3 "Feedback from" (:name (first (:user user-and-review))) "to You"]]
+          [:div.review-event-name-display (use-style review-event-name)
+           [:h3 "For Review Event: " (:title (first (:review user-and-review)))]]
+          [:p (:feedback feedback-details)]
+          ]]
+        )})))
+
+
 ;; main code
 (defn view-feedback-event []
   (let [user-and-review-list @(re-frame/subscribe [::subs/user-and-review-ids])]
@@ -128,4 +153,10 @@
           ;; [:div.table-section (use-style (table-style))
           (components/Table "Reviews" ["Name" "Review Title"] (map join-user-review user-and-review-list))
           ;;  ]
-          (publish-button)]])})))
+          ;; (publish-button)
+          (for [user-and-review user-and-review-list]
+            [view-feedback-page user-and-review])
+          ]
+         ]
+        )
+      })))
