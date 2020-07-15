@@ -141,12 +141,12 @@
 
 ;; main code
 (defn view-feedback-event []
-  (let [user-and-review-list @(re-frame/subscribe [::subs/user-and-review-ids])]
+  (let [user-and-review-list (re-frame/subscribe [::subs/user-and-review-ids])]
     (reagent/create-class
-     {:component-did-mount
+     {:constructor
       (fn []
         (re-frame/dispatch [::events/populate-user-and-review-ids])
-        (js/console.log "userssss " user-and-review-list))
+        (js/console.log "userssss " @user-and-review-list))
 
       :display-name "Main View Feedback Component"
       :reagent-render
@@ -154,7 +154,7 @@
         [:div.main-content (use-style main-content-style)
          [:div.side-section (use-style (section-style "20vw"))]
          [:div.main-section (use-style (section-style "80vw"))
-          (components/Table "Reviews" ["Name" "Review Title"] 
-                            (map join-user-review user-and-review-list) feedback-table-title-style)
-          (publish-button)]])})))
+          (components/Table "Reviews" ["Reviewer" "Review Event"] 
+                            (map join-user-review @user-and-review-list) feedback-table-title-style)]])
+      })))
 

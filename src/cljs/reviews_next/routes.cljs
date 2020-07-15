@@ -19,9 +19,6 @@
   (js/console.log "Okay atleast something" id)
   [view-feedback-event/view-feedback-page id])
 
-(secretary/defroute "/dummy" []
-  (js/console.log "Okay atleast something"))
-
 (secretary/defroute "/" []
   (js/console.log "Okay atleast something")
   [view-feedback-event/view-feedback-event])
