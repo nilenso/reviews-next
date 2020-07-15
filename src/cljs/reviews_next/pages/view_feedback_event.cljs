@@ -83,14 +83,27 @@
    :justify-content "flex-start"})
 
 
-(accountant/configure-navigation!
- {:nav-handler   (fn [path] (secretary/dispatch! path))
-  :path-exists?  (fn [path] (secretary/locate-route path))
-  :reload-same-path? true})
+(defn view-feedback-page [review-id]
+  (let [feedback-details @(re-frame/subscribe [::subs/feedback-details])]
+    (reagent/create-class
+     {:component-did-mount
+      (fn []
+        (re-frame/dispatch [::events/populate-feedback-from-review-id review-id]))
+      :display-name "Display Feedback Component"
+      :reagent-render
+      (fn []
+        (js/console.log "Feedback: " feedback-details)
+        [:div.main-content (use-style main-content-style)
+         [:div.side-section (use-style (section-style "20vw"))]
+         [:div.main-section (use-style (section-style "80vw"))
+        ;;   [:div.feedback-user-display (use-style current-user-name)
+        ;;    [:h3 "Feedback from" (:name (first (:user user-and-review))) "to You"]]
+        ;;   [:div.review-event-name-display (use-style review-event-name)
+        ;;    [:h3 "For Review Event: " (:title (first (:review user-and-review)))]]
+          [:p (:feedback feedback-details)]
+          [:p "hiiiiiiiiiiii"]
+          [:p review-id]]])})))
 
-(secretary/defroute "/view-feedback" {}
-  (js/console.log "Okay atleast something")
-)
 
 (defn publish-button
   []
@@ -100,7 +113,7 @@
         level @(re-frame/subscribe [::subs/level])]
     (components/Button
      {:variant "contained"
-      :on-click (fn [] (accountant/navigate! "/view-feedback"))
+      :on-click (fn [] (accountant/navigate! "/view-feedback/1"))
 
       :style {:margin "5px"
               :background "#EEF6FC"
@@ -109,31 +122,6 @@
 
 (defn join-user-review [user-and-review]
   [(:name (first (:user user-and-review))) (:title (first (:review user-and-review)))])
-
-(defn view-feedback-page [user-and-review]
-  (let [feedback-details @(re-frame/subscribe [::subs/feedback-details])
-        review-id (:id (first (:review user-and-review)))]
-    (reagent/create-class
-     {:component-did-mount
-      (fn []
-        (re-frame/dispatch [::events/populate-feedback-from-review-id review-id])
-        
-
-      :display-name "Display Feedback Component"
-      :reagent-render
-      (fn []
-        (js/console.log "Feedback: " feedback-details))
-        [:div.main-content (use-style main-content-style)
-         [:div.side-section (use-style (section-style "20vw"))]
-         [:div.main-section (use-style (section-style "80vw"))
-          [:div.feedback-user-display (use-style current-user-name)
-           [:h3 "Feedback from" (:name (first (:user user-and-review))) "to You"]]
-          [:div.review-event-name-display (use-style review-event-name)
-           [:h3 "For Review Event: " (:title (first (:review user-and-review)))]]
-          [:p (:feedback feedback-details)]
-          ]]
-        )})))
-
 
 ;; main code
 (defn view-feedback-event []
@@ -150,13 +138,10 @@
         [:div.main-content (use-style main-content-style)
          [:div.side-section (use-style (section-style "20vw"))]
          [:div.main-section (use-style (section-style "80vw"))
-          ;; [:div.table-section (use-style (table-style))
           (components/Table "Reviews" ["Name" "Review Title"] (map join-user-review user-and-review-list))
-          ;;  ]
-          ;; (publish-button)
-          (for [user-and-review user-and-review-list]
-            [view-feedback-page user-and-review])
+          (publish-button )
           ]
          ]
         )
       })))
+

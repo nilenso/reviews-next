@@ -171,3 +171,8 @@
   ::feedback-change
   (fn [db [_ new-desc]]
     (assoc db :feedback new-desc)))
+
+(re-frame/reg-event-db
+ ::set-current-component
+ (fn [db [_ new-component]]
+   (assoc db :current-component new-component)))

@@ -73,3 +73,8 @@
  ::feedback-details
  (fn [db _]
    (:feedback-details db)))
+
+(re-frame/reg-sub
+ ::current-component
+ (fn [db _]
+   (:current-component db)))
