@@ -29,3 +29,15 @@
       (query connection-uri ["select * from reviews"])
      (catch Exception e
       false))))
+
+(defn insert-and-get-last-id
+  ([data] (insert-and-get-last-id data (config/connection-uri)))
+  ([data connection-uri]
+   (try
+     (with-db-transaction [t-con connection-uri]
+                          (insert! t-con :reviews data)
+                          (get
+                            (nth
+                              (query t-con ["SELECT id FROM reviews ORDER BY id DESC LIMIT 1"]) 0) :id))
+     (catch Exception e
+            (str (.getMessage e))))))

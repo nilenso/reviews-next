@@ -33,3 +33,18 @@
   ::all-fields-valid-change
   (fn [db [_ new-val]]
     (assoc db :all-fields-valid? new-val)))
+
+(re-frame/reg-event-db
+  ::set-participants
+  (fn [db [_ new-val]]
+    (assoc db :participants new-val)))
+
+(re-frame/reg-event-db
+  ::add-to-selected-participants
+  (fn [db [_ new-val]]
+    (assoc db :selected-participants (set (conj (get db :selected-participants) new-val)))))
+
+(re-frame/reg-event-db
+  ::remove-from-selected-participants
+  (fn [db [_ new-val]]
+    (assoc db :selected-participants (disj (set (get db :selected-participants)) new-val))))
