@@ -53,7 +53,7 @@
      [:> material-ui/TableRow
       ;; (for [head-col head]
       [:> material-ui/TableCell {:align "left"} (first head)]
-      [:> material-ui/TableCell {:align "right"} (first head)]
+      [:> material-ui/TableCell {:align "right"} (second head)]
       ;)
       ]]
     [:> material-ui/TableBody

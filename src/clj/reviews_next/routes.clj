@@ -19,7 +19,7 @@
                 "review-event" {:post {"" (call-api review-event/insert-into-db)}}
                 "users" (wrap-json-response review-event/users-list)
                 "review-events-list" (wrap-json-response feedback-event/reviews-list)
-                "user-and-review"  (wrap-json-response feedback-event/get-reviewer-and-review-event)
+                "review-for-user"  (wrap-json-response feedback-event/get-reviewer-and-review-event)
                 "users-from-review" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/users-list)))}}
                 "feedback-from-id" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/feeback-details-from-id)))}}
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}}
