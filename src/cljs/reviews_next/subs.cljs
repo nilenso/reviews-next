@@ -13,9 +13,9 @@
     (:review-date db)))
 
 (re-frame/reg-sub
-  ::description
+  ::review-description
   (fn [db _]
-    (:description db)))
+    (:review-description db)))
 
 (re-frame/reg-sub
   ::all-fields-valid?
@@ -31,3 +31,8 @@
   ::selected-participants
   (fn [db _]
     (:selected-participants db)))
+
+(re-frame/reg-sub
+ ::clear-all-fields
+ (fn [db _]
+   (:clear-all-fields db)))
