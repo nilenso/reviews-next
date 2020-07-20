@@ -16,4 +16,4 @@
                       :target     :browser
                       :modules    {:main {:init-fn reviews-next.core/init!}}
                       :devtools   {:http-root  "target/"
-                                   :http-port  8080}}}}
+                                   :http-port  3449}}}}

@@ -11,8 +11,7 @@
    [reviews-next.subs :as subs]
    [reviews-next.components :as components])
   (:require-macros
-    [cljs.core.async.macros :refer [go]])
-  )
+   [cljs.core.async.macros :refer [go]]))
 
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
@@ -99,7 +98,7 @@
   (let [selected-participants (re-frame/subscribe [::subs/selected-participants])]
     (fn []
       [:div
-       (for [participant @participants]
+       (for [participant participants]
          ^{:key (participant :id)}
          (let [checked? (some #(= (participant :id) %) @selected-participants)]
            [:div.checkbox (use-style checkbox-style)

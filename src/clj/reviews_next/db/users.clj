@@ -4,17 +4,14 @@
           [clojure.java.jdbc :refer :all]
           [reviews-next.config :as config]))
 
-(def connection-uri-default (config/connection-uri))
-(def connection-uri-test (config/connection-uri "test"))
-
 (def data
-  {:id "U4"
-   :name "DEF"
-   :email "def@gmail.com"})
+  {:id "U5"
+   :name "MNO"
+   :email "mno@gmail.com"})
 
 (defn insert
   "execute query and return lazy sequence"
-  ([data] (insert data connection-uri-default))
+  ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
      (do
@@ -24,14 +21,22 @@
        false))))
 
 (defn delete-all
-  ([] (delete-all connection-uri-default))
+  ([] (delete-all (config/connection-uri)))
   ([connection-uri]
    (db-do-commands connection-uri "delete from users")))
 
 (defn get-users
-  ([] (get-users connection-uri-default))
+  ([] (get-users (config/connection-uri)))
   ([connection-uri]
    (try
       (query connection-uri ["select * from users"])
      (catch Exception e
       false))))
+
+(defn get-users-for-given-ids
+  ([user-ids] (get-users-for-given-ids (config/connection-uri)))
+  ([user-ids connection-uri]
+   (try
+      (db-do-prepared connection-uri "select * from users where id in (?)" user-ids)
+     (catch Exception e
+       (str e)))))
