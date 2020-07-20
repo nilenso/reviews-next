@@ -21,4 +21,5 @@
     :view-feedback-event
     {:user-and-review-ids (vector nil)
      :feedback-details {}
+     :current-reviewer-and-review-event {}
      }}})

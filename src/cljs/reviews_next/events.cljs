@@ -146,7 +146,7 @@
  ::populate-user-and-review-ids
  (fn [_ _]
    {:http-xhrio {:method :get
-                 :uri    "/api/user-and-review"
+                 :uri    "/api/review-for-user"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::user-and-review-ids]
                  :on-fail    [::api-failed]}}))
