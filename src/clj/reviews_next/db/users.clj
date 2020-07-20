@@ -14,9 +14,9 @@
   ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
-        do
-          (insert! connection-uri :users data)
-          true
+     (do
+       (insert! connection-uri :users data)
+       true)
      (catch Exception e
        false))))
 

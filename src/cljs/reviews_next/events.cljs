@@ -1,11 +1,28 @@
 (ns reviews-next.events
-  (:require [re-frame.core :as re-frame]
-            [reviews-next.db :as db]))
+  (:require
+   [day8.re-frame.http-fx]
+   [ajax.core :as ajax]
+   [re-frame.core :as re-frame]
+   [reviews-next.db :as db]))
 
 (re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
    {:db db/initial-db}))
+
+(re-frame/reg-event-db
+ ::participants-from-backend
+ (fn [db [_ participants-response]]
+   (assoc db :participants (vec participants-response))))
+
+(re-frame/reg-event-fx
+ ::populate-participants
+ (fn [_ _]
+   {:http-xhrio {:method :get
+                 :uri    "/api/users"
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::participants-from-backend]
+                 :on-fail    [::api-failed]}}))
 
 (re-frame/reg-fx
  ::setup-google-signin-functions
@@ -53,8 +70,3 @@
  ::remove-all-selected-participants
  (fn [db [_]]
    (assoc db :selected-participants [])))
-
-(re-frame/reg-event-db
- ::clear-all-fields
- (fn [db [_ new_val]]
-   (assoc db :clear-all-fields new_val)))
