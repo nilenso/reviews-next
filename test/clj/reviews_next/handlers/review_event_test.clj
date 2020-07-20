@@ -20,4 +20,4 @@
           handler (wrap-json-params review-event/insert-into-db)
           response (handler api-request)]
       (is (= (:status response) 200))
-      (is (= (:body response) "true")))))
+      (is (= (:body response) "Posted")))))
