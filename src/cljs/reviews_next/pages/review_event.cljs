@@ -11,8 +11,7 @@
    [reviews-next.subs :as subs]
    [reviews-next.components :as components])
   (:require-macros
-    [cljs.core.async.macros :refer [go]])
-  )
+   [cljs.core.async.macros :refer [go]]))
 
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
@@ -54,7 +53,7 @@
 ;;init functions
 (defn add-participants
   []
-  (go (let [response (<! (http/get "http://localhost:3000/api/users"))
+  (go (let [response (<! (http/get "/api/users"))
             participants (re-frame/subscribe [::subs/participants])]
         (re-frame/dispatch [::events/set-participants (:body response)]))))
 
@@ -85,9 +84,9 @@
                                                           (title-valid? title)
                                                           (desc-valid? description))])
     (when @all-fields-valid?
-      ((go (let [response (<! (http/post "http://localhost:3000/api/review-event" request-map))]
-            (js/console.log (:body response))))
-      ))
+      ((go (let [response (<! (http/post "/api/review-event" request-map))]
+             (js/console.log (:body response))))
+       ))
     (clear-all-fields)))
 
 (defn toggle-participants
@@ -104,16 +103,16 @@
         reset-checkbox? (re-frame/subscribe [::subs/clear-all-fields])]
     [:div
      (for [participant @participants]
-      ^{:key (participant :id)}
+       ^{:key (participant :id)}
        [:div.checkbox (use-style checkbox-style)
         [:input
-               {:type "checkbox"
-                :id (participant :id)
-                :name "checkbox"
-                :value (if reset-checkbox? false (participant :id))
-                :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
+         {:type "checkbox"
+          :id (participant :id)
+          :name "checkbox"
+          :value (participant :id)
+          :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
         [:label
-               {:for (participant :id)} (participant :name)]])]))
+         {:for (participant :id)} (participant :name)]])]))
 
 ;;main code
 (defn review-event []
@@ -124,52 +123,52 @@
         call-save-api #(call-save-api-fn @review-title @review-date @review-description)
         participants (re-frame/subscribe [::subs/participants])
         selected-participants (re-frame/subscribe [::subs/selected-participants])]
-   (add-participants)
+    (add-participants)
 
-   [:div.main-content (use-style main-content-style)
-      [:div.side-section (use-style (section-style "20vw"))]
-      [:div.main-section (use-style (section-style "80vw"))
-       [:div#box-button (use-style box-button-style)
-        [:input#title-box
-         {:style {:padding "5px"
-                  :border "5px white"
-                  :box-shadow "5px 5px 10px #888888"
-                  :font-size "large"
-                  :width "80%"
-                  :height "10vh"}
-          :value @review-title
-          :placeholder "Review Event Title"
-          :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
-        [:input#date-picker
-         {:style   {:border "5px white"
-                    :border-right "3px solid #f8337d"
-                    :box-shadow "5px 5px 10px #888888"}
-          :color "#f8337d"
-          :type "date"
-          :value @review-date
-          :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
-       [:div.markdown {
-          :style {:padding "10px"
-                  :border "5px white"
-                  :box-shadow "2px 2px px #888888"
-                  }}
-        (components/MarkDownEditor
-         {:style {:width "80%"
-                  :height "50vh"
-                  :padding-bottom "20px"}
-          :value @review-description
-          :placeholder "Add description"
-          :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])
-          })
-        ]     
-       [:div.participants-box (use-style checkbox-area)
-        [:b "Add Participants"]]
-         [participants-checkboxes participants]
-       (components/Button
-        {:variant "contained"
-         :onClick call-save-api
-         :style {:margin "5px"
-                 :background "#f8337d"
-                 :color "white"}} "Save")
-       (when-not @all-fields-valid?
-         [:h3 {:style {:color "red"}} "*Fill all fields."])]]))
+    [:div.main-content (use-style main-content-style)
+     [:div.side-section (use-style (section-style "20vw"))]
+     [:div.main-section (use-style (section-style "80vw"))
+      [:div#box-button (use-style box-button-style)
+       [:input#title-box
+        {:style {:padding "5px"
+                 :border "5px white"
+                 :box-shadow "5px 5px 10px #888888"
+                 :font-size "large"
+                 :width "80%"
+                 :height "10vh"}
+         :value @review-title
+         :placeholder "Review Event Title"
+         :on-change #(re-frame/dispatch [::events/title-change (-> % .-target .-value)])}]
+       [:input#date-picker
+        {:style   {:border "5px white"
+                   :border-right "3px solid #f8337d"
+                   :box-shadow "5px 5px 10px #888888"}
+         :color "#f8337d"
+         :type "date"
+         :value @review-date
+         :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
+      [:div.markdown {
+                      :style {:padding "10px"
+                              :border "5px white"
+                              :box-shadow "2px 2px px #888888"
+                              }}
+       (components/MarkDownEditor
+        {:style {:width "80%"
+                 :height "50vh"
+                 :padding-bottom "20px"}
+         :value @review-description
+         :placeholder "Add description"
+         :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])
+         })
+       ]     
+      [:div.participants-box (use-style checkbox-area)
+       [:b "Add Participants"]]
+      [participants-checkboxes participants]
+      (components/Button
+       {:variant "contained"
+        :onClick call-save-api
+        :style {:margin "5px"
+                :background "#f8337d"
+                :color "white"}} "Save")
+      (when-not @all-fields-valid?
+        [:h3 {:style {:color "red"}} "*Fill all fields."])]]))

@@ -32,14 +32,18 @@
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
+
   :profiles {:dev {:source-paths ["dev"]
+                   ; :env {:database_url "jdbc:sqlite:reviews_next.db"}
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
              :uberjar {:aot :all}
-             :test {:source-paths ["test"]
+             :test {
+                    ; :env {:database_url "jdbc:sqlite:test_reviews_next.db"}
                     :dependencies [[ring/ring-mock "0.4.0"]]}}
 
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj" "test/cljs"]
   :auto-clean false
   :main reviews-next.core
 
