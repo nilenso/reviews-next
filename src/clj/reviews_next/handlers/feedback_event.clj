@@ -35,14 +35,15 @@
   {:user_id user_id :review_id review_id})
 
 (defn join_user_review_table [user_review_id]
-  (let [user_id (:from_uid user_review_id)
+  (let [reviewer_id (:from_uid user_review_id)
         review_id (:review_id user_review_id)
-        user (users/users-for-given-id user_id)
+        id (:id user_review_id)
+        reviewer (users/users-for-given-id reviewer_id)
         review (reviews/review-for-given-id review_id)
-        user-review {:user user :review review}]
+        user-review {:reviewer reviewer :review-event review :id id}]
     user-review))
 
-(defn get-user-and-review-ids [_request]
+(defn get-reviewer-and-review-event [_request]
   (let [reviews-list (user-reviews/get-reviews-for-user "U2")
         user_review_list (map join_user_review_table reviews-list)]
     (response  user_review_list)))

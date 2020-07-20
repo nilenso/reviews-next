@@ -2,7 +2,9 @@
   (:require
    [reagent.core :as reagent]
    ["react-quill" :as ReactQuill]
-   ["@material-ui/core" :as material-ui]))
+   ["@material-ui/core" :as material-ui]
+   [accountant.core :as accountant]
+   [secretary.core :as secretary]))
 
 (defn TextField
   [props-map]
@@ -29,6 +31,17 @@
       ^{:key (:id user)}
       [:> material-ui/MenuItem {:value (:id user)} (:name user)])]))
 
+
+(defn Customisable-button
+  [data review-id]
+  (Button
+    {
+     :on-click (fn [] (accountant/navigate! (str "/view-feedback/" review-id)))
+     :style {:background "transparent"
+             :border "none"
+             ;:background "white"
+             :color "#257942"}} data))
+
 (defn Table [title head body style]
   [:> material-ui/TableContainer
    {:style style
@@ -38,13 +51,26 @@
      :style {:background "white"}}
     [:> material-ui/TableHead
      [:> material-ui/TableRow
-      (for [head-col head]
-        [:> material-ui/TableCell {:align "center"} head-col])]]
+      ;; (for [head-col head]
+      [:> material-ui/TableCell {:align "left"} (first head)]
+      [:> material-ui/TableCell {:align "right"} (first head)]
+      ;)
+      ]]
     [:> material-ui/TableBody
      (for [body-row body]
        [:> material-ui/TableRow
-        (for [body-row-col body-row]
-          [:> material-ui/TableCell
-           {:align "center"
-            :style {:font-size "12px"
-                    :margin "2px"}} body-row-col])])]]])
+       
+      ;  (for [body-row-col body-row]
+        [:> material-ui/TableCell
+         {:align "left"
+          ;:a (accountant/navigate! (str "view-feedback/" 1))
+          ;:onClick (accountant/navigate! (str "view-feedback/" 1))
+          :style {:font-size "12px"
+                  :margin "2px"}} (Customisable-button (first body-row) (last body-row))]
+        [:> material-ui/TableCell
+         {:align "right"
+          :style {:font-size "12px"}} (second body-row)]
+
+        ;)
+        ;}
+        ])]]])

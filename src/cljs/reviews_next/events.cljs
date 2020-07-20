@@ -176,3 +176,8 @@
  ::set-current-component
  (fn [db [_ new-component]]
    (assoc db :current-component new-component)))
+
+(re-frame/reg-event-db
+ ::set-current-reviewer-and-review-event
+ (fn [db [_ new-val]]
+   (assoc db :current-reviewer-and-review-event new-val)))

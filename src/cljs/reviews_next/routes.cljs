@@ -2,10 +2,8 @@
   (:require
    [reviews-next.db :as db]
    [reviews-next.events :as events]
-   [reviews-next.subs :as subs]
    [re-frame.core :as re-frame]
    [accountant.core :as accountant]
-   [reviews-next.components :as components]
    [secretary.core :as secretary]
    [reviews-next.pages.view-feedback-event :as view-feedback-event]))
 

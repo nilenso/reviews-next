@@ -78,3 +78,8 @@
  ::current-component
  (fn [db _]
    (:current-component db)))
+
+(re-frame/reg-sub
+ ::current-reviewer-and-review-event
+ (fn [db _]
+   (:current-reviewer-and-review-event db)))

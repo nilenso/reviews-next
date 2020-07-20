@@ -41,7 +41,7 @@
   ([user-uid connection-uri]
    (try
      (query connection-uri ["select * from user_reviews where to_uid=?" user-uid] 
-            {:row-fn (fn [row] {:from_uid (:from_uid row) :review_id (:review_id row)})})
+            {:row-fn (fn [row] {:from_uid (:from_uid row) :review_id (:review_id row) :id (:review_id row)})})
      (catch Exception e
        false))))
 
