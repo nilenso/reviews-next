@@ -3,7 +3,8 @@
 (def initial-db
  {
   :pages
-   {:add-review-event
+   {:current-component nil
+    :add-review-event
     {:review-event-title ""
      :review-date ""
      :description "DES"

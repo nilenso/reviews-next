@@ -145,6 +145,11 @@
     (assoc db :feedback new-desc)))
 
 (re-frame/reg-event-db
+ ::set-current-component
+ (fn [db [_ new-component]]
+   (assoc db :current-component new-component)))
+
+(re-frame/reg-event-db
   ::set-feedbacks-list
   (fn [db [_ new-val]]
     (assoc db :feedbacks-list new-val)))

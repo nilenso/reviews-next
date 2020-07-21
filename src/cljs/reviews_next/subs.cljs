@@ -67,3 +67,8 @@
   ::feedbacks-list
   (fn [db _]
     (:feedbacks-list db)))
+
+(re-frame/reg-sub
+ ::current-component
+ (fn [db _]
+   (:current-component db)))
