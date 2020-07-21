@@ -63,5 +63,4 @@
                   :margin "2px"}} (Customisable-button (first body-row) (last body-row))]
         [:> material-ui/TableCell
          {:align "right"
-          :style {:font-size "12px"}} (second body-row)]
-        ])]]])
+          :style {:font-size "12px"}} (second body-row)]])]]])
