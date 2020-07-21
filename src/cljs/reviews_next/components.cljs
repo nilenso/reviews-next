@@ -51,26 +51,17 @@
      :style {:background "white"}}
     [:> material-ui/TableHead
      [:> material-ui/TableRow
-      ;; (for [head-col head]
       [:> material-ui/TableCell {:align "left"} (first head)]
       [:> material-ui/TableCell {:align "right"} (second head)]
-      ;)
       ]]
     [:> material-ui/TableBody
      (for [body-row body]
        [:> material-ui/TableRow
-       
-      ;  (for [body-row-col body-row]
         [:> material-ui/TableCell
          {:align "left"
-          ;:a (accountant/navigate! (str "view-feedback/" 1))
-          ;:onClick (accountant/navigate! (str "view-feedback/" 1))
           :style {:font-size "12px"
                   :margin "2px"}} (Customisable-button (first body-row) (last body-row))]
         [:> material-ui/TableCell
          {:align "right"
           :style {:font-size "12px"}} (second body-row)]
-
-        ;)
-        ;}
         ])]]])
