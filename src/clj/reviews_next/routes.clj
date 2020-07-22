@@ -23,7 +23,7 @@
                 "users-from-review" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/users-list)))}}
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}
                 "feedback-list-from-user" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/feedback-from-user)))}}
-                "delete-from-user-feedback" {:post {"" (wrap-json-response (call-api list-feedback-event/delete-from-user-feedback))}}}         
+                "delete-from-user-feedback" {:post {"" (wrap-json-response (call-api feedback-event/delete-from-user-feedback))}}}         
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
 
