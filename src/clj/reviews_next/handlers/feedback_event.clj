@@ -14,13 +14,14 @@
    :headers {"Content-Type" "text"}
    :body error})
 
+
 (defn users-list [_request]
- (let [review_id (get-in _request [:params :review_id])
-       user-ids (user-reviews/users-for-review-id review_id)
-       result (users/users-for-given-ids user-ids)]
-   (if (empty? result)
-       (failed-request result)
-       (response result))))
+  (let [review_id (get-in _request [:params :review_id])
+        user-ids (user-reviews/users-for-review-id review_id)
+        result (users/users-for-given-ids user-ids)]
+    (if (empty? result)
+      (failed-request result)
+      (response result))))
 
 (defn reviews-list [_request]
   (let [uid (get-in _request [:params :uid])
@@ -47,3 +48,28 @@
     (if (= result true)
       (created "Insertion Successful")
       (failed-request (first result)))))
+
+
+(defn join_table_for_reviews_by_me [user_review_id]
+  (let [reviewee_id (:to_uid user_review_id)
+        review_event_id (:review_id user_review_id)
+        id (:id user_review_id)
+        reviewee (users/users-for-given-id reviewee_id)
+        review_event (reviews/review-for-given-id review_event_id)
+        feedback (user-feedback/feedback-for-given-review-id review_event_id)
+        user-review {:reviewee reviewee :review-event review_event :id id :feedback feedback}]
+    user-review))
+
+(defn feedback-from-user [_request]
+  (let [from-uid "U1"
+       ;(get-in _request [:params :from_uid])
+        reviews-list (user-reviews/get-reviews-by-user from-uid)
+        user_review_list (map join_table_for_reviews_by_me reviews-list)]
+    (response  user_review_list)))
+
+(defn delete-from-user-feedback [_request]
+  (let [feedback-id (get-in _request [:params "feedback_id"])
+        result (user-feedback/delete-feedback feedback-id)]
+    (if (empty? result)
+      (failed-request result)
+      (created "Deleted"))))

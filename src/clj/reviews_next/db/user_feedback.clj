@@ -6,9 +6,9 @@
 
 (def data
   {:from_uid "U1"
-   :to_uid "U3"
-   :review_id 2
-   :feedback "Great Job"
+   :to_uid "U2"
+   :review_id 1
+   :feedback "Great Job! well done."
    :level 6.1
    :is_draft 0})
 
@@ -28,11 +28,28 @@
   ([connection-uri]
    (db-do-commands connection-uri "delete from user_feedback")))
 
+(defn get-list
+  ([] (get-list (config/connection-uri)))
+  ([connection-uri]
+   (try
+     (query connection-uri ["select * from user_feedback"])
+     (catch Exception e
+       (str e)))))
+
+
 (defn feedbacks-from-uid
   ([from-uid] (feedbacks-from-uid from-uid (config/connection-uri)))
   ([from-uid connection-uri]
     (try
       (query connection-uri ["select * from user_feedback where is_draft=0 and from_uid=?" from-uid])
+     (catch Exception e
+      (str e)))))
+
+(defn feedback-for-given-review-id
+  ([review-id] (feedback-for-given-review-id review-id (config/connection-uri)))
+  ([review-id connection-uri]
+    (try
+      (query connection-uri ["select * from user_feedback where is_draft=0 and review_id=?" review-id])
      (catch Exception e
       (str e)))))
 

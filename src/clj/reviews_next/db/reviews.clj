@@ -8,9 +8,9 @@
 
 
 (def data
-  {:title "Review-3"
+  {:title "Review-1"
    :review_date "20-04-2000"
-   :review_description "Annual Report"})
+   :review_description "Annual Report 2020"})
 
 (defn format-date
   [date]
@@ -65,6 +65,14 @@
   ([review-ids connection-uri]
    (try
       (query connection-uri [(str "select * from reviews where id in " "(" (clojure.string/join "," (map #(str \" % \") review-ids)) ")")])
+     (catch Exception e
+       (str e)))))
+
+(defn review-for-given-id
+  ([review-id] (review-for-given-id review-id (config/connection-uri)))
+  ([review-id connection-uri]
+   (try
+     (query connection-uri [ "select * from reviews where id=?" review-id])
      (catch Exception e
        (str e)))))
 

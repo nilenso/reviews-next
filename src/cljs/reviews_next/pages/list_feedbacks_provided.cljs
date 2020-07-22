@@ -53,37 +53,57 @@
    :width "100%"
   })
 
+;; (defn display table [title head body style]
+;;   [:> material-ui/TableContainer {:style style :align "center"}  title
+;;    [:> material-ui/Table {:size "small" :style {:background "white"}}
+;;     [:> material-ui/TableHead
+;;      [:> material-ui/TableRow
+;;       (for [head-col head]
+;;         [:> material-ui/TableCell {:align "left"} (head-col)])]]
+;;     [:> material-ui/TableBody
+;;      (for [body-row body]
+;;        [:> material-ui/TableRow
+;;         [:> material-ui/TableCell
+;;          {:align "left" :style {:font-size "12px" :margin "2px"}}
+;;          (components/Button (first body-row) (last body-row))]
+;;         [:> material-ui/TableCell {:align "right" :style {:font-size "12px"}}
+;;          (second body-row)]])]]])
+
 (defn feedbacks-table-component [logged-in-user-details] 
   (let [_ (re-frame/dispatch [::events/populate-feedback-list (:id logged-in-user-details)])
-        feedback-list @(re-frame/subscribe [::subs/feedbacks-list])]
+        feedback-list (re-frame/subscribe [::subs/feedbacks-list])]
     [:div 
       [:div {:style {:background "#EFFAF3"
                     :color "#1D72AA"
                     :text-align "center"
                     :line-height "33px"}} "Reviews"]
-      [:div.feedback-table (use-style table-style)
+       [:div.feedback-table (use-style table-style)
         [:div.head-row (use-style head-row-style)
           [:div {:style {:width "10%"}}]
           [:div {:style {:width "25%" :text-align "center"}} "Pending" ]
           [:div {:style {:width "35%" :text-align "center"}} "Drafts" ]
           [:div {:style {:width "10%" :text-align "center"}} "Published" ]
           [:div {:style {:width "20%"}}]]
-        (for [feedback feedback-list]
+        (js/console.log "feedback: " @feedback-list)
+        (for [feedback @feedback-list]
           ^{:key (:id feedback)}
           [:div.row (use-style row-style)
-            [:i {:class "material-icons"} "check"]
-            [:div {:style {:width "30%"}} (get-in feedback [:user-details :name])]
-            [:div {:style {:width "40%"
+          ;;  (js/console.log feedback)
+           [:i {:class "material-icons"} "check"]
+           [:div {:style {:width "30%"}} (:name (first (:reviewee feedback)))]
+           [:div {:style {:width "40%"
                           :display "flex"
                           :flex-direction "row"
                           :justify-content "space-around"}}
-              [:div (get-in feedback [:level])]
-              [:div (get-in feedback [:review-details :title])]]
-            [:div {:style {:width "20%"}} (get-in feedback [:review-details :review_date])]
-            [components/Button {:onClick #(re-frame/dispatch [::events/unpublish-feedback (:id feedback)])                                      
-                                :width "20%"
-                                :style {:margin "0px 5px"
-                                        :color "#00947E"}} "Unpublish"]])]]))
+            [:div (:level (first (:feedback feedback)))]
+            [:div (:title (first (:review-event feedback)))]]
+           [:div {:style {:width "20%"}}  (:review_date (first (:review-event feedback)))]
+           [components/Button {:onClick #(re-frame/dispatch [::events/unpublish-feedback (:id feedback)])
+                               :width "20%"
+                               :style {:margin "0px 5px"
+                                       :color "#00947E"}} "Unpublish"]])
+        
+        ]]))
         
 
 (defn start-component []
@@ -91,9 +111,8 @@
    (reagent/create-class
     {:component-did-mount
      (fn []
-      ;  (js/console.log "Call Feedback list")
-      ;  (re-frame/dispatch [::events/populate-feedback-list (:id logged-in-user-details)])
-       )
+       (js/console.log "Call Feedback list")
+       (re-frame/dispatch [::events/populate-feedback-list (:id "logged-in-user-details")]))
      :display-name "Main component"
      :reagent-render
      (fn []
@@ -102,6 +121,6 @@
           [:div.main-section (use-style (section-style "80vw"))
             [:div.heading (use-style heading-style)
               [:h1 {:style 
-                      {:font-size "36px"}} (:name logged-in-user-details) " (You)"]]
+                      {:font-size "36px"}} (:name logged-in-user-details) " ( You)"]]
             [feedbacks-table-component logged-in-user-details]
             ]])})))
