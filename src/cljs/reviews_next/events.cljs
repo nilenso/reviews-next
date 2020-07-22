@@ -169,7 +169,7 @@
  (fn [_ [_ feedback-id]]
    {:http-xhrio {:method :post
                  :uri    "/api/delete-from-user-feedback"
-                 :params {:feedback_id feedback-id}
+                 :params {:feedback-id feedback-id}
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                 ;  :on-success [::set-users-for-review]

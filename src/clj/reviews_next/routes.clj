@@ -8,8 +8,7 @@
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.json :refer [wrap-json-params wrap-json-body wrap-json-response]]
             [reviews-next.handlers.review-event :as review-event]
-            [reviews-next.handlers.feedback-event :as feedback-event]
-            [reviews-next.handlers.list-feedback-event :as list-feedback-event]))
+            [reviews-next.handlers.feedback-event :as feedback-event]))
 
 (def call-api (partial wrap-json-params))
 

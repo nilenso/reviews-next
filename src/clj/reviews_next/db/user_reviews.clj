@@ -52,12 +52,3 @@
       (query connection-uri ["select review_id from user_reviews where from_uid=?" user-id] {:row-fn :review_id}))
      (catch Exception e
        (str e)))))
-
-(defn get-reviews-by-user
-  ([user-uid] (get-reviews-by-user user-uid (config/connection-uri)))
-  ([user-uid connection-uri]
-   (try
-     (query connection-uri ["select * from user_reviews where from_uid=?" user-uid]
-            {:row-fn (fn [row] {:to_uid (:from_uid row) :review_id (:review_id row) :id (:review_id row)})})
-     (catch Exception e
-       false))))

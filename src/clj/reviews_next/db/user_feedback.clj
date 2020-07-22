@@ -7,7 +7,7 @@
 (def data
   {:from_uid "U1"
    :to_uid "U2"
-   :review_id 1
+   :review_id 3
    :feedback "Great Job! well done."
    :level 6.1
    :is_draft 0})
@@ -53,10 +53,24 @@
      (catch Exception e
       (str e)))))
 
+(defn get-reviews-by-user
+  ([user-uid] (get-reviews-by-user user-uid (config/connection-uri)))
+  ([user-uid connection-uri]
+   (try
+     (query connection-uri ["select * from user_feedback where from_uid=?" user-uid]
+            {:row-fn (fn [row] {:to_uid (:to_uid row)
+                                :review_id (:review_id row)
+                                :id (:id row)
+                                :feedback (:feedback row)
+                                :level (:level row)
+                                :is_draft (:is_draft row)})})
+     (catch Exception e
+       false))))
+
 (defn delete-feedback
   ([feedback-id] (delete-feedback feedback-id (config/connection-uri)))
   ([feedback-id connection-uri]
-    (try
-      (delete! connection-uri :user_feedback ["id = ?" feedback-id])
+   (try
+     (delete! connection-uri :user_feedback ["id = ?" feedback-id])
      (catch Exception e
-      (str e)))))
+       (str e)))))
