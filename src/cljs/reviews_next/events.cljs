@@ -164,6 +164,36 @@
                  :on-success [::set-feedbacks-list]
                  :on-fail    [::api-failed]}}))
 
+(re-frame/reg-event-db
+ ::set-draft-feedbacks-list
+ (fn [db [_ new-val]]
+   (assoc db :draft-feedbacks-list new-val)))
+
+(re-frame/reg-event-fx
+ ::populate-draft-feedback-list
+ (fn [_ [_ current-user-id]]
+   {:http-xhrio {:method :get
+                 :uri    "/api/feedback-draft-list-from-user"
+                 :params {:from_uid current-user-id}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-draft-feedbacks-list]
+                 :on-fail    [::api-failed]}}))
+
+(re-frame/reg-event-db
+ ::draft-review-description
+ (fn [db [_ new-val]]
+   (assoc db :draft-review-description new-val)))
+
+(re-frame/reg-event-db
+ ::draft-level
+ (fn [db [_ new-val]]
+   (assoc db :draft-level new-val)))
+
+(re-frame/reg-event-db
+ ::current-feedback-to-edit
+ (fn [db [_ new-val]]
+   (assoc db :current-feedback-to-edit new-val)))
+
 (re-frame/reg-event-fx
  ::unpublish-feedback
  (fn [_ [_ feedback-id]]
@@ -172,5 +202,5 @@
                  :params {:feedback-id feedback-id}
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-                ;  :on-success [::set-users-for-review]
+               ;  :on-success [::set-users-for-review]
                  :on-fail    [::api-failed]}}))

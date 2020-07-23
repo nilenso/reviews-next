@@ -11,6 +11,8 @@
    [reviews-next.db :as db]
    [reviews-next.events :as events]
    [reviews-next.subs :as subs]
+   [accountant.core :as accountant]
+   [secretary.core :as secretary]
    [reviews-next.components :as components])
   (:require-macros
     [cljs.core.async.macros :refer [go]]))
@@ -121,7 +123,8 @@
           [:div.side-section (use-style (section-style "20vw"))]
           [:div.main-section (use-style (section-style "80vw"))
             [:div.heading (use-style heading-style)
-              [:h1 {:style 
-                      {:font-size "36px"}} (:name logged-in-user-details) " ( You)"]]
+              [:a {:style 
+                      {:font-size "36px"}
+                    :on-click #(accountant/navigate! (str "/view-feedback/1"))} (:name logged-in-user-details) " ( You)"]]
             [feedbacks-table-component logged-in-user-details]
             ]])})))

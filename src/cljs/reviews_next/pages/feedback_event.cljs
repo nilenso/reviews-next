@@ -184,6 +184,7 @@
      (fn []
        (js/console.log "Call Review events")
        (re-frame/dispatch [::events/populate-review-events-list logged-in-user-id]))
+     
      :display-name "Main component"
      :reagent-render
      (fn []

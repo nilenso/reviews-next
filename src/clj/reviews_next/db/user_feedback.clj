@@ -10,7 +10,7 @@
    :review_id 3
    :feedback "Great Job! well done."
    :level 6.1
-   :is_draft 0})
+   :is_draft 1})
 
 (defn insert
   "execute query and return lazy sequence"
@@ -57,7 +57,21 @@
   ([user-uid] (get-reviews-by-user user-uid (config/connection-uri)))
   ([user-uid connection-uri]
    (try
-     (query connection-uri ["select * from user_feedback where from_uid=?" user-uid]
+     (query connection-uri ["select * from user_feedback where is_draft=0 and from_uid=?" user-uid]
+            {:row-fn (fn [row] {:to_uid (:to_uid row)
+                                :review_id (:review_id row)
+                                :id (:id row)
+                                :feedback (:feedback row)
+                                :level (:level row)
+                                :is_draft (:is_draft row)})})
+     (catch Exception e
+       false))))
+
+(defn get-draft-reviews-by-user
+  ([user-uid] (get-draft-reviews-by-user user-uid (config/connection-uri)))
+  ([user-uid connection-uri]
+   (try
+     (query connection-uri ["select * from user_feedback where is_draft=1 and from_uid=?" user-uid]
             {:row-fn (fn [row] {:to_uid (:to_uid row)
                                 :review_id (:review_id row)
                                 :id (:id row)

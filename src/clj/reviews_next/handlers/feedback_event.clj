@@ -59,14 +59,20 @@
         user-review {:reviewee reviewee :review-event review_event :id id :feedback user_review_id}]
     user-review))
 
-(defn feedback-from-user [_request]
-  (let [from-uid (get-in _request [:params :from_uid])
+(defn feedback-from-user [request]
+  (let [from-uid (get-in request [:params :from_uid])
         reviews-list (user-feedback/get-reviews-by-user from-uid)
         user_review_list (map join_table_for_reviews_by_me reviews-list)]
     (response  user_review_list)))
 
-(defn delete-from-user-feedback [_request]
-  (let [feedback-id (get-in _request [:params "feedback-id"])
+(defn draft-feedback-from-user [request]
+  (let [from-uid (get-in request [:params :from_uid])
+        reviews-list (user-feedback/get-draft-reviews-by-user from-uid)
+        user-review-list (map join_table_for_reviews_by_me reviews-list)]
+    (response  user-review-list)))
+
+(defn delete-from-user-feedback [request]
+  (let [feedback-id (get-in request [:params "feedback-id"])
         result (user-feedback/delete-feedback feedback-id)]
     (if (empty? result)
       (failed-request result)

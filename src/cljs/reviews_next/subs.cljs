@@ -69,6 +69,26 @@
     (:feedbacks-list db)))
 
 (re-frame/reg-sub
+ ::draft-feedbacks-list
+ (fn [db _]
+   (:draft-feedbacks-list db)))
+
+(re-frame/reg-sub
+ ::draft-review-description
+ (fn [db _]
+   (:draft-review-description db)))
+
+(re-frame/reg-sub
+ ::draft-level
+ (fn [db _]
+   (:draft-level db)))
+
+(re-frame/reg-sub
+ ::current-feedback-to-edit
+ (fn [db _]
+   (:current-feedback-to-edit db)))
+
+(re-frame/reg-sub
  ::current-component
  (fn [db _]
    (:current-component db)))
