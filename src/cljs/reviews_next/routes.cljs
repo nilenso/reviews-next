@@ -30,4 +30,5 @@
 
 (secretary/defroute "/" []
   (js/console.log "Okay atleast something")
-  [list-draft-feedbacks/list-draft-feedback])
+  [list-feedbacks-provided/start-component])
+  ;[list-draft-feedbacks/list-draft-feedback])

@@ -8,9 +8,9 @@
   {:from_uid "U1"
    :to_uid "U3"
    :review_id 3
-   :feedback "Great Job! well done."
+   :feedback "Fab job."
    :level 6.1
-   :is_draft 1})
+   :is_draft 0})
 
 (defn insert
   "execute query and return lazy sequence"

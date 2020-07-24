@@ -208,7 +208,7 @@
                  :params {:feedback-id feedback-id}
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [::set-users-for-review]
+                ; :on-success [::set-users-for-review]
                  :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-fx

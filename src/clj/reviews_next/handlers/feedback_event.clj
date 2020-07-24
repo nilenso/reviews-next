@@ -76,7 +76,7 @@
         result (user-feedback/delete-feedback feedback-id)]
     (if (empty? result)
       (failed-request result)
-      (created "Deleted"))))
+      (response {:success true}))))
 
 (defn publish-draft-feedback [request]
   (let [id (get-in request [:params "id"])

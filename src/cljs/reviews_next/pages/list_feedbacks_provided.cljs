@@ -81,8 +81,8 @@
               [:div (:level (first (:feedback feedback)))]
               [:div (:title (first (:review-event feedback)))]]
              [:div {:style {:width "20%"}}  (:review_date (first (:review-event feedback)))]
-             [components/Button {:onClick #((re-frame/dispatch-sync [::events/unpublish-feedback (:id feedback)])
-                                            (re-frame/dispatch-sync [::events/populate-feedback-list (:id logged-in-user-details)]))
+             [components/Button {:onClick #((re-frame/dispatch [::events/unpublish-feedback (:id feedback)])
+                                            (re-frame/dispatch [::events/populate-feedback-list (:id logged-in-user-details)]))
                                  :width "20%"
                                  :style {:margin "0px 5px"
                                          :color "#00947E"}} "Unpublish"]])]])})))
