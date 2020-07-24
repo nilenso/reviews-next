@@ -24,6 +24,10 @@
    ;[view-feedback-event/view-feedback-page id]
 )
 
+(secretary/defroute "/list-feedbacks" []
+  (js/console.log "Okay atleast something")
+  [list-feedbacks-provided/start-component])
+
 (secretary/defroute "/" []
   (js/console.log "Okay atleast something")
   [list-draft-feedbacks/list-draft-feedback])

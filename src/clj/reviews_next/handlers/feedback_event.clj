@@ -46,7 +46,7 @@
                                          :level level
                                          :is_draft is_draft})]
     (if (= result true)
-      (created "Insertion Successful")
+      (response {:success true})
       (failed-request (first result)))))
 
 
@@ -77,3 +77,12 @@
     (if (empty? result)
       (failed-request result)
       (created "Deleted"))))
+
+(defn publish-draft-feedback [request]
+  (let [id (get-in request [:params "id"])
+        _ (prn "id of feedback" id)
+        result (user-feedback/publish-draft-feedback id)]
+    (if (empty? result)
+      (failed-request result)
+      (response {:success true})
+   #_   (created "Published"))))

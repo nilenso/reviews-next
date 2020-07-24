@@ -23,6 +23,7 @@
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}
                 "feedback-draft-list-from-user" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/draft-feedback-from-user)))}}
                 "feedback-list-from-user" {:get {"" (wrap-json-response (wrap-params (wrap-keyword-params feedback-event/feedback-from-user)))}}
+                "publish-draft-feedback" {:put {"" (wrap-json-response (call-api feedback-event/publish-draft-feedback))}}
                 "delete-from-user-feedback" {:post {"" (wrap-json-response (call-api feedback-event/delete-from-user-feedback))}}}         
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])

@@ -1,19 +1,11 @@
 (ns reviews-next.pages.feedback-event
   (:require
-   ["@material-ui/core" :as material-ui]
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
-   [cljs.core.async :refer [<!]]
-   [cljs-http.client :as http]
-   [clojure.pprint :as pp]
-   [cljs.spec.alpha :as s]
    [stylefy.core :as stylefy :refer [use-style]]
-   [reviews-next.db :as db]
    [reviews-next.events :as events]
    [reviews-next.subs :as subs]
-   [reviews-next.components :as components])
-  (:require-macros
-    [cljs.core.async.macros :refer [go]]))
+   [reviews-next.components :as components]))
 
 ;;styles
 (def main-content-style

@@ -23,7 +23,7 @@
                  :uri    "/api/users"
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::participants-from-backend]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-fx
  ::setup-google-signin-functions
@@ -99,7 +99,7 @@
                  :params {:uid current-user-id}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::set-review-events]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::set-users-for-review
@@ -114,7 +114,7 @@
                  :params {:review_id current-review-id}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::set-users-for-review]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::set-current-user-from-menu
@@ -136,8 +136,7 @@
                  :params feedback-param
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-                ;  :on-success [::set-users-for-review]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-db
   ::feedback-change
@@ -162,22 +161,29 @@
                  :params {:from_uid current-user-id}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::set-feedbacks-list]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-db
  ::set-draft-feedbacks-list
  (fn [db [_ new-val]]
+   (js/console.log "setttt" new-val)
    (assoc db :draft-feedbacks-list new-val)))
+
+(re-frame/reg-event-db
+ ::api-failed
+ (fn [_ [_]]
+   (js/console.log "API failed.")))
 
 (re-frame/reg-event-fx
  ::populate-draft-feedback-list
  (fn [_ [_ current-user-id]]
+   (js/console.log "Event populate-draft-feedback-list" current-user-id)
    {:http-xhrio {:method :get
                  :uri    "/api/feedback-draft-list-from-user"
                  :params {:from_uid current-user-id}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::set-draft-feedbacks-list]
-                 :on-fail    [::api-failed]}}))
+                 :on-failure    [::api-failed]}}))
 
 (re-frame/reg-event-db
  ::draft-review-description
@@ -202,5 +208,17 @@
                  :params {:feedback-id feedback-id}
                  :format          (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
-               ;  :on-success [::set-users-for-review]
-                 :on-fail    [::api-failed]}}))
+                 :on-success [::set-users-for-review]
+                 :on-failure    [::api-failed]}}))
+
+(re-frame/reg-event-fx
+ ::publish-draft-feedback
+ (fn [_ [_ feedback-id]]
+   (js/console.log "publish-draft-feedback" feedback-id)
+   {:http-xhrio {:method :put
+                 :uri    "/api/publish-draft-feedback"
+                 :params {:id feedback-id}
+                 :format          (ajax/json-request-format)
+                 :response-format (ajax/json-response-format {:keywords? true})
+               ;  :on-success [::populate-draft-feedback-list]
+                 :on-failure    [::test-event]}}))

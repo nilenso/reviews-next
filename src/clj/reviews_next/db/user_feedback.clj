@@ -6,7 +6,7 @@
 
 (def data
   {:from_uid "U1"
-   :to_uid "U2"
+   :to_uid "U3"
    :review_id 3
    :feedback "Great Job! well done."
    :level 6.1
@@ -80,6 +80,14 @@
                                 :is_draft (:is_draft row)})})
      (catch Exception e
        false))))
+
+(defn publish-draft-feedback
+  ([feedback-id] (publish-draft-feedback feedback-id (config/connection-uri)))
+  ([feedback-id connection-uri]
+   (try
+     (update! connection-uri :user_feedback {:is_draft 0} ["id = ?" feedback-id])
+     (catch Exception e
+       (str e)))))
 
 (defn delete-feedback
   ([feedback-id] (delete-feedback feedback-id (config/connection-uri)))
