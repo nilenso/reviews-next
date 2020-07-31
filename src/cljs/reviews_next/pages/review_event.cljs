@@ -13,6 +13,7 @@
   (:require-macros
    [cljs.core.async.macros :refer [go]]))
 
+
 ;;specs
 (s/def ::title (s/and #(not (nil? %)) #(<= 1 (count %) 50)))
 (s/def ::date (s/and #(not (nil? %)) #(not (empty? %))))
@@ -50,13 +51,6 @@
 (def checkbox-style
   {:margin "2%"})
 
-;;init functions
-(defn add-participants
-  []
-  (go (let [response (<! (http/get "/api/users"))
-            participants (re-frame/subscribe [::subs/participants])]
-        (re-frame/dispatch [::events/set-participants (:body response)]))))
-
 ;;events
 
 (defn clear-all-fields
@@ -68,7 +62,7 @@
   (re-frame/dispatch [::events/remove-all-selected-participants]))
 
 (defn call-save-api-fn
-  [title date description selected-participants ]
+  [title date description selected-participants]
   (js/console.log "Coming here")
   (let [request-map {:json-params {:title title
                                    :review_date date
@@ -83,34 +77,35 @@
       (go (let [response (<! (http/post "/api/review-event" request-map))]
             (js/console.log (str "review event api response: " (:body response))))))
     (clear-all-fields)))
+   ; (re-frame/dispatch [::events/clear-all-fields false])
+
 
 (defn toggle-participants
   [checked? id]
-  (js/console.log id)
-  (let [selected-participants [::subs/selected-participants]]
-    (if checked?
-      (re-frame/dispatch [::events/add-to-selected-participants id])
-      (re-frame/dispatch [::events/remove-from-selected-participants id]))))
+  (if checked?
+    (re-frame/dispatch [::events/add-to-selected-participants id])
+    (re-frame/dispatch [::events/remove-from-selected-participants id])))
+
+(defn onchange [participant selected-participants]
+  (if (some #(= (participant :id) %) @selected-participants) true false))
 
 ;;components
 (defn participants-checkboxes
-  [participants]
-  (let [selected-participants (re-frame/subscribe [::subs/selected-participants])]
-    (fn []
-      [:div
-       (for [participant participants]
-         ^{:key (participant :id)}
-         (let [checked? (some #(= (participant :id) %) @selected-participants)]
-           [:div.checkbox (use-style checkbox-style)
-            [:input
-             {:type "checkbox"
-              :id (participant :id)
-              :name "checkbox"
-              :value (participant :id)
-              :checked checked?
-              :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
-            [:label
-             {:for (participant :id)} (participant :name)]]))])))
+  [participants selected-participants]
+  [:div
+   (for [participant participants]
+     ^{:key (participant :id)}
+     [:div.checkbox (use-style checkbox-style)
+      [:input
+       {:type "checkbox"
+        :id (participant :id)
+        :name "checkbox"
+        :checked (contains? selected-participants (:id participant))
+        :value (participant :id)
+        :on-change #(toggle-participants (-> % .-target .-checked) (-> % .-target .-value))}]
+      [:label
+       {:for (participant :id)} (participant :name)]])])
+
 
 ;;main code
 (defn review-event []
@@ -144,22 +139,20 @@
           :value @review-date
           :on-change #(re-frame/dispatch [::events/date-change (-> % .-target .-value)])}]]
        [:div.markdown {
-          :style {:padding "10px"
-                  :border "5px white"
-                  :box-shadow "2px 2px px #888888"
-                  }}
+                       :style {:padding "10px"
+                               :border "5px white"
+                               :box-shadow "2px 2px px #888888"}}
+
         (components/MarkDownEditor
          {:style {:width "80%"
                   :height "50vh"
                   :padding-bottom "20px"}
           :value @review-description
           :placeholder "Add description"
-          :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])
-          })
-        ]     
+          :onChange  #(re-frame/dispatch [::events/description-change (. %4 getText)])})]
        [:div.participants-box (use-style checkbox-area)
         [:b "Add Participants"]]
-         [participants-checkboxes @participants @selected-participants]
+       [participants-checkboxes @participants @selected-participants]
        (components/Button
         {:variant "contained"
          :onClick call-save-api

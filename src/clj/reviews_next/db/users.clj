@@ -5,7 +5,7 @@
           [reviews-next.config :as config]))
 
 (def data
-  {:id "U5"
+  {:id "U6"
    :name "MNO"
    :email "mno@gmail.com"})
 
@@ -14,11 +14,11 @@
   ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
    (try
-     (do
-       (insert! connection-uri :users data)
-       true)
+        (do
+          (insert! connection-uri :users data)
+          true)
      (catch Exception e
-       false))))
+       (str e)))))
 
 (defn delete-all
   ([] (delete-all (config/connection-uri)))
@@ -31,12 +31,12 @@
    (try
       (query connection-uri ["select * from users"])
      (catch Exception e
-      false))))
+      (str e)))))
 
-(defn get-users-for-given-ids
-  ([user-ids] (get-users-for-given-ids (config/connection-uri)))
+(defn users-for-given-ids
+  ([user-ids] (users-for-given-ids user-ids (config/connection-uri)))
   ([user-ids connection-uri]
    (try
-      (db-do-prepared connection-uri "select * from users where id in (?)" user-ids)
+      (query connection-uri [(str "select * from users where id in " "(" (clojure.string/join "," (map #(str \" % \") user-ids)) ")")])
      (catch Exception e
        (str e)))))

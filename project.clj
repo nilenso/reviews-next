@@ -12,6 +12,8 @@
                  [bidi "2.1.6"]
                  [cider/piggieback "0.5.0"]
                  [cheshire "5.10.0"]
+                 [cljsjs/material-ui "4.10.2-0"]
+                 [day8.re-frame/http-fx "v0.2.0"]
                  [hiccup "1.0.5"]
                  [hikari-cp "2.12.0"]
                  [honeysql "0.9.10"]
@@ -39,12 +41,10 @@
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
              :uberjar {:aot :all}
-             :test {
-                    ; :env {:database_url "jdbc:sqlite:test_reviews_next.db"}
+             :test {:source-paths ["test/clj" "test/cljs"]
                     :dependencies [[ring/ring-mock "0.4.0"]]}}
 
   :source-paths ["src/clj" "src/cljs"]
-  :test-paths ["test/clj" "test/cljs"]
   :auto-clean false
   :main reviews-next.core
 

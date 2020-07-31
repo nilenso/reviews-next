@@ -6,20 +6,19 @@
 
 (def data
   {:from_uid "U1"
-   :to_uid "U2"
+   :to_uid "U4"
    :review_id 3})
 
 (defn insert
   "execute query and return lazy sequence"
   ([data] (insert data (config/connection-uri)))
   ([data connection-uri]
-   (insert! connection-uri :user_reviews data)))
-   ; (try
-   ;      do
-   ;        (insert! connection-uri :user_reviews data)
-   ;        true
-   ;   (catch Exception e
-   ;     false))))
+   (try
+       (do
+          (insert! connection-uri :user_reviews data)
+          true)
+     (catch Exception e
+       (str e)))))
 
 (defn delete-all
   ([] (delete-all (config/connection-uri)))
@@ -32,9 +31,23 @@
    (try
       (query connection-uri ["select * from user_reviews"])
      (catch Exception e
-      false))))
+      (str e)))))
 
 (defn users-for-review-id
-  ([review-id] (users-for-review-id (config/connection-uri)))
+  ([review-id] (users-for-review-id review-id (config/connection-uri)))
   ([review-id connection-uri]
-   (db-do-prepared connection-uri "select * from user_reviews where review_id= ?" review-id)))
+   (try
+      (let [user-ids (query connection-uri ["select to_uid from user_reviews where review_id=?" review-id] {:row-fn :to_uid})]
+       (concat user-ids (query connection-uri ["select distinct from_uid from user_reviews where review_id=?" review-id] {:row-fn :from_uid})))
+     (catch Exception e
+       (str e)))))
+
+(defn reviews-for-user-id
+  ([user-id] (reviews-for-user-id user-id (config/connection-uri)))
+  ([user-id connection-uri]
+   (try
+      (concat
+        (query connection-uri ["select review_id from user_reviews where to_uid=?" user-id] {:row-fn :review_id})
+        (query connection-uri ["select review_id from user_reviews where from_uid=?" user-id] {:row-fn :review_id}))
+     (catch Exception e
+       (str e)))))

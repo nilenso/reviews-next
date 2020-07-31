@@ -31,3 +31,34 @@
   ::selected-participants
   (fn [db _]
     (:selected-participants db)))
+
+(re-frame/reg-sub
+  ::review-events
+  (fn [db _]
+    (:review-events db)))
+
+(re-frame/reg-sub
+  ::current-review-event
+  (fn [db _]
+    (:current-review-event db)))
+
+
+(re-frame/reg-sub
+  ::users-for-review
+  (fn [db _]
+    (:users-for-review db)))
+
+(re-frame/reg-sub
+  ::current-user
+  (fn [db _]
+    (:current-user db)))
+
+(re-frame/reg-sub
+  ::feedback
+  (fn [db _]
+    (:feedback db)))
+
+(re-frame/reg-sub
+  ::level
+  (fn [db _]
+    (:level db)))
