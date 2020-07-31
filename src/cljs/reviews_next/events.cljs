@@ -140,6 +140,46 @@
                  :on-fail    [::api-failed]}}))
 
 (re-frame/reg-event-db
+ ::user-and-review-ids
+ (fn [db [_ new-val]]
+   (assoc db :user-and-review-ids new-val)))
+
+(re-frame/reg-event-fx
+ ::populate-user-and-review-ids
+ (fn [_ _]
+   {:http-xhrio {:method :get
+                 :uri    "/api/review-for-user"
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::user-and-review-ids]
+                 :on-fail    [::api-failed]}}))
+
+
+(re-frame/reg-event-db
+ ::set-feedback-details
+ (fn [db [_ new-val]]
+   (assoc db :feedback-details new-val)))
+
+(re-frame/reg-event-fx
+ ::populate-feedback-from-review-id
+ (fn [_ [_ review-id]]
+   {:http-xhrio {:method :get
+                 :uri    "/api/feedback-from-id"
+                 :params {:review_id review-id}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [::set-feedback-details]
+                 :on-fail    [::api-failed]}}))
+
+(re-frame/reg-event-db
   ::feedback-change
   (fn [db [_ new-desc]]
     (assoc db :feedback new-desc)))
+
+(re-frame/reg-event-db
+ ::set-current-component
+ (fn [db [_ new-component]]
+   (assoc db :current-component new-component)))
+
+(re-frame/reg-event-db
+ ::set-current-reviewer-and-review-event
+ (fn [db [_ new-val]]
+   (assoc db :current-reviewer-and-review-event new-val)))

@@ -62,3 +62,24 @@
   ::level
   (fn [db _]
     (:level db)))
+
+(re-frame/reg-sub
+ ::user-and-review-ids
+ (fn [db _]
+   (:user-and-review-ids db)))
+
+
+(re-frame/reg-sub
+ ::feedback-details
+ (fn [db _]
+   (:feedback-details db)))
+
+(re-frame/reg-sub
+ ::current-component
+ (fn [db _]
+   (:current-component db)))
+
+(re-frame/reg-sub
+ ::current-reviewer-and-review-event
+ (fn [db _]
+   (:current-reviewer-and-review-event db)))

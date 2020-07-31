@@ -12,7 +12,10 @@
                 [cljs-react-material-ui "0.2.48"]
                 [cljsjs/react "15.6.1-1"]
                 [cljsjs/react-dom "15.6.1-1"]
-                [re-frame "1.0.0-rc2"]]
+                [re-frame "1.0.0-rc2"]
+                [clj-commons/secretary "1.2.4"]
+                [venantius/accountant "0.2.5"]]
+ 
 
  :builds       {:app {:output-dir "target/assets/"
                       :asset-path "assets"

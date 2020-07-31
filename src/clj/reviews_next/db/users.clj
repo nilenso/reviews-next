@@ -5,8 +5,8 @@
           [reviews-next.config :as config]))
 
 (def data
-  {:id "U6"
-   :name "MNO"
+  {:id "U3"
+   :name "shreyanshi"
    :email "mno@gmail.com"})
 
 (defn insert
@@ -38,5 +38,13 @@
   ([user-ids connection-uri]
    (try
       (query connection-uri [(str "select * from users where id in " "(" (clojure.string/join "," (map #(str \" % \") user-ids)) ")")])
+     (catch Exception e
+       (str e)))))
+
+(defn users-for-given-id
+  ([user-id] (users-for-given-id user-id connection-uri-default))
+  ([user-id connection-uri]
+   (try
+     (query connection-uri [ "select * from users where id=?" user-id])
      (catch Exception e
        (str e)))))

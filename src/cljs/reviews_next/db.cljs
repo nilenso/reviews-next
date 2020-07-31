@@ -3,7 +3,8 @@
 (def initial-db
  {
   :pages
-   {:add-review-event
+   {:current-component nil
+    :add-review-event
     {:review-event-title ""
      :review-date ""
      :review-description ""
@@ -16,4 +17,9 @@
      :users-for-review []
      :current-user {}
      :feedback ""
-     :level nil}}})
+     :level nil}
+    :view-feedback-event
+    {:user-and-review-ids (vector nil)
+     :feedback-details {}
+     :current-reviewer-and-review-event {}
+     }}})

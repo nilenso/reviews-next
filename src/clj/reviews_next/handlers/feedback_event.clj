@@ -22,6 +22,28 @@
        (failed-request result)
        (response result))))
 
+(defn feeback-details-from-id [_request]
+  (let [review_id (get-in _request [:params :review_id])
+        feedback-details (user-feedback/feedback-for-given-review-id review_id)]
+    (response feedback-details)))
+
+(defn create_user_review_map [user_id review_id] 
+  {:user_id user_id :review_id review_id})
+
+(defn join_user_review_table [user_review_id]
+  (let [reviewer_id (:from_uid user_review_id)
+        review_id (:review_id user_review_id)
+        id (:id user_review_id)
+        reviewer (users/users-for-given-id reviewer_id)
+        review (reviews/review-for-given-id review_id)
+        user-review {:reviewer reviewer :review-event review :id id}]
+    user-review))
+
+(defn get-reviewer-and-review-event [_request]
+  (let [reviews-list (user-reviews/get-reviews-for-user "U2")
+        user_review_list (map join_user_review_table reviews-list)]
+    (response  user_review_list)))
+
 (defn reviews-list [_request]
   (let [uid (get-in _request [:params :uid])
         reviews-for-uid-list (user-reviews/reviews-for-user-id uid)
