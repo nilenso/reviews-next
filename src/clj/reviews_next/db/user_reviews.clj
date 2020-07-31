@@ -4,7 +4,6 @@
           [clojure.java.jdbc :refer :all]
           [reviews-next.config :as config]))
 
-
 (def data
   {:from_uid "U1"
    :to_uid "U4"

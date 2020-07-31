@@ -15,7 +15,7 @@
   :ready)
 
 (defn reset []
-  stop
+  (stop)
   (refresh :after (go)))
 
 (go)

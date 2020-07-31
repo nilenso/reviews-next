@@ -12,13 +12,15 @@
 (defn insert-into-db [_request]
   (let [title (get-in _request [:params "title"])
         date (get-in _request [:params "review_date"])
+        description (get-in _request [:params "review_description"])
         from_uid (get-in _request [:params "from_uid"])
         participants (get-in _request [:params "participants"])
         review_id (reviews/insert-and-get-last-id {:title title
-                                                         :review_date date})]
+                                                   :review_date date
+                                                   :review_description description})]
     (doseq [participant participants]
-       (user-reviews/insert {:from_uid from_uid :to_uid participant :review_id review_id}))
+      (user-reviews/insert {:from_uid from_uid :to_uid participant :review_id review_id}))
     (response (str "Posted"))))
 
 (defn users-list [_request]
- (response (users/get-users)))
+  (response (users/get-users)))
