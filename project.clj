@@ -13,6 +13,7 @@
                  [cider/piggieback "0.5.0"]
                  [cheshire "5.10.0"]
                  [cljsjs/material-ui "4.10.2-0"]
+                 [day8.re-frame/http-fx "v0.2.0"]
                  [hiccup "1.0.5"]
                  [hikari-cp "2.12.0"]
                  [honeysql "0.9.10"]
@@ -29,18 +30,21 @@
                  [lein-cljfmt "0.6.7"]
                  [day8.re-frame/test "0.1.5"]
                  [seancorfield/next.jdbc "1.0.409"]
-                 [com.fzakaria/slf4j-timbre "0.3.19"]]
+                 [com.fzakaria/slf4j-timbre "0.3.19"]
+                 [clj-kondo "2020.06.21"]]
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
+
   :profiles {:dev {:source-paths ["dev"]
+                   ; :env {:database_url "jdbc:sqlite:reviews_next.db"}
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]
                                    [org.clojure/java.classpath "0.2.0"]]}
              :uberjar {:aot :all}
-             :test {:source-paths ["test"]
+             :test {:source-paths ["test/clj" "test/cljs"]
                     :dependencies [[ring/ring-mock "0.4.0"]]}}
 
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljs"]
   :auto-clean false
   :main reviews-next.core
 

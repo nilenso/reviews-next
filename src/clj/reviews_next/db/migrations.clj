@@ -5,27 +5,15 @@
             [ragtime.strategy :as strategy]
             [reviews-next.config :as config]))
 
-(defn migration-config
-  ([]
-   {:datastore  (jdbc/sql-database
-                 {:connection-uri (:jdbc-url (:database config/config))})
-    :migrations (jdbc/load-resources "migrations")
-    :strategy ragtime.strategy/apply-new})
-  ([test]
-   {:datastore  (jdbc/sql-database
-                 {:connection-uri (:test (:database config/config))})
-    :migrations (jdbc/load-resources "migrations")
-    :strategy ragtime.strategy/apply-new}))
+(defn migration-config []
+  {:datastore  (jdbc/sql-database {:connection-uri (config/connection-uri)})
+   :migrations (jdbc/load-resources "migrations")
+   :strategy ragtime.strategy/apply-new})
 
-(defn migrate
-  ([]
-   (mount/start #'config/config)
-   (repl/migrate (migration-config))
-   (mount/stop #'config/config))
-  ([test]
-   (mount/start #'config/config)
-   (repl/migrate (migration-config test))
-   (mount/stop #'config/config)))
+(defn migrate []
+  (mount/start #'config/config)
+  (repl/migrate (migration-config))
+  (mount/stop #'config/config))
 
 (defn rollback []
   (mount/start #'config/config)

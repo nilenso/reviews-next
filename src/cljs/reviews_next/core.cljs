@@ -18,7 +18,7 @@
 (defn init! []
   (re-frame/dispatch [:reviews-next.events/initialize-db])
   (accountant/navigate! "/")
-  
+
   (re-frame/dispatch [:reviews-next.events/populate-participants])
   (re-frame/dispatch-sync [:setup-google-signin-functions])
   (rdom/render [app] (.getElementById js/document "app")))

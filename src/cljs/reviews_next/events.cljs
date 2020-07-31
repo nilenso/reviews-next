@@ -6,7 +6,7 @@
    [re-frame.core :as re-frame]
    [reviews-next.db :as db]))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  ::initialize-db
  (fn [_ _]
    {:db db/initial-db}))
@@ -27,7 +27,7 @@
 
 (re-frame/reg-fx
  ::setup-google-signin-functions
- (fn []
+ (fn [_ _]
    (set!
     (.. js/window -onSignIn)
     (clj->js (fn [& args] (apply (.-log js/console) args))))))
@@ -80,8 +80,9 @@
 (re-frame/reg-event-db
   ::set-review-events
   (fn [db [_ new-val]]
-    (let [db (assoc db :review-events new-val)]
-      (assoc db :current-review-event (first new-val)))))
+    (-> db
+      (assoc :review-events new-val)
+      (assoc :current-review-event (first new-val)))))
 
 (re-frame/reg-event-db
   ::set-current-review-item-from-menu
@@ -92,9 +93,10 @@
 
 (re-frame/reg-event-fx
  ::populate-review-events-list
- (fn [_ _]
+ (fn [_ [_ current-user-id]]
    {:http-xhrio {:method :get
                  :uri    "/api/review-events-list"
+                 :params {:uid current-user-id}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [::set-review-events]
                  :on-fail    [::api-failed]}}))

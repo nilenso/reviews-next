@@ -25,4 +25,3 @@
                 "publish-feedback" {:post {"" (wrap-json-response (call-api feedback-event/into-user-feedback))}}}
         "assets" (bidi/resources {:prefix "assets/"})
         true pages/not-found}])
-

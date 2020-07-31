@@ -11,7 +11,7 @@
    [reviews-next.subs :as subs]
    [reviews-next.components :as components])
   (:require-macros
-    [cljs.core.async.macros :refer [go]]))
+   [cljs.core.async.macros :refer [go]]))
 
 
 ;;specs
