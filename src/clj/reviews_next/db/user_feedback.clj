@@ -12,6 +12,7 @@
    :level 6.1
    :is_draft 1})
 
+(def connection-uri-default nil)
 (defn insert
   "execute query and return lazy sequence"
   ([data] (insert data (config/connection-uri)))

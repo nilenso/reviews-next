@@ -12,6 +12,8 @@
    :review_date "20-04-2000"
    :review_description "Annual Report"})
 
+(def connection-uri-default nil)
+
 (defn format-date
   [date]
   (.format
@@ -48,14 +50,14 @@
      (catch Exception e
       (str e)))))
 
-;; (defn get-list-reviewers
-;;   ([] (get-list-reviewers connection-uri-default))
-;;   ([connection-uri]
-;;    (try
-;;      (query connection-uri ["select id, title from reviews order by review_date desc"])
-;;      (catch Exception e
-;;        false))))
-;;        
+(defn get-list-reviewers
+  ([] (get-list-reviewers connection-uri-default))
+  ([connection-uri]
+   (try
+     (query connection-uri ["select id, title from reviews order by review_date desc"])
+     (catch Exception e
+       false))))
+
 (defn review-for-given-id
   ([review-id] (review-for-given-id review-id connection-uri-default))
   ([review-id connection-uri]

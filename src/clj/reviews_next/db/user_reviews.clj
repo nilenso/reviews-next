@@ -4,6 +4,8 @@
           [clojure.java.jdbc :refer :all]
           [reviews-next.config :as config]))
 
+(def connection-uri-default nil)
+
 (def data
   {:from_uid "U1"
    :to_uid "U3"
