@@ -1,24 +1,24 @@
 (ns reviews-next.core
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame]
-            [reviews-next.pages.login :as login]
-            [reviews-next.pages.home :as home]
+            [reviews-next.pages.base :as base]
             [reviews-next.pages.login :as login]
             [reviews-next.subs :as subs]
             [reviews-next.events :as events]
             [reviews-next.events.user :as user-events]
             [accountant.core :as accountant]
-            [reviews-next.components :as components]
             [reviews-next.routes :as routes]))
 
 (defn app []
   (let [panel (re-frame/subscribe [::subs/active-panel])
         user (re-frame/subscribe [::subs/user])]
     (if (not (nil? @user))
-     (if (fn? @root-page)
-      (apply @root-page)
-      [:div])
-     (login/login))))
+      (if (fn? @panel)
+        [:div
+         [base/header]
+         (@panel)]
+        [:div])
+      (login/login))))
 
 (defn init! []
   (re-frame/dispatch-sync [::user-events/setup-google-signin-functions])

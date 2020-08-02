@@ -1,3 +1,7 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 .app {
   width: 100%;
 }
@@ -9,9 +13,52 @@ div.login {
 }
 
 div.login > img {
-  margin: 50px;
+  margin: 48px;
 }
 
 div.login > div.g-signin2 {
   align-self: center;
+}
+
+div.header {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 48px;
+  padding: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+div.header > img {
+  align-self: flex-start;
+  height: 100%;
+}
+
+div.header > button {
+  align-self: flex-end;
+}
+
+button {
+  height: 48px;
+  margin: 8px;
+  width: 200px;
+  border: 0px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: "Noto Sans";
+}
+
+button.primary {
+  background: #EBFFFC;
+  color: #00947E;
+}
+
+button.link {
+  background: #EEF3FC;
+  color: #2160C4;
+}
+
+button.warning {
+  background: #FFFBEB;
+  color: #947600;
 }
