@@ -42,7 +42,7 @@
        (str e)))))
 
 (defn users-for-given-id
-  ([user-id] (users-for-given-id user-id connection-uri-default))
+  ([user-id] (users-for-given-id user-id (config/connection-uri)))
   ([user-id connection-uri]
    (try
      (query connection-uri [ "select * from users where id=?" user-id])

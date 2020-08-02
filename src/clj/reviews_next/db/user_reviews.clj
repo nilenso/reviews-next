@@ -34,7 +34,7 @@
        false))))
 
 (defn get-reviews-for-user
-  ([user-uid] (get-reviews-for-user user-uid connection-uri-default))
+  ([user-uid] (get-reviews-for-user user-uid (config/connection-uri)))
   ([user-uid connection-uri]
    (try
      (query connection-uri ["select * from user_reviews where to_uid=?" user-uid]

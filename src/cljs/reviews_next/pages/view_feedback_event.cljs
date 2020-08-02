@@ -12,8 +12,7 @@
    [reviews-next.events :as events]
    [reviews-next.subs :as subs]
    [accountant.core :as accountant]
-   [reviews-next.components :as components]
-   [secretary.core :as secretary])
+   [reviews-next.components :as components])
   (:require-macros
    [cljs.core.async.macros :refer [go]]))
 
@@ -159,9 +158,8 @@
         [:div.main-content (use-style main-content-style)
          [:div.side-section (use-style (section-style "20vw"))]
          [:div.main-section (use-style (section-style "80vw"))
-          (components/Table "Reviews" ["Reviewer" "Review Event"] 
+          (components/Table "Reviews" ["Reviewer" "Review Event"]
                             (map join-user-review @user-and-review-list) feedback-table-title-style)
           (re-frame/dispatch [::events/set-current-reviewer-and-review-event (first @user-and-review-list)])
           ]])
       })))
-

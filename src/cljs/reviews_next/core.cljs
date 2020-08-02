@@ -8,12 +8,11 @@
             [reviews-next.subs :as subs]
             [accountant.core :as accountant]
             [reviews-next.components :as components]
-            [secretary.core :as secretary]
             [reviews-next.routes :as routes]))
 
 (defn app []
-  [:div
-   @(re-frame/subscribe [::subs/current-component])])
+  (let [root-page (re-frame/subscribe ::subs/current-component)])
+  [:div])
 
 (defn init! []
   (re-frame/dispatch [:reviews-next.events/initialize-db])

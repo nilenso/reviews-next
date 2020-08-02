@@ -1,22 +1,18 @@
 (ns reviews-next.routes
   (:require
+   [bidi.bidi :as bidi]
    [reviews-next.db :as db]
    [reviews-next.events :as events]
    [re-frame.core :as re-frame]
    [accountant.core :as accountant]
-   [secretary.core :as secretary]
-   [reviews-next.pages.view-feedback-event :as view-feedback-event]))
+   [reviews-next.pages.home :as home]))
+
+(def routes
+  ["/" {"" [home/home]}])
 
 (accountant/configure-navigation!
  {:nav-handler   (fn [path]
-                   (re-frame/dispatch [::events/set-current-component (secretary/dispatch! path)]))
-  :path-exists?  (fn [path] (secretary/locate-route path))
+                   (apply (.-log js/console) path)
+                   (re-frame/dispatch [::events/set-current-component home/home]))
+  :path-exists?  (fn [path] (boolean (bidi/match-route routes path)))
   :reload-same-path? true})
-
-(secretary/defroute "/view-feedback/:id" {id :id}
-  (js/console.log "Okay atleast something" id)
-  [view-feedback-event/view-feedback-page id])
-
-(secretary/defroute "/" []
-  (js/console.log "Okay atleast something")
-  [view-feedback-event/view-feedback-event])

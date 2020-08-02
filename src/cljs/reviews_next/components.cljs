@@ -3,8 +3,7 @@
    [reagent.core :as reagent]
    ["react-quill" :as ReactQuill]
    ["@material-ui/core" :as material-ui]
-   [accountant.core :as accountant]
-   [secretary.core :as secretary]))
+   [accountant.core :as accountant]))
 
 (defn TextField
   [props-map]

@@ -24,7 +24,7 @@
        (str e)))))
 
 (defn get-list
-  ([] (get-list connection-uri-default))
+  ([] (get-list (config/connection-uri)))
   ([connection-uri]
    (try
      (query connection-uri ["select * from user_feedback"])
@@ -38,7 +38,7 @@
 
 
 (defn feedback-for-given-review-id
-  ([review-id] (feedback-for-given-review-id review-id connection-uri-default))
+  ([review-id] (feedback-for-given-review-id review-id (config/connection-uri)))
   ([review-id connection-uri]
    (try
      (query connection-uri ["select * from user_feedback where review_id=?" review-id])
