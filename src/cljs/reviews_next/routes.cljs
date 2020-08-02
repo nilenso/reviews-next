@@ -8,11 +8,11 @@
    [reviews-next.pages.home :as home]))
 
 (def routes
-  ["/" {"" [home/home]}])
+  ["/" {"" #'home/home}])
 
 (accountant/configure-navigation!
- {:nav-handler   (fn [path]
-                   (apply (.-log js/console) path)
-                   (re-frame/dispatch [::events/set-current-component home/home]))
-  :path-exists?  (fn [path] (boolean (bidi/match-route routes path)))
+ {:nav-handler (fn [path]
+                 (let [active-panel (:handler (bidi/match-route routes path))]
+                   (re-frame/dispatch [::events/set-active-panel active-panel])))
+  :path-exists? (fn [path] (boolean (bidi/match-route routes path)))
   :reload-same-path? true})

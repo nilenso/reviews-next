@@ -2,6 +2,7 @@
   (:require [reagent.dom :as rdom]
             [re-frame.core :as re-frame]
             [reviews-next.pages.login :as login]
+            [reviews-next.pages.home :as home]
             [reviews-next.pages.review-event :as review-event]
             [reviews-next.pages.feedback-event :as feedback-event]
             [reviews-next.pages.view-feedback-event :as view-feedback-event]
@@ -11,8 +12,10 @@
             [reviews-next.routes :as routes]))
 
 (defn app []
-  (let [root-page (re-frame/subscribe ::subs/current-component)])
-  [:div])
+  (let [root-page (re-frame/subscribe [::subs/active-panel])]
+    (if (fn? @root-page)
+      [:div.container (apply @root-page)]
+      [:div.container])))
 
 (defn init! []
   (re-frame/dispatch [:reviews-next.events/initialize-db])

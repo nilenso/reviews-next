@@ -75,9 +75,9 @@
    (:feedback-details db)))
 
 (re-frame/reg-sub
- ::current-component
+ ::active-panel
  (fn [db _]
-   (:current-component db)))
+   (:active-panel db)))
 
 (re-frame/reg-sub
  ::current-reviewer-and-review-event

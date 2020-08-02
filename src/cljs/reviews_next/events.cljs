@@ -175,9 +175,9 @@
     (assoc db :feedback new-desc)))
 
 (re-frame/reg-event-db
- ::set-current-component
- (fn [db [_ new-component]]
-   (assoc db :current-component new-component)))
+ ::set-active-panel
+ (fn [db [_ panel]]
+   (assoc db :active-panel panel)))
 
 (re-frame/reg-event-db
  ::set-current-reviewer-and-review-event
