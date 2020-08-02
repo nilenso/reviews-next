@@ -2,6 +2,11 @@
   margin: 0;
   padding: 0;
 }
+
+body {
+  font-family: "Noto Sans";
+  font-size: 24px;
+}
 .app {
   width: 100%;
 }
@@ -41,10 +46,11 @@ div.header > button {
 button {
   height: 48px;
   margin: 8px;
-  width: 200px;
+  padding: 8px 24px;
+  min-width: 200px;
   border: 0px;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 21px;
   font-family: "Noto Sans";
 }
 
@@ -61,4 +67,31 @@ button.link {
 button.warning {
   background: #FFFBEB;
   color: #947600;
+}
+
+div.contents {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  padding: 8px;
+}
+
+div.navigation {
+  padding: 8px;
+}
+
+div.navigation > ul {
+  list-style-type: none;
+  color: #423259;
+}
+
+div.navigation > ul > li {
+  margin: 16px 0;
+}
+
+div.navigation > ul > li > i {
+  margin-right: 16px;
+}
+
+div.panel {
+  padding: 8px;
 }

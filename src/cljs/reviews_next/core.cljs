@@ -14,10 +14,8 @@
         user (re-frame/subscribe [::subs/user])]
     (if (not (nil? @user))
       (if (fn? @panel)
-        [:div
-         [base/header]
-         (@panel)]
-        [:div])
+        [base/base @user @panel]
+        [:div.container])
       (login/login))))
 
 (defn init! []
