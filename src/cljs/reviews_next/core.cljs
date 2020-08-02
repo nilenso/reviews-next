@@ -3,24 +3,26 @@
             [re-frame.core :as re-frame]
             [reviews-next.pages.login :as login]
             [reviews-next.pages.home :as home]
-            [reviews-next.pages.review-event :as review-event]
-            [reviews-next.pages.feedback-event :as feedback-event]
-            [reviews-next.pages.view-feedback-event :as view-feedback-event]
+            [reviews-next.pages.login :as login]
             [reviews-next.subs :as subs]
+            [reviews-next.events :as events]
+            [reviews-next.events.user :as user-events]
             [accountant.core :as accountant]
             [reviews-next.components :as components]
             [reviews-next.routes :as routes]))
 
 (defn app []
-  (let [root-page (re-frame/subscribe [::subs/active-panel])]
-    (if (fn? @root-page)
-      [:div.container (apply @root-page)]
-      [:div.container])))
+  (let [panel (re-frame/subscribe [::subs/active-panel])
+        user (re-frame/subscribe [::subs/user])]
+    (if (not (nil? @user))
+     (if (fn? @root-page)
+      (apply @root-page)
+      [:div])
+     (login/login))))
 
 (defn init! []
-  (re-frame/dispatch [:reviews-next.events/initialize-db])
-  (accountant/navigate! "/")
+  (re-frame/dispatch-sync [::user-events/setup-google-signin-functions])
+  (re-frame/dispatch [::events/initialize-db])
 
-  (re-frame/dispatch [:reviews-next.events/populate-participants])
-  (re-frame/dispatch-sync [:setup-google-signin-functions])
+  (accountant/navigate! "/")
   (rdom/render [app] (.getElementById js/document "app")))

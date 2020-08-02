@@ -18,6 +18,11 @@
     (:review-description db)))
 
 (re-frame/reg-sub
+  ::user
+  (fn [db _]
+    (:user db)))
+
+(re-frame/reg-sub
   ::all-fields-valid?
   (fn [db _]
     (:all-fields-valid? db)))

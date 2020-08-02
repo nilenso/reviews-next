@@ -1,10 +1,9 @@
 (ns reviews-next.events
-  (:require
-   [day8.re-frame.http-fx]
-   [clojure.set]
-   [ajax.core :as ajax]
-   [re-frame.core :as re-frame]
-   [reviews-next.db :as db]))
+  (:require [day8.re-frame.http-fx]
+            [clojure.set]
+            [ajax.core :as ajax]
+            [re-frame.core :as re-frame]
+            [reviews-next.db :as db]))
 
 (re-frame/reg-event-fx
  ::initialize-db
@@ -25,17 +24,10 @@
                  :on-success [::participants-from-backend]
                  :on-fail    [::api-failed]}}))
 
-(re-frame/reg-fx
- ::setup-google-signin-functions
- (fn [_ _]
-   (set!
-    (.. js/window -onSignIn)
-    (clj->js (fn [& args] (apply (.-log js/console) args))))))
-
 (re-frame/reg-event-db
-  ::title-change
-   (fn [db [_ new-title]]
-    (assoc db :review-event-title new-title)))
+ ::title-change
+ (fn [db [_ new-title]]
+   (assoc db :review-event-title new-title)))
 
 (re-frame/reg-event-db
   ::date-change
