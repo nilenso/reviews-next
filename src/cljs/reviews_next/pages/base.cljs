@@ -1,4 +1,6 @@
-(ns reviews-next.pages.base)
+(ns reviews-next.pages.base
+  (:require [re-frame.core :as re-frame]
+            [reviews-next.events.user :as user-events]))
 
 (defn header [user]
   [:div.header
@@ -6,7 +8,10 @@
    [:div.buttons
     [:button {:class ["primary"]} "+ Review Event"]
     [:button {:class ["link"]} "Profile"]
-    [:button {:class ["warning"]} (str "Sign out as " (:name user))]]])
+    [:button
+     {:class ["warning"]
+      :on-click #(re-frame/dispatch [::user-events/sign-out])}
+     (str "Sign out as " (:name user))]]])
 
 (defn nav-item [name]
   [:li

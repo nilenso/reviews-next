@@ -1,4 +1,4 @@
 (ns reviews-next.pages.home)
 
 (defn home []
-  nil)
+  [:h1 "Home"])
