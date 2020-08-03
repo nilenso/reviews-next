@@ -32,7 +32,6 @@
 
   :plugins [[lein-cljfmt "0.6.7"]]
 
-
   :profiles {:dev {:source-paths ["dev"]
                    ; :env {:database_url "jdbc:sqlite:reviews_next.db"}
                    :dependencies  [[org.clojure/tools.namespace "0.2.3"]

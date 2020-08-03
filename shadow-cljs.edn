@@ -1,4 +1,4 @@
-{:source-paths ["src/cljs"]
+{:source-paths ["src/cljs" "test/cljs"]
  :dev-http     {8081 {:root      "target"
                       :proxy-url "http://localhost:3000"}}
  :dependencies [[bidi "2.1.6"]
@@ -22,4 +22,7 @@
                       :target     :browser
                       :modules    {:main {:init-fn reviews-next.core/init!}}
                       :devtools   {:http-root  "target/"
-                                   :http-port  3449}}}}
+                                   :http-port  3449}}
+                :test {:target :node-test
+                       :output-to "target/node-tests.js"
+                       :autorun true}}}

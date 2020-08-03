@@ -5,10 +5,12 @@
    [reviews-next.events :as events]
    [re-frame.core :as re-frame]
    [accountant.core :as accountant]
-   [reviews-next.pages.home :as home]))
+   [reviews-next.pages.home :as home]
+   [reviews-next.pages.login :as login]))
 
 (def routes
-  ["/" {"" #'home/home}])
+  ["/" {"" #'home/home
+        "login" #'login/login}])
 
 (accountant/configure-navigation!
  {:nav-handler (fn [path]

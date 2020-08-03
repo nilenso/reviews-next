@@ -1,30 +1,38 @@
 (ns reviews-next.events.user
-  (:require [re-frame.core :as re-frame]))
+  (:require [re-frame.core :as re-frame]
+            [day8.re-frame.http-fx]
+            [ajax.core :as ajax]))
+
+(defn login-payload [google-user]
+  (let [profile (.getBasicProfile google-user)
+        google-id (.getId profile)
+        name (.getName profile)
+        image-url (.getImageUrl profile)
+        email (.getEmail profile)]
+    {:google-id google-id
+     :name name
+     :image-url image-url
+     :email email}))
 
 (re-frame/reg-event-fx
  ::setup-google-signin-functions
  (fn [_ _]
    (set!
     (.. js/window -onSignIn)
-    (clj->js
-     (fn [user]
-       (let [profile (.getBasicProfile user)
-             ^int id (.getId profile)
-             ^string name (.getName profile)
-             ^string image-url (.getImageUrl profile)
-             ^string email (.getEmail profile)]
-         (re-frame/dispatch
-          [::login-user
-           {:id id
-            :name name
-            :image-url image-url
-            :email email}])))))
+    (clj->js #(re-frame/dispatch [::login-user (login-payload %)])))
    {}))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  ::login-user
- (fn [db [_ user]]
-   (assoc db :user user)))
+ (fn [_ [_ payload]]
+   {:http-xhrio
+    {:method :post
+     :uri "/api/google/login"
+     :params payload
+     :format (ajax/json-request-format)
+     :response-format (ajax/json-request-format {:keywords? true})
+     :on-success []
+     :on-fail []}}))
 
 (re-frame/reg-event-db
  ::clear-user

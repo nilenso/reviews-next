@@ -1,6 +1,7 @@
 (ns reviews-next.db.user-reviews-test
   (:require [clojure.test :refer :all]
             [reviews-next.db.user-reviews :as user-reviews]
+            [reviews-next.config :as config]
             [reviews-next.fixtures :as fixtures]))
 
 (use-fixtures :once fixtures/load-states)
