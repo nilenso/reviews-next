@@ -1,10 +1,5 @@
 (ns reviews-next.user
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str]
-            [clojure.pprint :refer (pprint)]
-            [clojure.repl :refer :all]
-            [clojure.test :as test]
-            [clojure.tools.namespace.repl :refer (refresh refresh-all)]
+  (:require [clojure.tools.namespace.repl :refer (refresh)]
             [reviews-next.core :as core]))
 
 (def start core/start)
