@@ -6,7 +6,7 @@
 
 (defstate config
   :start
-  (read-config (io/resource "config.edn")
+  (read-config (io/resource "config/config.edn")
                {:profile (keyword (or (System/getenv "ENV") "dev"))}))
 
 (defn connection-uri []

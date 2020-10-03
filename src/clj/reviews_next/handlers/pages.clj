@@ -1,36 +1,22 @@
 (ns reviews-next.handlers.pages
-  (:require [hiccup.core :as h]
-            [hiccup.page :as page]
-            [reviews-next.config :as config]))
+  (:require [reviews-next.handlers.core :as handlers]))
 
-(defn head []
-  [:head
-   [:meta {:charset "utf-8"}]
-   [:meta {:name "viewport"
-           :content "width=device-width, initial-scale=1"}]
-   [:meta {:name "google-signin-client_id"
-           :content (-> config/config :secrets :google-oauth :client-id)}]
-   (page/include-css "/assets/css/bulma.min.css")
-   (page/include-css "/assets/css/site.css")])
-
-(defn page [contents]
-  (page/html5
-   (head)
-   [:body
-    contents
-    (page/include-js "/assets/main.js")
-    (page/include-js "https://apis.google.com/js/platform.js")]))
 
 (defn index [_request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body (h/html (page [:div#app]))})
+  (handlers/page
+    {:body
+     [:div#app
+      [:div.login
+       [:img {:src "/images/vertical.svg"}]
+       [:div
+        {:class "g-signin2"
+         :data-width "240"
+         :data-heigth "50"
+         :data-theme "dark"
+         :data-longtitle "240"
+         :data-onsuccess "onSignIn"}]]]}))
 
 (defn not-found [_request]
-  {:status 404
-   :headers {"Content-Type" "text/html"}
-   :body (h/html
-          (page/html5
-           [:head]
-           [:body
-            [:div "Not found"]]))})
+  (handlers/page
+    {:status 404
+     :body [:div "Not found"]}))
