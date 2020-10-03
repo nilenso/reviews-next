@@ -1,0 +1,17 @@
+.app {
+  width: 100%;
+}
+
+div.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+div.login > img {
+  margin: 50px;
+}
+
+div.login > div.g-signin2 {
+  align-self: center;
+}
