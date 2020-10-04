@@ -1,12 +1,15 @@
 (ns reviews-next.routes
-  (:require [reviews-next.handlers.pages :as pages]
+  (:require [bidi.bidi :as b]
+            [reviews-next.handlers.pages :as pages]
             [reviews-next.handlers.users :as users]))
 
 (def routes
   ["/" [["" pages/index]
+        ["home/" pages/home]
         ["users/" [["login/" {:post users/login}]]]
         [true pages/not-found]]])
 
+(def path-for (partial b/path-for routes))
 ;; (def routes-old
 ;;   ["/" {"" pages/index
 ;;         "api/" {"review-event" {:post {"" (call-api review-event/insert-into-db)}}

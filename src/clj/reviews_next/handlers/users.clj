@@ -1,6 +1,7 @@
 (ns reviews-next.handlers.users
-  (:require [ring.util.response :as response]))
+  (:require [reviews-next.routes :as routes]
+            [reviews-next.handlers.pages :as pages ]
+            [ring.util.response :as response]))
 
-(defn login [request]
-  (response/response "hello world")
-  {:status 200})
+(defn login [_request]
+  (response/redirect (routes/path-for pages/home)))

@@ -14,6 +14,8 @@
         }, 
         id_token: id_token
       }
+    }).then(function(response) {
+      window.location.replace(response.url);
     });
   }
 })();
