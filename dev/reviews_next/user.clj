@@ -6,7 +6,7 @@
 (def stop core/stop)
 
 (defn go []
-  start
+  (start)
   :ready)
 
 (defn reset []

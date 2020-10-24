@@ -10,7 +10,6 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-.clj-kondo
 *figwheel*
 secrets*
 .rebel_readline_history
@@ -18,3 +17,4 @@ secrets*
 *.log
 .shadow-cljs
 node_modules
+.clj-kondo/.cache
