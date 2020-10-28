@@ -1,4 +1,4 @@
-(ns reviews-next.db.migrations
+(ns reviews-next.migrations
   (:require [mount.core :as mount]
             [ragtime.jdbc :as jdbc]
             [ragtime.repl :as repl]

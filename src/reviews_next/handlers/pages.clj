@@ -16,3 +16,10 @@
   (handlers/page
     {:status 404
      :body (not-found/page)}))
+
+(defn oops [_]
+  (handlers/page
+    {:body
+     [:section {:class "section"}
+      [:div {:class "container"}
+       [:h1 {:class "is-size-1"} "Something went wrong"]]]}))

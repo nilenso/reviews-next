@@ -16,7 +16,6 @@
    (page/include-css "/css/font-awesome.min.css")
    (page/include-css "/css/simplemde.min.css")
    (page/include-css "/css/bulma.min.css")
-   (page/include-css "/css/bulma.min.css")
    (page/include-css "/css/unpoly.css")
    (page/include-css "/css/site.css")
    (page/include-js "https://apis.google.com/js/platform.js")

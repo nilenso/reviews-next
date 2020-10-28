@@ -9,7 +9,11 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [aero "1.1.6"]
                  [bidi "2.1.6"]
+                 [camel-snake-kebab "0.4.1"]
                  [cheshire "5.10.0"]
+                 [com.fzakaria/slf4j-timbre "0.3.19"]
+                 [com.google.api-client/google-api-client "1.30.9"]
+                 [com.taoensso/timbre "5.1.0"]
                  [hiccup "1.0.5"]
                  [hikari-cp "2.12.0"]
                  [honeysql "0.9.10"]
@@ -21,8 +25,7 @@
                  [ring-cors "0.1.13"]
                  [ring-logger "1.0.1"]
                  [ring/ring-json "0.5.0"]
-                 [seancorfield/next.jdbc "1.0.409"]
-                 [com.fzakaria/slf4j-timbre "0.3.19"]]
+                 [seancorfield/next.jdbc "1.1.582"]]
 
   :plugins [[lein-cljfmt "0.6.7"]
             [clj-kondo "2020.06.21"]]
@@ -34,8 +37,8 @@
 
   :main reviews-next.core
 
-  :aliases {"migrate"  ["run" "-m" "reviews-next.db.migrations/migrate"]
-            "rollback" ["run" "-m" "reviews-next.db.migrations/rollback"]}
+  :aliases {"migrate"  ["run" "-m" "reviews-next.migrations/migrate"]
+            "rollback" ["run" "-m" "reviews-next.migrations/rollback"]}
 
   :resource-paths ["resources"]
   :ring {:handler reviews-next.server/hander}
