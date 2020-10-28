@@ -1,8 +1,8 @@
 (ns reviews-next.handlers.pages
-  (:require [reviews-next.views.index :as index]
-            [reviews-next.views.home :as home]
+  (:require [reviews-next.views.home :as home]
             [reviews-next.views.not-found :as not-found]
-            [reviews-next.handlers.core :as handlers]))
+            [reviews-next.handlers.core :as handlers]
+            [reviews-next.views.index :as index]))
 
 
 (defn index [_request]

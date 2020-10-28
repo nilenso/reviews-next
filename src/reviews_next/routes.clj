@@ -11,8 +11,3 @@
         ["ping" ping/ping]
         ["oops" pages/oops]
         [true pages/not-found]]])
-
-(defn wrap-path-for-fn [handler routes]
-  (fn [request]
-    (handler (merge request
-                    {:path-for (partial b/path-for routes)}))))
