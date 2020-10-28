@@ -2,9 +2,10 @@
   (:require [bidi.ring :as bidi]
             [mount.core :refer [defstate]]
             [reviews-next.config :refer [config]]
-            [reviews-next.routes :refer [routes]]
+            [reviews-next.routes :refer [routes wrap-path-for-fn]]
             [ring.adapter.jetty :as jetty]
             [ring.logger :as logger]
+            [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.json :refer [wrap-json-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
@@ -16,6 +17,8 @@
 (def handler
   (-> routes
       bidi/make-handler
+      (wrap-path-for-fn routes)
+      wrap-cookies
       wrap-keyword-params
       wrap-multipart-params
       wrap-params

@@ -12,4 +12,7 @@
         ["oops" pages/oops]
         [true pages/not-found]]])
 
-(def path-for (partial b/path-for routes))
+(defn wrap-path-for-fn [handler routes]
+  (fn [request]
+    (handler (merge request
+                    {:path-for (partial b/path-for routes)}))))

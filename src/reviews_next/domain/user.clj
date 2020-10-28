@@ -1,10 +1,11 @@
 (ns reviews-next.domain.user
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
+            [clojure.string :as string]
             [mount.core :refer [defstate]]
-            [next.jdbc :as jdbc]
             [reviews-next.config :as config]
-            [reviews-next.database :as db])
+            [reviews-next.database :as db]
+            [taoensso.timbre :as log])
   (:import [com.google.api.client.googleapis.auth.oauth2 GoogleIdTokenVerifier$Builder]
            [com.google.api.client.json.jackson2 JacksonFactory]
            [com.google.api.client.http.javanet NetHttpTransport]))
@@ -51,13 +52,17 @@
        ::google-id (str (.getUserId payload))
        ::image-url (str (.get payload "picture"))})))
 
-(defn register-user [params]
-  (jdbc/with-transaction [tx @db/pool]
-    (let [user-info (id-token->user-info (::id-token params))
-          google-id (::google-id user-info)]
+(defn register-user [tx params]
+  (let [user-info (id-token->user-info (::id-token params))
+        google-id (::google-id user-info)]
+    (when-not (nil? user-info)
       (if-let [existing-user (db/find-by tx :users {::google-id google-id})]
-        existing-user
-        (db/create! tx :users user-info)))))
+        (do
+          (log/info "Returning existing user for google-id" google-id)
+          existing-user)
+        (do
+          (log/info "Creating new user for google-id" google-id)
+          (db/create! tx :users user-info))))))
 
 (s/fdef
   register-user
