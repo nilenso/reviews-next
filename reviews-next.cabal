@@ -1,0 +1,18 @@
+cabal-version:       >=1.10
+name:                reviews-next
+version:             0.1.0.0
+synopsis:            Webapp for internal nilenso reviews
+license-file:        LICENSE
+author:              nilenso
+maintainer:          hello@nilenso.com
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+executable reviews-next
+  main-is:             Main.hs
+  hs-source-dirs:      src
+  build-depends:       
+    base >=4.13 && <4.14,
+    servant >= 0.16 && < 0.17
+
+  default-language:    Haskell2010

@@ -1,8 +1,0 @@
-{:server {:port #long #or [#env PORT 3000]}
- :nrepl {:enable? #boolean #or [#env ENABLE_NREPL "true"]
-         :port #long #or [#env NREPL_PORT 4444]}
- :secrets #include "secrets.edn"
- :database {:jdbc-url #profile {:dev  "jdbc:sqlite:reviews_next.db"
-                                :test "jdbc:sqlite:test_reviews_next.db" }}
- :log {:min-level :info}
- :authorization {:valid-for 3600}}
