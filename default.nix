@@ -1,5 +1,6 @@
-{ mkDerivation, acid-state, base, blaze-html, dhall, lens, mtl
-, safecopy, servant, stdenv, text, time, wai, warp
+{ mkDerivation, acid-state, base, blaze-html, bytestring, dhall
+, lens, mtl, safecopy, servant-blaze, servant-server, stdenv, text
+, time, wai, warp
 }:
 mkDerivation {
   pname = "reviews-next";
@@ -8,8 +9,8 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    acid-state base blaze-html dhall lens mtl safecopy servant text
-    time wai warp
+    acid-state base blaze-html bytestring dhall lens mtl safecopy
+    servant-blaze servant-server text time wai warp
   ];
   description = "Webapp for internal nilenso reviews";
   license = "unknown";

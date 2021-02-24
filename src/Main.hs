@@ -1,18 +1,10 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeOperators #-}
-
 module Main where
 
-import Data.Text
-import Data.Time (UTCTime)
-import Servant.API
-
+import Network.Wai.Handler.Warp (run)
 import Reviews.Config
+import Reviews.Routes
 import Reviews.Database
 
 main :: IO ()
-main = do
-  config <- readConfig "./config.dhall"
-  print config
+main = run 8080 app
 
