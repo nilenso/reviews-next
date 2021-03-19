@@ -18,3 +18,10 @@ packages:
       sha256: d57bcb2ad5e01fe7424abbcf9e58cf943027b5c4a8496d93625c57b6e1272274
       size: 13678
     hackage: acid-state-0.16.0.1@sha256:d43f6ee0b23338758156c500290c4405d769abefeb98e9bc112780dae09ece6f,6207
+- original:
+    hackage: fused-effects-1.1.1.0@sha256:6f5cf3f2d0d61f39d97b8f63bc96564d0f64bc2801f3da828572d9f99f1e79f4,5139
+  completed:
+    pantry-tree:
+      sha256: 44b34742d763dbc1922e05f2b8017a8e02a298ca66c72bb4c7b0468fea4a7254
+      size: 6288
+    hackage: fused-effects-1.1.1.0@sha256:6f5cf3f2d0d61f39d97b8f63bc96564d0f64bc2801f3da828572d9f99f1e79f4,5139

@@ -1,9 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
 import Network.Wai.Handler.Warp (run)
-import Reviews.Config
-import Reviews.Routes
-import Reviews.Database
+import Reviews.Routes (app)
+import Reviews.Types.Config
 
 main :: IO ()
-main = run 3000 app
+main = do
+  config <- readConfig "./config.dhall"
+  run 3000 (app config)

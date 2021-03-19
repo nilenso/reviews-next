@@ -6,7 +6,7 @@ import Control.Monad
 import Prelude hiding (head, div)
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes hiding (title)
-import Servant
+import Reviews.Types.Common
 
 turbojs :: AttributeValue
 turbojs = "/assets/js/turbo.es5-umd.js" 
@@ -57,8 +57,16 @@ index = return . html $ do
   menuListItem :: Html -> [Html] -> Markup
   menuListItem title elements = li $ do
     a title
-    ul $ sequence_ $ (li . a) <$> elements
+    ul $ sequence_ $ li . a <$> elements
   
   contents :: Markup
   contents = div ! class_ "column" $
     p "Contents here"
+
+landing :: Handler Markup
+landing = return . html $ do
+  head $ do
+    title "Reviews Next"
+    link ! rel "stylesheet" ! type_ "text/css" ! href bulma
+  body $ do
+    div "Landing page"
