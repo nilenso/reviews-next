@@ -25,9 +25,8 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
       Reviews.Config
-      Reviews.Controller.Pages
+      Reviews.Controllers.Pages
       Reviews.Database
       Reviews.Routes
   other-modules:

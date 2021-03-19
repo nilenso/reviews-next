@@ -9,12 +9,13 @@ import Servant
 import Servant.HTML.Blaze (HTML)
 import Text.Blaze.Html5
 
-import Reviews.Controller.Pages
+import Reviews.Controllers.Pages
 
 type API = Get '[HTML] Markup
+  :<|> "assets" :> Raw
 
 server :: Server API
-server = index
+server = index :<|> serveDirectoryWebApp "assets"
 
 api :: Proxy API
 api = Proxy
