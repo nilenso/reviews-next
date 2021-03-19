@@ -1,0 +1,55 @@
+name:                reviews-next
+version:             0.1.0.0
+github:              "nilenso/reviews-next"
+license:             BSD3
+author:              "nilenso"
+maintainer:          "hello@nilenso.com"
+copyright:           "2021 nilenso"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/nilenso/reviews-next#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+  - acid-state
+  - blaze-html
+  - bytestring
+  - dhall
+  - lens
+  - mtl
+  - safecopy
+  - servant-blaze
+  - servant-server
+  - text
+  - time
+
+executables:
+  reviews-next-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - reviews-next
+    - wai
+    - warp
+
+tests:
+  reviews-next-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - reviews-next
