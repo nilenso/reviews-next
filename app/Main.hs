@@ -6,5 +6,4 @@ import Reviews.Routes
 import Reviews.Database
 
 main :: IO ()
-main = run 8080 app
-
+main = run 3000 app

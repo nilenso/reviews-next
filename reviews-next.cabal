@@ -27,6 +27,7 @@ library
   exposed-modules:
       Lib
       Reviews.Config
+      Reviews.Controller.Pages
       Reviews.Database
       Reviews.Routes
   other-modules:
@@ -37,7 +38,6 @@ library
       acid-state
     , base >=4.7 && <5
     , blaze-html
-    , bytestring
     , dhall
     , lens
     , mtl

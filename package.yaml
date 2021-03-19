@@ -20,7 +20,6 @@ library:
   dependencies:
   - acid-state
   - blaze-html
-  - bytestring
   - dhall
   - lens
   - mtl

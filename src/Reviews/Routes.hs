@@ -5,14 +5,16 @@
 
 module Reviews.Routes where
 
-import qualified Data.Text as T
 import Servant
 import Servant.HTML.Blaze (HTML)
+import Text.Blaze.Html5
 
-type API = Get '[HTML] T.Text
+import Reviews.Controller.Pages
+
+type API = Get '[HTML] Markup
 
 server :: Server API
-server = return "Hello World!"
+server = index
 
 api :: Proxy API
 api = Proxy
