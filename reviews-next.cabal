@@ -64,6 +64,7 @@ executable reviews-next-exe
       base >=4.7 && <5
     , reviews-next
     , wai
+    , wai-extra
     , warp
   default-language: Haskell2010
 

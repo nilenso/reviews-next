@@ -41,6 +41,7 @@ executables:
     dependencies:
     - reviews-next
     - wai
+    - wai-extra
     - warp
 
 tests:
