@@ -20,6 +20,7 @@ library:
   dependencies:
   - aeson
   - blaze-html
+  - blaze-markup
   - dhall
   - fused-effects
   - lens

@@ -3,7 +3,8 @@
 module Reviews.Controllers.Pages where
 
 import Control.Monad
-import Prelude hiding (head, div)
+import Prelude hiding (head, div, id)
+import Text.Blaze.Internal
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes hiding (title)
 import Reviews.Types.Common
@@ -17,8 +18,8 @@ bulma = "/assets/css/bulma.min.css"
 fontawesome :: AttributeValue
 fontawesome = "/assets/css/fontawesome.min.css"
 
-turboFrame :: Tag
-turboFrame = textTag "turbo-frame"
+turboFrame :: Html -> Html
+turboFrame = Parent "turbo-frame" "<turbo-frame" "</turbo-frame"
 
 index :: Handler Markup
 index = return . html $ do
@@ -61,7 +62,7 @@ index = return . html $ do
   
   contents :: Markup
   contents = div ! class_ "column" $
-    p "Contents here"
+    turboFrame ! id  "contents" $ "Contents here"
 
 landing :: Handler Markup
 landing = return . html $ do
