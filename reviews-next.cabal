@@ -15,14 +15,22 @@ extra-source-files:
 
 executable reviews-next
     main-is:          Main.hs
+    ghc-options:      -Wall
     other-modules:
+      Reviews
       Reviews.Config
       Reviews.Html
+      Reviews.Types.User
+      Reviews.Utils
     build-depends:
       base ^>=4.14.1.0,
+      acid-state,
       blaze-html,
+      bytestring,
       dhall,
-      hoauth2,
+      http-client,
+      mtl,
+      safecopy,
       servant-blaze,
       servant-server,
       text,

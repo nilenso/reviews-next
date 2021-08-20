@@ -1,5 +1,6 @@
-{ mkDerivation, base, blaze-html, dhall, hoauth2, lib
-, servant-blaze, servant-server, text, wai, wai-extra, warp
+{ mkDerivation, acid-state, base, blaze-html, bytestring, dhall
+, http-client, lib, mtl, safecopy, servant-blaze, servant-server
+, text, wai, wai-extra, warp
 }:
 mkDerivation {
   pname = "reviews-next";
@@ -8,8 +9,8 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    base blaze-html dhall hoauth2 servant-blaze servant-server text wai
-    wai-extra warp
+    acid-state base blaze-html bytestring dhall http-client mtl
+    safecopy servant-blaze servant-server text wai wai-extra warp
   ];
   license = "unknown";
   hydraPlatforms = lib.platforms.none;

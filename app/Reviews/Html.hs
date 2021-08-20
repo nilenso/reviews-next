@@ -2,7 +2,7 @@
 
 module Reviews.Html where
 
-import Text.Blaze.Html5
+import Text.Blaze.Html5 hiding (contents)
 import Text.Blaze.Html5.Attributes hiding (title)
 import Prelude hiding (div, head)
 
