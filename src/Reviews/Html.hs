@@ -2,6 +2,7 @@
 
 module Reviews.Html where
 
+import Reviews.Types.User
 import Text.Blaze.Html5 hiding (contents)
 import Text.Blaze.Html5.Attributes hiding (title)
 import Prelude hiding (div, head)
@@ -49,7 +50,14 @@ landingPage = page $ do
     signInContainer = div ! class_ "d-flex flex-row justify-content-center"
 
     signInWithGithub =
-      a ! href "/sign-in" ! class_ "btn btn-outline-primary" $ do
+      a ! href "/oauth/login/github" ! class_ "btn btn-outline-primary" $ do
         i ! class_ "bi bi-github" $ ""
         text " "
         text "Sign In with Github"
+
+userHome :: User -> Markup
+userHome user = page $ do
+  div ! class_ "h-100 d-flex flex-row justify-content-center" $ do
+    div ! class_ "d-flex flex-column justify-content-center" $ do
+      h1 $ text "Hello"
+      h1 $ text (fullname user)

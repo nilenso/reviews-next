@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators #-}
 
 module Main where
@@ -8,13 +7,13 @@ module Main where
 import Network.Wai.Handler.Warp (run)
 import Network.Wai.Middleware.RequestLogger (logStdout)
 import Reviews
-import Reviews.Config
+import Reviews.Types.Common
 
 main :: IO ()
 main = do
-  config <- readConfig "./config.dhall"
-  putStrLn $ "Starting webserver on port: " ++ show (port config)
-  run (port' config) $ application config
+  ctx <- createContext "./config.dhall"
+  putStrLn $ "Starting webserver on port: " ++ show (port' ctx)
+  run (port' ctx) $ application ctx
   where
-    port' = fromIntegral . port
+    port' = fromIntegral . port . config
     application = logStdout . app
