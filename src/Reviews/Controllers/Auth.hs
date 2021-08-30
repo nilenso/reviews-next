@@ -7,6 +7,7 @@
 module Reviews.Controllers.Auth
   ( signInWithGithub,
     oauthCallbackForGithub,
+    logout,
   )
 where
 
@@ -85,3 +86,11 @@ oauthCallbackForGithub code state = do
       if all isJust [code, state] && state == Just keyBase
         then return ()
         else E.throwError S.err400
+
+logout :: Controller ()
+logout = do
+  cookieSettings <- R.ask
+  E.throwError S.err302 {S.errHeaders = S.getHeaders (SA.clearSession cookieSettings baseResponse)}
+  where
+    baseResponse :: S.Headers '[S.Header "Location" T.Text] S.NoContent
+    baseResponse = S.addHeader "/" S.NoContent

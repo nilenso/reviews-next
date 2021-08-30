@@ -1,3 +1,4 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
@@ -19,10 +20,11 @@ import Reviews
 import Reviews.Effects.OAuth
 import Reviews.Types.Cache
 import Reviews.Types.Common
-import qualified Servant as S
+import Servant
+import qualified Servant.Auth.Server.Internal.ConfigTypes as SA
 import Test.Tasty
 
-withTestApplication :: (S.Application -> TestTree) -> TestTree
+withTestApplication :: (Application -> TestTree) -> TestTree
 withTestApplication toTestTree =
   withResource
     (createContext "./test.config.dhall")
@@ -31,28 +33,28 @@ withTestApplication toTestTree =
 
 type TestControllerC =
   ErrorC
-    S.ServerError
+    ServerError
     ( GithubOAuthC
         ( ReaderC
-            (TMVar Cache)
-            (ReaderC Config (LiftC IO))
+            SA.JWTSettings
+            ( ReaderC
+                SA.CookieSettings
+                (ReaderC (TMVar Cache) (ReaderC Config (LiftC IO)))
+            )
         )
     )
 
-toTestHandler :: AppContext -> TestControllerC a -> S.Handler a
-toTestHandler AppContext {..} = do
-  S.Handler
+fromTestControllerC :: AppContext -> TestControllerC a -> Handler a
+fromTestControllerC AppContext {..} = do
+  Handler
     . ExceptT
     . runM
     . runReader config
     . runReader cache
+    . runReader cookieSettings
+    . runReader jwtSettings
     . runGithubOAuth httpManager githubProvider
     . runError
 
-testApp :: AppContext -> S.Application
-testApp ctx =
-  S.serve api $
-    S.hoistServer
-      api
-      (toTestHandler ctx)
-      server
+testApp :: AppContext -> Application
+testApp ctx = mkApp (fromTestControllerC ctx) ctx

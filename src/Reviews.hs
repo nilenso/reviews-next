@@ -36,6 +36,7 @@ import Text.Blaze.Html5 (Markup)
 
 type API =
   Auth '[Cookie, JWT] Session :> Get '[HTML] Markup
+    :<|> "logout" :> Get '[JSON] ()
     :<|> "oauth" :> "login" :> "github" :> Get '[JSON] ()
     :<|> ( "oauth"
              :> "callback"
@@ -59,8 +60,8 @@ type ControllerC =
         )
     )
 
-toHandler :: AppContext -> ControllerC a -> Handler a
-toHandler AppContext {..} = do
+fromControllerC :: AppContext -> ControllerC a -> Handler a
+fromControllerC AppContext {..} = do
   Handler
     . ExceptT
     . runM
@@ -95,6 +96,7 @@ server ::
   ServerT API m
 server =
   index
+    :<|> Auth.logout
     :<|> Auth.signInWithGithub
     :<|> Auth.oauthCallbackForGithub
     :<|> serveDirectoryWebApp "assets"
@@ -102,13 +104,28 @@ server =
 api :: Proxy API
 api = Proxy
 
-app :: AppContext -> Application
-app ctx =
+mkApp ::
+  ( MonadIO m,
+    Has (Reader Config) sig m,
+    Has (Reader (TMVar Cache)) sig m,
+    Has (Reader JWTSettings) sig m,
+    Has (Reader CookieSettings) sig m,
+    Has (Error ServerError) sig m,
+    Has (OAuth GithubUser) sig m,
+    Has (Lift IO) sig m
+  ) =>
+  (forall a. m a -> Handler a) ->
+  AppContext ->
+  Application
+mkApp toHandler ctx =
   serveWithContext
     api
     (cookieSettings ctx :. jwtSettings ctx :. EmptyContext)
     $ hoistServerWithContext
       api
       (Proxy :: Proxy '[CookieSettings, JWTSettings])
-      (toHandler ctx)
+      toHandler
       server
+
+app :: AppContext -> Application
+app ctx = mkApp (fromControllerC ctx) ctx

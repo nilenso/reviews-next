@@ -22,6 +22,7 @@ library
     Reviews.Html
     Reviews.Types.Cache
     Reviews.Types.Common
+    Reviews.Types.Review
     Reviews.Types.User
     Reviews.Utils
   hs-source-dirs:
@@ -30,16 +31,17 @@ library
     base ^>=4.14.1.0,
     aeson,
     blaze-html,
+    blaze-markup,
     bytestring,
     containers,
     dhall,
     fused-effects,
+    gitlib,
     hoauth2,
     http-conduit,
     jwt,
     lens,
     mtl,
-    safecopy,
     servant-auth-server,
     servant-blaze,
     servant-server,
