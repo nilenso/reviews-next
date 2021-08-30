@@ -1,16 +1,19 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE TypeOperators #-}
+
 module Main where
 
 import Network.Wai.Handler.Warp (run)
 import Network.Wai.Middleware.RequestLogger (logStdout)
-
-import Reviews.Routes (app)
-import Reviews.Types.Config
+import Reviews
+import Reviews.Types.Common
 
 main :: IO ()
 main = do
-  config <- readConfig "./config.dhall"
-  putStrLn $ "Starting reviews-next on port: " ++ show (port config)
-  run 3000 $ application config
+  ctx <- createContext "./config.dhall"
+  putStrLn $ "Starting webserver on port: " ++ show (port' ctx)
+  run (port' ctx) $ application ctx
   where
-  application = logStdout . app
+    port' = fromIntegral . port . config
+    application = logStdout . app

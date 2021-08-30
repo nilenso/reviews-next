@@ -1,82 +1,99 @@
-cabal-version: 1.12
-name:           reviews-next
-version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/nilenso/reviews-next#readme>
-homepage:       https://github.com/nilenso/reviews-next#readme
-bug-reports:    https://github.com/nilenso/reviews-next/issues
-author:         nilenso
-maintainer:     hello@nilenso.com
-copyright:      2021 nilenso
-license:        BSD3
-license-file:   LICENSE
-build-type:     Simple
+cabal-version:      2.4
+name:               reviews-next
+version:            0.1.0.0
+-- synopsis:
+-- description:
+-- bug-reports:
+-- license:
+author:             nilenso
+maintainer:         govind@nilenso.com
+-- copyright:
+-- category:
 extra-source-files:
-    README.md
-    ChangeLog.md
-
-source-repository head
-  type: git
-  location: https://github.com/nilenso/reviews-next
+  ChangeLog.md,
+  README.md
 
 library
+  ghc-options: -Wall
   exposed-modules:
-      Reviews.Controllers.Pages
-      Reviews.Controllers.Users
-      Reviews.Database
-      Reviews.Effects
-      Reviews.Routes
-      Reviews.Types.Common
-      Reviews.Types.Config
-      Reviews.Types.Timestamps
-      Reviews.Types.User
-  other-modules:
-      Paths_reviews_next
+    Reviews
+    Reviews.Controllers.Auth
+    Reviews.Effects.OAuth
+    Reviews.Html
+    Reviews.Types.Cache
+    Reviews.Types.Common
+    Reviews.Types.User
+    Reviews.Utils
   hs-source-dirs:
-      src
+    src
   build-depends:
-      aeson
-    , base >=4.7 && <5
-    , blaze-html
-    , blaze-markup
-    , dhall
-    , fused-effects
-    , lens
-    , mtl
-    , servant-blaze
-    , servant-server
-    , stm
-    , text
-    , time
+    base ^>=4.14.1.0,
+    aeson,
+    blaze-html,
+    bytestring,
+    containers,
+    dhall,
+    fused-effects,
+    hoauth2,
+    http-conduit,
+    jwt,
+    lens,
+    mtl,
+    safecopy,
+    servant-auth-server,
+    servant-blaze,
+    servant-server,
+    stm,
+    text,
+    time,
+    uri-bytestring,
+    uuid
   default-language: Haskell2010
 
-executable reviews-next-exe
+executable reviews-next
   main-is: Main.hs
-  other-modules:
-      Paths_reviews_next
-  hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
-    , reviews-next
-    , wai
-    , wai-extra
-    , warp
+    base ^>=4.14.1.0,
+    reviews-next,
+    wai,
+    wai-extra,
+    warp
+
+  hs-source-dirs:
+    app
   default-language: Haskell2010
 
 test-suite reviews-next-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Reviews.EffectsSpec
-      Paths_reviews_next
+    Fixtures,
+    Fixtures.MockOAuth,
+    Reviews.AuthSpec
   hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+    test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
-    , reviews-next
-    , tasty
-    , tasty-hunit
-    , tasty-quickcheck
+    base ^>=4.14.1.0,
+    aeson,
+    containers,
+    fused-effects,
+    http-api-data,
+    http-conduit,
+    http-types,
+    lens,
+    mtl,
+    reviews-next,
+    servant-server,
+    stm,
+    tasty,
+    tasty-hunit,
+    tasty-quickcheck,
+    tasty-wai,
+    text,
+    uri-bytestring,
+    wai,
+    wai-extra,
+    warp
   default-language: Haskell2010

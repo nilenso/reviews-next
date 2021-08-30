@@ -1,32 +1,66 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Reviews.Types.User where
 
-import Control.Lens ( makeLenses, (^.) )
-import Data.Time ()
-import Data.Aeson ( ToJSON(toJSON), object, KeyValue((.=)) )
-import Text.Blaze.Html
-import Text.Blaze.Html5 hiding (map, object)
+import Control.Monad.IO.Class (MonadIO, liftIO)
+import Data.Aeson
+import qualified Data.Text as T
+import Data.Time
+import qualified Data.UUID as UUID
+import qualified Data.UUID.V4 as UUID
+import GHC.Generics (Generic)
+import qualified Network.OAuth.OAuth2 as OAuth
+import qualified Reviews.Effects.OAuth as OAuth
+import Servant.Auth.Server (FromJWT, ToJWT)
 
-import Reviews.Types.Timestamps ( Timestamps )
+type UserId = UUID.UUID
+
+data OAuthProfile
+  = GithubProfile OAuth.GithubUser OAuth.OAuth2Token
+  deriving (Generic, Show)
 
 data User = User
-  { _name :: String
-  -- , _timestamps :: Timestamps
+  { userId :: UserId,
+    fullname :: T.Text,
+    username :: T.Text,
+    oauthProfiles :: [OAuthProfile]
   }
+  deriving (Generic, Show)
 
-$(makeLenses ''User)
+data Session = Session
+  { sessionId :: UUID.UUID,
+    sessionUserId :: UserId,
+    startedAt :: UTCTime
+  }
+  deriving (Generic, Show)
 
-instance ToJSON User where
-  toJSON user =
-    object ["name" .= (user ^. name) ]
+instance FromJSON Session
 
-instance ToMarkup User where
-  toMarkup user = li $ toHtml $ user ^. name
+instance ToJSON Session
 
-instance ToMarkup [User] where
-  toMarkup = ul . sequence_ . map toMarkup 
+instance FromJWT Session
+
+instance ToJWT Session
+
+createFromGithubUser ::
+  MonadIO m =>
+  OAuth.OAuth2Token ->
+  OAuth.GithubUser ->
+  m User
+createFromGithubUser oauthToken gUser@OAuth.GithubUser {..} = do
+  uuid <- liftIO UUID.nextRandom
+  return $
+    User
+      { userId = uuid,
+        fullname = github_name,
+        username = github_login,
+        oauthProfiles = [GithubProfile gUser oauthToken]
+      }
+
+newSession :: User -> IO Session
+newSession User {..} =
+  Session
+    <$> UUID.nextRandom
+    <*> pure userId
+    <*> getCurrentTime
