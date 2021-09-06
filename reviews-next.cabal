@@ -19,12 +19,15 @@ library
     Reviews
     Reviews.Controllers.Auth
     Reviews.Effects.OAuth
-    Reviews.Html
     Reviews.Types.Cache
     Reviews.Types.Common
     Reviews.Types.Review
     Reviews.Types.User
     Reviews.Utils
+    Reviews.Views.Common
+    Reviews.Views.Landing
+    Reviews.Views.Home
+    Reviews.Views.Nav
   hs-source-dirs:
     src
   build-depends:
@@ -87,6 +90,7 @@ test-suite reviews-next-test
     lens,
     mtl,
     reviews-next,
+    servant-auth-server,
     servant-server,
     stm,
     tasty,
@@ -95,6 +99,7 @@ test-suite reviews-next-test
     tasty-wai,
     text,
     uri-bytestring,
+    validity,
     wai,
     wai-extra,
     warp

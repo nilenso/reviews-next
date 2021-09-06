@@ -3,7 +3,7 @@
 , http-conduit, http-types, jwt, lens, lib, mtl
 , servant-auth-server, servant-blaze, servant-server, stm, tasty
 , tasty-hunit, tasty-quickcheck, tasty-wai, text, time
-, uri-bytestring, uuid, wai, wai-extra, warp
+, uri-bytestring, uuid, validity, wai, wai-extra, warp
 }:
 mkDerivation {
   pname = "reviews-next";
@@ -20,8 +20,9 @@ mkDerivation {
   executableHaskellDepends = [ base wai wai-extra warp ];
   testHaskellDepends = [
     aeson base containers fused-effects http-api-data http-conduit
-    http-types lens mtl servant-server stm tasty tasty-hunit
-    tasty-quickcheck tasty-wai text uri-bytestring wai wai-extra warp
+    http-types lens mtl servant-auth-server servant-server stm tasty
+    tasty-hunit tasty-quickcheck tasty-wai text uri-bytestring validity
+    wai wai-extra warp
   ];
   license = "unknown";
   hydraPlatforms = lib.platforms.none;

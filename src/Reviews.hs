@@ -25,10 +25,12 @@ import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Reviews.Controllers.Auth as Auth
 import Reviews.Effects.OAuth
-import Reviews.Html
 import Reviews.Types.Cache
 import Reviews.Types.Common
 import Reviews.Types.User
+import Reviews.Views.Common
+import Reviews.Views.Home
+import Reviews.Views.Landing
 import Servant hiding (NoSuchUser)
 import Servant.Auth.Server
 import Servant.HTML.Blaze (HTML)
@@ -78,10 +80,10 @@ index (Authenticated authToken) = do
   maybeUser <-
     sendIO . STM.atomically $
       M.lookup (sessionUserId authToken) . usersMap <$> STM.readTMVar cache
-  maybe (index NoSuchUser) (return . userHome) maybeUser
+  maybe (index NoSuchUser) (return . page . userHome) maybeUser
 index r = do
   sendIO $ print r
-  return landingPage
+  return $ page landing
 
 server ::
   ( MonadIO m,
